@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROYAL | Premium Men's Fashion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        royal: '#D4AF37', // Gold
+                        'royal-dark': '#B8941F',
+                        'royal-light': '#F4E4BC',
+                        dark: '#0a0a0a',
+                        'dark-light': '#1a1a1a',
+                        'dark-lighter': '#2d2d2d',
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.8s ease-out forwards',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        .glass {
+            background: rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #F4E4BC 50%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .gold-border:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .product-card {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        .product-image {
+            transition: transform 0.6s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.08);
+        }
+
+        .product-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+            display: flex;
+            gap: 0.75rem;
+            opacity: 1;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+        }
+
+        .action-btn-primary:hover {
+            background: linear-gradient(135deg, #F4E4BC 0%, #D4AF37 100%);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .action-btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+
+        .quick-add-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 2px solid #D4AF37;
+        }
+
+        .quick-add-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .cart-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .product-badge.sale {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #fff;
+        }
+
+        .product-badge.limited {
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            color: #fff;
+        }
+
+        .marquee {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .size-btn {
+            transition: all 0.2s;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        .size-btn:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+        .size-btn.selected {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+            border-color: #D4AF37;
+            font-weight: 700;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cart-item {
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .qty-btn:hover {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+        }
+
+        .category-pill {
+            transition: all 0.3s ease;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        .category-pill:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+        .category-pill.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: #000;
+            border-color: #D4AF37;
+            font-weight: 700;
+        }
+
+        .crown-icon {
+            display: inline-block;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .royal-glow {
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-strong transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="font-display text-3xl font-bold tracking-wider text-white flex items-center gap-2">
+                        <i class="fas fa-crown text-royal crown-icon"></i>
+                        ROYAL
+                    </span>
+                    <span class="ml-3 px-3 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30">MEN</span>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a onclick="filterCategory('all')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">All</a>
+                    <a onclick="filterCategory('streetwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Streetwear</a>
+                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Formal</a>
+                    <a onclick="filterCategory('casual')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Casual</a>
+                    <a onclick="filterCategory('activewear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Activewear</a>
+                    <a onclick="filterCategory('outerwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Outerwear</a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button onclick="toggleSearch()" class="text-gray-300 hover:text-royal transition-colors p-2">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                    <button onclick="toggleCart()" class="text-gray-300 hover:text-royal transition-colors relative p-2">
+                        <i class="fas fa-shopping-bag text-xl"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-royal text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform">0</span>
+                    </button>
+                    <button class="md:hidden text-gray-300 hover:text-royal p-2" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div id="search-bar" class="hidden border-t border-gray-800 bg-dark-light px-4 py-4">
+            <div class="max-w-3xl mx-auto relative">
+                <input type="text" id="search-input" placeholder="Search shirts, jackets, pants, brands..." 
+                    class="w-full bg-dark-lighter border border-gray-700 rounded-full px-6 py-3 pl-12 text-white focus:outline-none focus:border-royal transition-colors"
+                    onkeyup="filterProducts()">
+                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-strong border-t border-gray-800">
+            <div class="px-4 py-4 space-y-2">
+                <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">All Products</a>
+                <a onclick="filterCategory('streetwear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Streetwear</a>
+                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Formal Wear</a>
+                <a onclick="filterCategory('casual'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Casual</a>
+                <a onclick="filterCategory('activewear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Activewear</a>
+                <a onclick="filterCategory('outerwear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Outerwear</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[420px] bg-dark-light z-50 cart-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
+            <h2 class="font-display text-2xl font-bold flex items-center gap-2">
+                Your Cart 
+                <span id="cart-total-items" class="text-royal text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
+            </h2>
+            <button onclick="toggleCart()" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all border border-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="p-6 space-y-4 min-h-[300px]">
+            <div class="text-center text-gray-500 py-12">
+                <i class="fas fa-shopping-bag text-6xl mb-4 opacity-20"></i>
+                <p class="text-lg mb-2">Your cart is empty</p>
+                <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+            </div>
+        </div>
+
+        <div class="p-6 border-t border-gray-800 sticky bottom-0 bg-dark-light">
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between text-gray-400">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-medium">$0.00</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Shipping</span>
+                    <span class="text-royal">Free</span>
+                </div>
+                <div class="flex justify-between text-2xl font-bold border-t border-gray-800 pt-3">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-royal">$0.00</span>
+                </div>
+            </div>
+            
+            <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-lg mb-3 shadow-lg shadow-royal/20">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                Checkout via WhatsApp
+            </button>
+            <button onclick="toggleCart()" class="w-full border border-gray-600 text-gray-300 font-medium py-3 rounded-full hover:bg-white/5 transition-all text-sm">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-crown text-xl"></i>
+        <span>Added to cart!</span>
+    </div>
+
+    <!-- Hero -->
+    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-dark-light to-dark">
+        <div class="absolute inset-0">
+            <div class="absolute top-20 left-10 w-96 h-96 bg-royal/10 rounded-full blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-royal-dark/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-royal/5 rounded-full"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-royal/10 rounded-full"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 bg-royal/10 border border-royal/30 px-4 py-2 rounded-full mb-8">
+                <i class="fas fa-crown text-royal text-sm"></i>
+                <span class="text-xs font-bold tracking-wider uppercase text-royal">Premium Men's Collection</span>
+            </div>
+            
+            <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 leading-tight">
+                Dress Like <br>
+                <span class="text-gradient">Royalty</span>
+            </h1>
+            
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                Elevate your wardrobe with 55+ premium men's pieces. 
+                From streetwear to formal wear, experience luxury with instant WhatsApp checkout.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:from-royal-light hover:to-royal transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-royal/25">
+                    Shop Collection <i class="fas fa-arrow-down"></i>
+                </button>
+                <button onclick="showWhatsAppChat()" class="px-8 py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center gap-2 border border-royal/30">
+                    <i class="fab fa-whatsapp text-royal"></i> Personal Stylist
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
+                <div class="text-center glass rounded-2xl p-4 gold-border">
+                    <p class="font-display text-4xl font-bold text-royal">55+</p>
+                    <p class="text-sm text-gray-500 mt-1">Items</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-4 gold-border">
+                    <p class="font-display text-4xl font-bold text-royal">15+</p>
+                    <p class="text-sm text-gray-500 mt-1">Brands</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-4 gold-border">
+                    <p class="font-display text-4xl font-bold text-white">24h</p>
+                    <p class="text-sm text-gray-500 mt-1">Dispatch</p>
+                </div>
+                <div class="text-center glass rounded-2xl p-4 gold-border">
+                    <p class="font-display text-4xl font-bold text-white">5</p>
+                    <p class="text-sm text-gray-500 mt-1">Categories</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-8 bg-dark-lighter border-y border-royal/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="flex items-center justify-center gap-3 text-gray-300">
+                    <i class="fab fa-whatsapp text-3xl text-royal"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">WhatsApp Order</p>
+                        <p class="text-xs text-gray-500">Instant Checkout</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-gray-300">
+                    <i class="fas fa-crown text-3xl text-royal"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Premium Quality</p>
+                        <p class="text-xs text-gray-500">Authentic Brands</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-gray-300">
+                    <i class="fas fa-shipping-fast text-3xl text-royal"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Free Shipping</p>
+                        <p class="text-xs text-gray-500">Orders $200+</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-3 text-gray-300">
+                    <i class="fas fa-shield-alt text-3xl text-royal"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Secure</p>
+                        <p class="text-xs text-gray-500">100% Protected</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Pills -->
+    <section class="py-6 bg-dark border-b border-royal/10 sticky top-20 z-40" id="category-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+                <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all" data-category="all">All Items</button>
+                <button onclick="filterCategory('streetwear')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-300" data-category="streetwear">🔥 Streetwear</button>
+                <button onclick="filterCategory('formal')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-300" data-category="formal">👔 Formal</button>
+                <button onclick="filterCategory('casual')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-300" data-category="casual">👕 Casual</button>
+                <button onclick="filterCategory('activewear')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-300" data-category="activewear">🏃 Activewear</button>
+                <button onclick="filterCategory('outerwear')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-300" data-category="outerwear">🧥 Outerwear</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
+        <div class="flex justify-between items-center mb-8 reveal">
+            <div>
+                <h2 class="font-display text-3xl font-bold flex items-center gap-2">
+                    <i class="fas fa-crown text-royal text-2xl"></i>
+                    <span id="category-title">All Men's Clothing</span>
+                </h2>
+                <p class="text-gray-400 mt-1" id="category-count">Showing all items</p>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-400">
+                <i class="fas fa-sort text-royal"></i>
+                <select onchange="sortProducts(this.value)" class="bg-dark-lighter border border-gray-700 rounded-lg px-3 py-2 focus:border-royal outline-none text-white">
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Injected by JS -->
+        </div>
+
+        <div class="mt-16 text-center reveal">
+            <button onclick="loadMoreProducts()" id="load-more-btn" class="px-8 py-4 bg-dark-lighter border-2 border-royal/30 rounded-full text-sm font-bold hover:border-royal hover:text-royal transition-all flex items-center gap-2 mx-auto text-gray-300">
+                <i class="fas fa-spinner"></i> Load More
+            </button>
+        </div>
+    </section>
+
+    <!-- Size Guide -->
+    <section class="py-24 bg-dark-lighter border-y border-royal/10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="font-display text-3xl font-bold mb-2 flex items-center justify-center gap-3">
+                <i class="fas fa-ruler text-royal"></i>
+                Royal Size Guide
+            </h2>
+            <p class="text-gray-400 mb-8">Find your perfect fit</p>
+            <div class="glass rounded-2xl p-8 gold-border overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-royal/20">
+                            <th class="pb-4 font-bold text-royal">Size</th>
+                            <th class="pb-4 font-bold text-gray-300">Chest (in)</th>
+                            <th class="pb-4 font-bold text-gray-300">Waist (in)</th>
+                            <th class="pb-4 font-bold text-gray-300">Length (in)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-400">
+                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">XS</td><td>34-36</td><td>28-30</td><td>26</td></tr>
+                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">S</td><td>36-38</td><td>30-32</td><td>27</td></tr>
+                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">M</td><td>38-40</td><td>32-34</td><td>28</td></tr>
+                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">L</td><td>40-42</td><td>34-36</td><td>29</td></tr>
+                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">XL</td><td>42-44</td><td>36-38</td><td>30</td></tr>
+                        <tr><td class="py-4 font-bold text-white">XXL</td><td>44-46</td><td>38-40</td><td>31</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Float -->
+    <div class="whatsapp-float">
+        <button onclick="showWhatsAppChat()" class="w-16 h-16 bg-gradient-to-r from-royal to-royal-dark rounded-full flex items-center justify-center text-black text-3xl shadow-2xl hover:scale-110 transition-transform border-4 border-dark">
+            <i class="fab fa-whatsapp"></i>
+        </button>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="fixed inset-0 bg-black/90 z-[60] modal flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-dark-light rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-royal/20 shadow-2xl relative royal-glow">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all text-xl border border-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-content" class="grid md:grid-cols-2 gap-0">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark border-t border-royal/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <span class="font-display text-3xl font-bold tracking-wider text-white mb-6 block flex items-center gap-2">
+                        <i class="fas fa-crown text-royal crown-icon"></i>
+                        ROYAL
+                        <span class="text-sm font-normal text-gray-500 ml-2">MEN</span>
+                    </span>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Premium men's fashion for the modern gentleman. 
+                        Authentic brands, royal quality, instant WhatsApp checkout.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Shop</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" onclick="filterCategory('streetwear')" class="hover:text-royal transition-colors">Streetwear</a></li>
+                        <li><a href="#" onclick="filterCategory('formal')" class="hover:text-royal transition-colors">Formal Wear</a></li>
+                        <li><a href="#" onclick="filterCategory('casual')" class="hover:text-royal transition-colors">Casual</a></li>
+                        <li><a href="#" onclick="filterCategory('activewear')" class="hover:text-royal transition-colors">Activewear</a></li>
+                        <li><a href="#" onclick="filterCategory('outerwear')" class="hover:text-royal transition-colors">Outerwear</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Help</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-royal transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Returns</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Contact</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-center gap-3">
+                            <i class="fab fa-whatsapp text-royal text-lg"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-royal text-lg"></i>
+                            <span>king@royalfashion.com</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-crown text-royal text-lg"></i>
+                            <span>24/7 Royal Support</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">© 2024 ROYAL Men. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-2xl text-gray-600">
+                    <i class="fab fa-cc-visa hover:text-royal transition-colors"></i>
+                    <i class="fab fa-cc-mastercard hover:text-royal transition-colors"></i>
+                    <i class="fab fa-cc-amex hover:text-royal transition-colors"></i>
+                    <i class="fab fa-cc-paypal hover:text-royal transition-colors"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product Database (55 items)
+        const products = [
+            // STREETWEAR (15 items)
+            {
+                id: 1,
+                name: "Off-White Diagonal Hoodie",
+                brand: "Off-White",
+                price: 890,
+                originalPrice: 1100,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                badge: "BESTSELLER",
+                description: "Iconic diagonal stripe design with signature arrows motif. Heavyweight cotton fleece construction.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Grey"]
+            },
+            {
+                id: 2,
+                name: "Supreme Box Logo Tee",
+                brand: "Supreme",
+                price: 350,
+                originalPrice: 500,
+                category: "streetwear",
+                subcategory: "T-Shirts",
+                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
+                badge: "SALE",
+                description: "Classic box logo t-shirt in heavyweight cotton. Limited edition colorway.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Red", "Black", "White"]
+            },
+            {
+                id: 3,
+                name: "Palace Ark Air Bomber",
+                brand: "Palace Skateboards",
+                price: 450,
+                category: "streetwear",
+                subcategory: "Jackets",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
+                badge: "NEW",
+                description: "Military-inspired bomber jacket with Palace tri-ferg logo. Water-resistant nylon shell.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Olive", "Black", "Camo"]
+            },
+            {
+                id: 4,
+                name: "Stüssy Stock Logo Crew",
+                brand: "Stüssy",
+                price: 120,
+                category: "streetwear",
+                subcategory: "Sweatshirts",
+                image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&q=80",
+                description: "Classic stock logo crewneck sweatshirt. Premium loopback cotton.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Heather Grey", "Navy"]
+            },
+            {
+                id: 5,
+                name: "Kith Williams III Hoodie",
+                brand: "Kith",
+                price: 285,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+                badge: "LIMITED",
+                description: "Heavyweight French terry hoodie with tonal Kith embroidery. Made in USA.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Sand", "Sage", "Black"]
+            },
+            {
+                id: 6,
+                name: "BAPE Shark Full Zip",
+                brand: "A Bathing Ape",
+                price: 650,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                badge: "HOT",
+                description: "Iconic shark face full zip hoodie with WGM embroidery. Camo pattern.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Green Camo", "Blue Camo", "Purple Camo"]
+            },
+            {
+                id: 7,
+                name: "Fear of God Essentials Tee",
+                brand: "Essentials",
+                price: 95,
+                category: "streetwear",
+                subcategory: "T-Shirts",
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                description: "Oversized boxy fit t-shirt with rubberized Essentials logo. Premium jersey cotton.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Oatmeal", "Dark Grey"]
+            },
+            {
+                id: 8,
+                name: "Carhartt WIP Detroit Jacket",
+                brand: "Carhartt WIP",
+                price: 280,
+                category: "streetwear",
+                subcategory: "Jackets",
+                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
+                description: "Classic workwear jacket in durable duck canvas. Blanket lining for warmth.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Brown", "Black", "Hamilton Brown"]
+            },
+            {
+                id: 9,
+                name: "Stone Island Ghost Piece",
+                brand: "Stone Island",
+                price: 850,
+                category: "streetwear",
+                subcategory: "Sweatshirts",
+                badge: "LUXURY",
+                description: "Monochromatic ghost piece crewneck with signature badge. Garment dyed.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Black", "Navy", "Olive"]
+            },
+            {
+                id: 10,
+                name: "Noah NY Core Logo Hoodie",
+                brand: "Noah",
+                price: 198,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                image: "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=800&q=80",
+                description: "Heavyweight hoodie with embroidered winged foot logo. Made in Canada.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Navy", "Burgundy", "Forest Green"]
+            },
+            {
+                id: 11,
+                name: "Dime MTL Classic Logo Tee",
+                brand: "Dime",
+                price: 45,
+                category: "streetwear",
+                subcategory: "T-Shirts",
+                description: "Classic skate tee with Dime logo. 100% cotton construction.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Black", "Yellow"]
+            },
+            {
+                id: 12,
+                name: "Thrasher Flame Hoodie",
+                brand: "Thrasher",
+                price: 85,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                description: "Iconic flame logo hoodie. Heavyweight cotton fleece.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Grey", "White"]
+            },
+            {
+                id: 13,
+                name: "Anti Social Social Club Tee",
+                brand: "ASSC",
+                price: 78,
+                category: "streetwear",
+                subcategory: "T-Shirts",
+                description: "Oversized tee with signature logo print. Limited drop.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["White", "Pink", "Black"]
+            },
+            {
+                id: 14,
+                name: "FTP All Over Print Hoodie",
+                brand: "FTP",
+                price: 160,
+                category: "streetwear",
+                subcategory: "Hoodies",
+                badge: "LIMITED",
+                description: "All-over print hoodie with anti-establishment graphics.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Black/White"]
+            },
+            {
+                id: 15,
+                name: "Pleasures Cut Here Tee",
+                brand: "Pleasures",
+                price: 55,
+                category: "streetwear",
+                subcategory: "T-Shirts",
+                description: "Punk-inspired graphic tee. Soft vintage wash cotton.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Vintage Black"]
+            },
+
+            // FORMAL WEAR (10 items)
+            {
+                id: 16,
+                name: "Hugo Boss Slim Fit Suit",
+                brand: "Hugo Boss",
+                price: 895,
+                category: "formal",
+                subcategory: "Suits",
+                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                badge: "BESTSELLER",
+                description: "Modern slim fit suit in virgin wool. Two-button jacket with flat-front trousers.",
+                sizes: ["36R", "38R", "40R", "42R", "44R"],
+                colors: ["Navy", "Charcoal", "Black"]
+            },
+            {
+                id: 17,
+                name: "Armani Exchange Blazer",
+                brand: "Armani Exchange",
+                price: 425,
+                category: "formal",
+                subcategory: "Blazers",
+                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
+                description: "Single-breasted blazer in stretch cotton. Notch lapel design.",
+                sizes: ["36", "38", "40", "42", "44"],
+                colors: ["Navy", "Light Grey", "Beige"]
+            },
+            {
+                id: 18,
+                name: "Ralph Lauren Oxford Shirt",
+                brand: "Polo Ralph Lauren",
+                price: 98,
+                category: "formal",
+                subcategory: "Shirts",
+                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+                description: "Classic fit oxford shirt with embroidered pony logo. Button-down collar.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Light Blue", "Pink", "Navy"]
+            },
+            {
+                id: 19,
+                name: "Brooks Brothers Non-Iron Dress Shirt",
+                brand: "Brooks Brothers",
+                price: 92,
+                category: "formal",
+                subcategory: "Shirts",
+                description: "Madison fit non-iron dress shirt. 100% Supima cotton.",
+                sizes: ["14.5/32", "15/33", "15.5/34", "16/35", "16.5/36"],
+                colors: ["White", "Light Blue", "French Blue"]
+            },
+            {
+                id: 20,
+                name: "Calvin Klein Slim Fit Tuxedo",
+                brand: "Calvin Klein",
+                price: 650,
+                category: "formal",
+                subcategory: "Suits",
+                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
+                description: "Slim fit tuxedo with satin peak lapels. Perfect for black tie events.",
+                sizes: ["36R", "38R", "40R", "42R", "44R"],
+                colors: ["Black"]
+            },
+            {
+                id: 21,
+                name: "Theory Sylvain Dress Shirt",
+                brand: "Theory",
+                price: 195,
+                category: "formal",
+                subcategory: "Shirts",
+                description: "Slim fit dress shirt in stretch cotton. Wrinkle-resistant finish.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["White", "Light Blue", "Grey"]
+            },
+            {
+                id: 22,
+                name: "J.Crew Ludlow Blazer",
+                brand: "J.Crew",
+                price: 298,
+                category: "formal",
+                subcategory: "Blazers",
+                description: "Ludlow slim fit blazer in Italian wool. Two-button closure.",
+                sizes: ["36", "38", "40", "42", "44"],
+                colors: ["Navy", "Charcoal", "Brown"]
+            },
+            {
+                id: 23,
+                name: "Tommy Hilfiger Chino Pants",
+                brand: "Tommy Hilfiger",
+                price: 89,
+                category: "formal",
+                subcategory: "Pants",
+                description: "Slim fit chino pants in stretch cotton. Classic flat front.",
+                sizes: ["30x30", "32x32", "33x32", "34x32", "36x32"],
+                colors: ["Khaki", "Navy", "Olive", "Grey"]
+            },
+            {
+                id: 24,
+                name: "Banana Republic Rapid Movement Chino",
+                brand: "Banana Republic",
+                price: 98,
+                category: "formal",
+                subcategory: "Pants",
+                description: "Athletic-fit chino with four-way stretch. Wrinkle-resistant.",
+                sizes: ["30", "32", "33", "34", "36", "38"],
+                colors: ["True Khaki", "Navy", "Black", "Olive"]
+            },
+            {
+                id: 25,
+                name: "Charles Tyrwhitt Silk Tie",
+                brand: "Charles Tyrwhitt",
+                price: 65,
+                category: "formal",
+                subcategory: "Accessories",
+                description: "100% silk woven tie. Classic width and length.",
+                sizes: ["One Size"],
+                colors: ["Navy Stripe", "Burgundy", "Gold", "Silver"]
+            },
+
+            // CASUAL WEAR (12 items)
+            {
+                id: 26,
+                name: "Uniqlo U Crew Neck Tee",
+                brand: "Uniqlo",
+                price: 25,
+                category: "casual",
+                subcategory: "T-Shirts",
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                badge: "VALUE",
+                description: "U series crew neck in premium cotton. Relaxed fit with dropped shoulders.",
+                sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Black", "Grey", "Navy", "Olive"]
+            },
+            {
+                id: 27,
+                name: "Everlane Heavyweight Tee",
+                brand: "Everlane",
+                price: 38,
+                category: "casual",
+                subcategory: "T-Shirts",
+                description: "Heavyweight 6.2oz organic cotton tee. Boxy, oversized fit.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Heather Grey", "Navy"]
+            },
+            {
+                id: 28,
+                name: "Patagonia P-6 Logo Tee",
+                brand: "Patagonia",
+                price: 45,
+                category: "casual",
+                subcategory: "T-Shirts",
+                description: "Classic P-6 logo tee in organic cotton. 1% for the Planet.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Black", "Navy", "Grey"]
+            },
+            {
+                id: 29,
+                name: "Levi's 501 Original Jeans",
+                brand: "Levi's",
+                price: 98,
+                category: "casual",
+                subcategory: "Jeans",
+                image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&q=80",
+                badge: "CLASSIC",
+                description: "Original straight fit jeans in shrink-to-fit denim. Button fly.",
+                sizes: ["28", "30", "32", "33", "34", "36", "38"],
+                colors: ["Rigid", "Light Stonewash", "Dark Stonewash", "Black"]
+            },
+            {
+                id: 30,
+                name: "Lee Modern Series Slim Jean",
+                brand: "Lee",
+                price: 68,
+                category: "casual",
+                subcategory: "Jeans",
+                description: "Slim fit jeans with active stretch waistband. Modern comfort.",
+                sizes: ["29", "30", "32", "33", "34", "36"],
+                colors: ["Raw", "Medium Wash", "Dark Wash", "Black"]
+            },
+            {
+                id: 31,
+                name: "Wrangler Retro Slim Boot",
+                brand: "Wrangler",
+                price: 89,
+                category: "casual",
+                subcategory: "Jeans",
+                description: "Slim boot cut jeans with retro styling. Premium denim.",
+                sizes: ["30", "32", "33", "34", "36", "38"],
+                colors: ["Dark Denim", "Light Denim", "Black"]
+            },
+            {
+                id: 32,
+                name: "Gap Vintage Soft Henley",
+                brand: "Gap",
+                price: 45,
+                category: "casual",
+                subcategory: "Long Sleeve",
+                description: "Vintage soft henley with three-button placket. Ultra-soft wash.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Heather Grey", "Navy", "Black", "Olive"]
+            },
+            {
+                id: 33,
+                name: "Abercrombie & Fitch Polo",
+                brand: "Abercrombie",
+                price: 55,
+                category: "casual",
+                subcategory: "Polos",
+                description: "Classic fit polo in pique cotton. Tonal moose logo.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Navy", "Pink", "Light Blue", "Grey"]
+            },
+            {
+                id: 34,
+                name: "Lacoste Classic Pique Polo",
+                brand: "Lacoste",
+                price: 98,
+                category: "casual",
+                subcategory: "Polos",
+                badge: "PREMIUM",
+                description: "Original L.12.12 polo in petit pique cotton. Iconic croc logo.",
+                sizes: ["3", "4", "5", "6", "7", "8"],
+                colors: ["White", "Navy", "Black", "Green", "Red"]
+            },
+            {
+                id: 35,
+                name: "H&M Conscious Sweatshirt",
+                brand: "H&M",
+                price: 35,
+                category: "casual",
+                subcategory: "Sweatshirts",
+                description: "Conscious collection sweatshirt in organic cotton blend.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Grey", "Beige", "Green"]
+            },
+            {
+                id: 36,
+                name: "Zara Basic Hoodie",
+                brand: "Zara",
+                price: 49,
+                category: "casual",
+                subcategory: "Hoodies",
+                description: "Basic hoodie in soft cotton blend. Kangaroo pocket.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Grey", "Navy", "Khaki"]
+            },
+            {
+                id: 37,
+                name: "ASOS Design Oversized Tee",
+                brand: "ASOS",
+                price: 22,
+                category: "casual",
+                subcategory: "T-Shirts",
+                description: "Extreme oversized t-shirt in heavyweight jersey. Dropped shoulders.",
+                sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Neon", "Pastel"]
+            },
+
+            // ACTIVEWEAR (8 items)
+            {
+                id: 38,
+                name: "Nike Pro Compression Tee",
+                brand: "Nike",
+                price: 35,
+                category: "activewear",
+                subcategory: "Base Layer",
+                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
+                description: "Tight-fit compression tee with Dri-FIT technology. Flat seams.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Grey", "Navy"]
+            },
+            {
+                id: 39,
+                name: "Under Armour HeatGear Tee",
+                brand: "Under Armour",
+                price: 30,
+                category: "activewear",
+                subcategory: "T-Shirts",
+                description: "HeatGear fabric wicks sweat and regulates body temperature.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "White", "Red", "Blue", "Grey"]
+            },
+            {
+                id: 40,
+                name: "Lululemon Metal Vent Tech",
+                brand: "Lululemon",
+                price: 78,
+                category: "activewear",
+                subcategory: "T-Shirts",
+                badge: "PREMIUM",
+                description: "Seamless construction with anti-stink technology. Silverescent threads.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Slate", "Navy", "Olive"]
+            },
+            {
+                id: 41,
+                name: "Adidas Tiro Track Pants",
+                brand: "Adidas",
+                price: 65,
+                category: "activewear",
+                subcategory: "Pants",
+                description: "Slim-fit track pants with moisture-wicking fabric. Ankle zips.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Grey"]
+            },
+            {
+                id: 42,
+                name: "Gymshark Vital Seamless",
+                brand: "Gymshark",
+                price: 50,
+                category: "activewear",
+                subcategory: "Long Sleeve",
+                description: "Seamless long sleeve with contouring shading. Sweat-wicking.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Black", "Charcoal", "Navy", "Olive"]
+            },
+            {
+                id: 43,
+                name: "Rhone Reign Short Sleeve",
+                brand: "Rhone",
+                price: 68,
+                category: "activewear",
+                subcategory: "T-Shirts",
+                description: "Premium workout tee with GoldFusion anti-odor technology.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Heather Grey", "Olive"]
+            },
+            {
+                id: 44,
+                name: "Ten Thousand Session Short",
+                brand: "Ten Thousand",
+                price: 68,
+                category: "activewear",
+                subcategory: "Shorts",
+                description: "Versatile training short with phone pocket. 7-inch inseam.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Olive", "Grey"]
+            },
+            {
+                id: 45,
+                name: "Outdoor Voices Rectrek Pant",
+                brand: "Outdoor Voices",
+                price: 98,
+                category: "activewear",
+                subcategory: "Pants",
+                description: "Versatile pants for hiking to happy hour. Water-resistant.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Olive", "Khaki"]
+            },
+
+            // OUTERWEAR (10 items)
+            {
+                id: 46,
+                name: "The North Face 1996 Retro Nuptse",
+                brand: "The North Face",
+                price: 320,
+                category: "outerwear",
+                subcategory: "Jackets",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
+                badge: "BESTSELLER",
+                description: "Iconic boxy puffer jacket with 700-fill goose down. Packable into pocket.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Olive", "Red", "Yellow"]
+            },
+            {
+                id: 47,
+                name: "Patagonia Nano Puff Hoody",
+                brand: "Patagonia",
+                price: 299,
+                category: "outerwear",
+                subcategory: "Jackets",
+                description: "Lightweight synthetic insulated hoody. PrimaLoft Gold insulation.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Forge Grey", "Classic Navy"]
+            },
+            {
+                id: 48,
+                name: "Arc'teryx Atom LT Hoody",
+                brand: "Arc'teryx",
+                price: 379,
+                category: "outerwear",
+                subcategory: "Jackets",
+                badge: "PREMIUM",
+                description: "Versatile insulated hoody for alpine conditions. Coreloft Compact.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Pilot", "Glitch", "Paradox"]
+            },
+            {
+                id: 49,
+                name: "Canada Goose Chilliwack Bomber",
+                brand: "Canada Goose",
+                price: 1150,
+                category: "outerwear",
+                subcategory: "Jackets",
+                badge: "LUXURY",
+                description: "Pilot-style bomber with 625-fill white duck down. Fur-trimmed hood.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Graphite", "Red"]
+            },
+            {
+                id: 50,
+                name: "Woolrich Arctic Parka",
+                brand: "Woolrich",
+                price: 850,
+                category: "outerwear",
+                subcategory: "Parkas",
+                description: "Heritage parka with Teflon coating. Removable fur trim.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Navy", "Dark Green", "Camel"]
+            },
+            {
+                id: 51,
+                name: "Barbour Ashby Wax Jacket",
+                brand: "Barbour",
+                price: 450,
+                category: "outerwear",
+                subcategory: "Jackets",
+                description: "Slim-fit waxed cotton jacket with corduroy collar. British-made.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Olive", "Black", "Navy"]
+            },
+            {
+                id: 52,
+                name: "Alpha Industries MA-1 Flight Jacket",
+                brand: "Alpha Industries",
+                price: 180,
+                category: "outerwear",
+                subcategory: "Jackets",
+                badge: "CLASSIC",
+                description: "Authentic MA-1 bomber with reversible orange lining. Flight satin.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Sage Green", "Black", "Navy", "Maroon"]
+            },
+            {
+                id: 53,
+                name: "Schott NYC Perfecto Leather Jacket",
+                brand: "Schott",
+                price: 895,
+                category: "outerwear",
+                subcategory: "Leather",
+                description: "Original Perfecto motorcycle jacket in steerhide leather. Made in USA.",
+                sizes: ["36", "38", "40", "42", "44", "46"],
+                colors: ["Black", "Brown"]
+            },
+            {
+                id: 54,
+                name: "Belstaff Trialmaster Jacket",
+                brand: "Belstaff",
+                price: 650,
+                category: "outerwear",
+                subcategory: "Jackets",
+                description: "Waxed cotton motorcycle jacket with four-pocket design.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Olive", "Brown"]
+            },
+            {
+                id: 55,
+                name: "Uniqlo Blocktech Parka",
+                brand: "Uniqlo",
+                price: 99,
+                category: "outerwear",
+                subcategory: "Rain Jackets",
+                badge: "VALUE",
+                description: "Waterproof breathable parka with sealed seams. Packable design.",
+                sizes: ["S", "M", "L", "XL", "XXL", "3XL"],
+                colors: ["Black", "Navy", "Olive", "Beige"]
+            }
+        ];
+
+        let cart = [];
+        let currentCategory = 'all';
+        let currentSort = 'newest';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            initScrollReveal();
+            updateCategoryTitle();
+        });
+
+        // Render Products
+        function renderProducts(filter = 'all', searchTerm = '') {
+            const grid = document.getElementById('products-grid');
+            let filtered = products;
+
+            if (filter !== 'all') {
+                filtered = filtered.filter(p => p.category === filter);
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    p.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    p.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+
+            if (currentSort === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (currentSort === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            }
+
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card reveal">
+                    <div class="product-image-container rounded-2xl h-[400px] mb-4 relative gold-border">
+                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''}">${product.badge}</div>` : ''}
+                        
+                        <button onclick="addToCart(${product.id})" class="quick-add-btn" title="Quick Add">
+                            <i class="fas fa-plus"></i>
+                        </button>
+
+                        <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="product-image">
+                        
+                        <div class="product-actions">
+                            <button onclick="openQuickView(${product.id})" class="action-btn action-btn-secondary">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="addToCart(${product.id})" class="action-btn action-btn-primary">
+                                <i class="fas fa-shopping-bag"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 px-1">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-royal font-bold uppercase tracking-wider">${product.brand}</p>
+                                <p class="text-xs text-gray-500">${product.subcategory}</p>
+                            </div>
+                            <div class="flex items-center gap-1 bg-royal/10 px-2 py-1 rounded-full border border-royal/20">
+                                <i class="fas fa-crown text-royal text-xs"></i>
+                                <span class="text-xs font-bold text-royal">4.9</span>
+                            </div>
+                        </div>
+                        <h3 class="font-display text-lg font-bold text-white leading-tight cursor-pointer hover:text-royal transition-colors" onclick="openQuickView(${product.id})">
+                            ${product.name}
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-bold text-royal">$${product.price}</span>
+                            ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('category-count').textContent = `Showing ${filtered.length} items`;
+
+            setTimeout(() => {
+                document.querySelectorAll('#products-grid .reveal').forEach(el => el.classList.add('active'));
+            }, 100);
+        }
+
+        // Filter Functions
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            document.querySelectorAll('.category-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === category);
+                if (btn.dataset.category === category) {
+                    btn.classList.remove('text-gray-300');
+                } else {
+                    btn.classList.add('text-gray-300');
+                }
+            });
+
+            renderProducts(category);
+            updateCategoryTitle();
+
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function updateCategoryTitle() {
+            const titles = {
+                'all': 'All Men\'s Collection',
+                'streetwear': 'Royal Streetwear',
+                'formal': 'Royal Formal Wear',
+                'casual': 'Royal Casual Wear',
+                'activewear': 'Royal Activewear',
+                'outerwear': 'Royal Outerwear'
+            };
+            document.getElementById('category-title').textContent = titles[currentCategory] || titles['all'];
+        }
+
+        function sortProducts(sortType) {
+            currentSort = sortType;
+            renderProducts(currentCategory, document.getElementById('search-input').value);
+        }
+
+        function filterProducts() {
+            renderProducts(currentCategory, document.getElementById('search-input').value);
+        }
+
+        function toggleSearch() {
+            const bar = document.getElementById('search-bar');
+            bar.classList.toggle('hidden');
+            if (!bar.classList.contains('hidden')) {
+                document.getElementById('search-input').focus();
+            }
+        }
+
+        // Cart Functions
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1, selectedSize: product.sizes[0] });
+            }
+
+            updateCartUI();
+            showToast();
+            
+            const cartIcon = document.querySelector('.fa-shopping-bag').parentElement;
+            cartIcon.classList.add('animate-bounce');
+            setTimeout(() => cartIcon.classList.remove('animate-bounce'), 1000);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) removeFromCart(productId);
+                else updateCartUI();
+            }
+        }
+
+        function updateSize(productId, size) {
+            const item = cart.find(item => item.id === productId);
+            if (item) item.selectedSize = size;
+        }
+
+        function updateCartUI() {
+            const count = document.getElementById('cart-count');
+            const totalItems = document.getElementById('cart-total-items');
+            const items = document.getElementById('cart-items');
+            const subtotal = document.getElementById('cart-subtotal');
+            const total = document.getElementById('cart-total');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            count.textContent = totalQty;
+            count.classList.toggle('scale-0', totalQty === 0);
+            count.classList.toggle('scale-100', totalQty > 0);
+            totalItems.textContent = totalQty;
+
+            if (cart.length === 0) {
+                items.innerHTML = `
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fas fa-crown text-6xl mb-4 opacity-20"></i>
+                        <p class="text-lg mb-2">Your cart is empty</p>
+                        <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+                    </div>
+                `;
+            } else {
+                items.innerHTML = cart.map(item => `
+                    <div class="cart-item flex gap-4 bg-dark rounded-xl p-4 border border-gray-800">
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg border border-gray-700">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <div>
+                                    <p class="text-xs text-royal font-bold">${item.brand}</p>
+                                    <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
+                                </div>
+                                <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-xs text-gray-400">Size:</span>
+                                <select onchange="updateSize(${item.id}, this.value)" class="bg-dark-lighter border border-gray-700 rounded text-xs px-2 py-1 focus:border-royal outline-none">
+                                    ${item.sizes.map(size => `<option value="${size}" ${size === item.selectedSize ? 'selected' : ''}>${size}</option>`).join('')}
+                                </select>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-1 bg-dark-lighter rounded-lg p-1">
+                                    <button onclick="updateQuantity(${item.id}, -1)" class="qty-btn text-gray-400 hover:text-black">-</button>
+                                    <span class="w-8 text-center font-bold text-sm">${item.quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, 1)" class="qty-btn text-gray-400 hover:text-black">+</button>
+                                </div>
+                                <p class="font-bold text-royal text-lg">$${(item.price * item.quantity).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            subtotal.textContent = `$${totalPrice.toLocaleString()}.00`;
+            total.textContent = `$${totalPrice.toLocaleString()}.00`;
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = sidebar.classList.contains('open');
+            
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // WhatsApp Checkout
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            const phone = '1234567890';
+            let message = `👑 *ROYAL MEN'S ORDER*%0A%0A`;
+            
+            cart.forEach((item, i) => {
+                message += `*${i + 1}. ${item.name}*%0A`;
+                message += `   Brand: ${item.brand}%0A`;
+                message += `   Category: ${item.category}%0A`;
+                message += `   Size: ${item.selectedSize}%0A`;
+                message += `   Qty: ${item.quantity}%0A`;
+                message += `   Price: $${(item.price * item.quantity).toLocaleString()}%0A%0A`;
+            });
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            message += `*TOTAL: $${total.toLocaleString()}.00*%0A%0A`;
+            message += `Please confirm availability. 👑`;
+
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+
+        function showWhatsAppChat() {
+            window.open(`https://wa.me/1234567890?text=👑 Hi! I'm looking for royal fashion advice.`, '_blank');
+        }
+
+        // Quick View
+        function openQuickView(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('quick-view-modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="h-[300px] md:h-[600px] bg-dark-lighter">
+                    <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-8 md:p-12 space-y-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-royal font-bold tracking-wider uppercase text-sm">${product.brand}</span>
+                            <span class="text-gray-500 text-sm">• ${product.subcategory}</span>
+                            ${product.badge ? `<span class="bg-royal/20 text-royal text-xs font-bold px-3 py-1 rounded-full border border-royal/30">${product.badge}</span>` : ''}
+                        </div>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold mb-4 leading-tight">${product.name}</h2>
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="text-4xl font-bold text-royal">$${product.price}</span>
+                            ${product.originalPrice ? `<span class="text-2xl text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
+                        </div>
+                        <p class="text-gray-400 leading-relaxed text-lg">${product.description}</p>
+                        
+                        ${product.colors ? `
+                        <div class="mt-4">
+                            <p class="text-sm font-bold text-gray-400 mb-2">Available Colors:</p>
+                            <div class="flex gap-2">
+                                ${product.colors.map(color => `<span class="px-3 py-1 bg-dark-lighter rounded-full text-sm border border-gray-700">${color}</span>`).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div>
+                        <p class="font-bold mb-3 text-sm uppercase tracking-wider text-gray-400">Select Size</p>
+                        <div class="flex flex-wrap gap-3">
+                            ${product.sizes.map((size, i) => `
+                                <button onclick="selectSize(this)" class="size-btn w-14 h-14 rounded-xl font-bold hover:border-royal ${i === 0 ? 'selected' : ''}">${size}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button onclick="addToCart(${product.id}); closeQuickView();" class="flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-2 text-lg shadow-lg shadow-royal/20">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                        <button onclick="buyNow(${product.id})" class="flex-1 border-2 border-royal text-royal font-bold py-4 rounded-full hover:bg-royal hover:text-black transition-all flex items-center justify-center gap-2 text-lg">
+                            <i class="fab fa-whatsapp"></i> Buy Now
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-800 text-center">
+                        <div class="text-gray-400">
+                            <i class="fas fa-crown text-royal mb-2 text-xl"></i>
+                            <p class="text-xs">Authentic</p>
+                        </div>
+                        <div class="text-gray-400">
+                            <i class="fas fa-truck text-royal mb-2 text-xl"></i>
+                            <p class="text-xs">Free Shipping</p>
+                        </div>
+                        <div class="text-gray-400">
+                            <i class="fas fa-undo text-royal mb-2 text-xl"></i>
+                            <p class="text-xs">30-Day Returns</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuickView() {
+            document.getElementById('quick-view-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function selectSize(btn) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function buyNow(productId) {
+            const product = products.find(p => p.id === productId);
+            const selectedSize = document.querySelector('.size-btn.selected')?.textContent || product.sizes[0];
+            const phone = '1234567890';
+            
+            const message = `👑 *Quick Order - ROYAL Men*%0A%0A*${product.name}*%0ABrand: ${product.brand}%0ACategory: ${product.category}%0ASize: ${selectedSize}%0APrice: $${product.price}%0A%0APlease confirm availability.`;
+            
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+
+        // Toast
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Scroll Reveal
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Close modal on outside click
+        document.getElementById('quick-view-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'quick-view-modal') closeQuickView();
+        });
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Load more
+        function loadMoreProducts() {
+            const btn = document.getElementById('load-more-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> All Items Loaded';
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }, 1000);
+        }
+
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('glass-strong');
+            else nav.classList.remove('glass-strong');
+        });
+    </script>
+</body>
+</html>
