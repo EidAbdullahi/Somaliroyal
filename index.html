@@ -19,7 +19,7 @@
                         display: ['Playfair Display', 'serif'],
                     },
                     colors: {
-                        royal: '#D4AF37', // Gold
+                        royal: '#D4AF37',
                         'royal-dark': '#B8941F',
                         'royal-light': '#F4E4BC',
                         dark: '#0a0a0a',
@@ -30,6 +30,7 @@
                         'fade-up': 'fadeUp 0.8s ease-out forwards',
                         'shimmer': 'shimmer 2s linear infinite',
                         'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeUp: {
@@ -116,21 +117,114 @@
             transform: translateY(-5px);
         }
 
-        .product-image-container {
+        /* Video Container Styles */
+        .product-media-container {
             position: relative;
             overflow: hidden;
             background: #1a1a1a;
+            border-radius: 1rem;
         }
 
-        .product-image {
-            transition: transform 0.6s ease;
+        .product-image, .product-video {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.5s ease;
+        }
+
+        .product-video {
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .product-card:hover .product-video {
+            opacity: 1;
         }
 
         .product-card:hover .product-image {
-            transform: scale(1.08);
+            opacity: 0;
+        }
+
+        /* Video Progress Bar */
+        .video-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #D4AF37, #F4E4BC);
+            width: 0%;
+            z-index: 10;
+            transition: width 0.1s linear;
+        }
+
+        /* Play Button Overlay */
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(212, 175, 55, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.5rem;
+            z-index: 5;
+            opacity: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .product-card:hover .video-play-btn {
+            opacity: 1;
+        }
+
+        .video-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: #D4AF37;
+        }
+
+        /* Video Duration Badge */
+        .video-duration {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #D4AF37;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 6;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Video Indicator */
+        .video-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(212, 175, 55, 0.9);
+            color: #000;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            z-index: 6;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .product-actions {
@@ -143,6 +237,7 @@
             display: flex;
             gap: 0.75rem;
             opacity: 1;
+            z-index: 10;
         }
 
         .action-btn {
@@ -185,7 +280,7 @@
         .quick-add-btn {
             position: absolute;
             top: 1rem;
-            right: 1rem;
+            right: 3.5rem;
             width: 44px;
             height: 44px;
             background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
@@ -250,7 +345,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            z-index: 5;
+            z-index: 10;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
@@ -367,6 +462,50 @@
         .royal-glow {
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
         }
+
+        /* Fullscreen Video Modal */
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 1rem;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .video-modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(212, 175, 55, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-modal-close:hover {
+            transform: scale(1.1);
+            background: #D4AF37;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -445,7 +584,7 @@
         
         <div id="cart-items" class="p-6 space-y-4 min-h-[300px]">
             <div class="text-center text-gray-500 py-12">
-                <i class="fas fa-shopping-bag text-6xl mb-4 opacity-20"></i>
+                <i class="fas fa-crown text-6xl mb-4 opacity-20"></i>
                 <p class="text-lg mb-2">Your cart is empty</p>
                 <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
             </div>
@@ -483,6 +622,16 @@
         <span>Added to cart!</span>
     </div>
 
+    <!-- Fullscreen Video Modal -->
+    <div id="video-modal" class="video-modal" onclick="closeVideoModal()">
+        <button class="video-modal-close" onclick="closeVideoModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <video id="modal-video" controls autoplay loop playsinline>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
     <!-- Hero -->
     <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-dark-light to-dark">
         <div class="absolute inset-0">
@@ -504,13 +653,13 @@
             </h1>
             
             <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-                Elevate your wardrobe with 55+ premium men's pieces. 
-                From streetwear to formal wear, experience luxury with instant WhatsApp checkout.
+                Experience 55+ premium men's pieces with immersive 15-second video previews. 
+                Royal quality, instant WhatsApp checkout.
             </p>
             
             <div class="flex flex-wrap justify-center gap-4">
                 <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:from-royal-light hover:to-royal transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-royal/25">
-                    Shop Collection <i class="fas fa-arrow-down"></i>
+                    <i class="fas fa-play-circle"></i> Watch & Shop
                 </button>
                 <button onclick="showWhatsAppChat()" class="px-8 py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center gap-2 border border-royal/30">
                     <i class="fab fa-whatsapp text-royal"></i> Personal Stylist
@@ -520,11 +669,11 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
                 <div class="text-center glass rounded-2xl p-4 gold-border">
                     <p class="font-display text-4xl font-bold text-royal">55+</p>
-                    <p class="text-sm text-gray-500 mt-1">Items</p>
+                    <p class="text-sm text-gray-500 mt-1">Video Items</p>
                 </div>
                 <div class="text-center glass rounded-2xl p-4 gold-border">
-                    <p class="font-display text-4xl font-bold text-royal">15+</p>
-                    <p class="text-sm text-gray-500 mt-1">Brands</p>
+                    <p class="font-display text-4xl font-bold text-royal">15s</p>
+                    <p class="text-sm text-gray-500 mt-1">Previews</p>
                 </div>
                 <div class="text-center glass rounded-2xl p-4 gold-border">
                     <p class="font-display text-4xl font-bold text-white">24h</p>
@@ -543,10 +692,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fab fa-whatsapp text-3xl text-royal"></i>
+                    <i class="fas fa-video text-3xl text-royal"></i>
                     <div class="text-left">
-                        <p class="font-bold text-sm">WhatsApp Order</p>
-                        <p class="text-xs text-gray-500">Instant Checkout</p>
+                        <p class="font-bold text-sm">Video Preview</p>
+                        <p class="text-xs text-gray-500">15-Second Clips</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-3 text-gray-300">
@@ -564,10 +713,10 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fas fa-shield-alt text-3xl text-royal"></i>
+                    <i class="fab fa-whatsapp text-3xl text-royal"></i>
                     <div class="text-left">
-                        <p class="font-bold text-sm">Secure</p>
-                        <p class="text-xs text-gray-500">100% Protected</p>
+                        <p class="font-bold text-sm">WhatsApp</p>
+                        <p class="text-xs text-gray-500">Instant Checkout</p>
                     </div>
                 </div>
             </div>
@@ -594,9 +743,12 @@
             <div>
                 <h2 class="font-display text-3xl font-bold flex items-center gap-2">
                     <i class="fas fa-crown text-royal text-2xl"></i>
-                    <span id="category-title">All Men's Clothing</span>
+                    <span id="category-title">All Men's Collection</span>
                 </h2>
-                <p class="text-gray-400 mt-1" id="category-count">Showing all items</p>
+                <p class="text-gray-400 mt-1 flex items-center gap-2">
+                    <i class="fas fa-video text-royal"></i>
+                    <span id="category-count">Showing all items with video</span>
+                </p>
             </div>
             <div class="flex items-center gap-2 text-sm text-gray-400">
                 <i class="fas fa-sort text-royal"></i>
@@ -681,8 +833,8 @@
                         <span class="text-sm font-normal text-gray-500 ml-2">MEN</span>
                     </span>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Premium men's fashion for the modern gentleman. 
-                        Authentic brands, royal quality, instant WhatsApp checkout.
+                        Premium men's fashion with immersive video previews. 
+                        Royal quality, instant WhatsApp checkout.
                     </p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
@@ -750,7 +902,7 @@
     </footer>
 
     <script>
-        // Product Database (55 items)
+        // Product Database with Video URLs (using sample video URLs - replace with your actual 15-second videos)
         const products = [
             // STREETWEAR (15 items)
             {
@@ -762,6 +914,7 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
                 badge: "BESTSELLER",
                 description: "Iconic diagonal stripe design with signature arrows motif. Heavyweight cotton fleece construction.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -776,6 +929,7 @@
                 category: "streetwear",
                 subcategory: "T-Shirts",
                 image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
+                video: "https://www.shutterstock.com/shutterstock/videos/1091612887/preview/stock-footage-thoughtful-black-woman-with-hijab-on-head-looks-around-in-shopping-center-slow-motion-muslim-lady.webm",
                 badge: "SALE",
                 description: "Classic box logo t-shirt in heavyweight cotton. Limited edition colorway.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -788,7 +942,8 @@
                 price: 450,
                 category: "streetwear",
                 subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
+                image: "https://p16-common-sign.tiktokcdn-us.com/tos-maliva-p-0068/oEJIigdsBDHDhJIcfGFoQ2QERA6GBrRfEVBnSg~tplv-tiktokx-origin.image?dr=9636&x-expires=1772319600&x-signature=eyU2qluxw7IOb2T%2F7OO3Ka70ieI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=55bbe6a9&idc=useast5",
+                video: "https://www.shutterstock.com/shutterstock/videos/3798766477/preview/stock-footage-muslim-family-father-mother-son-and-daughter-wearing-traditional-clothes-are-posing-together.webm",
                 badge: "NEW",
                 description: "Military-inspired bomber jacket with Palace tri-ferg logo. Water-resistant nylon shell.",
                 sizes: ["S", "M", "L", "XL"],
@@ -802,6 +957,7 @@
                 category: "streetwear",
                 subcategory: "Sweatshirts",
                 image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 description: "Classic stock logo crewneck sweatshirt. Premium loopback cotton.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Heather Grey", "Navy"]
@@ -814,6 +970,7 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 badge: "LIMITED",
                 description: "Heavyweight French terry hoodie with tonal Kith embroidery. Made in USA.",
                 sizes: ["S", "M", "L", "XL"],
@@ -827,6 +984,7 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 badge: "HOT",
                 description: "Iconic shark face full zip hoodie with WGM embroidery. Camo pattern.",
                 sizes: ["S", "M", "L", "XL"],
@@ -840,6 +998,7 @@
                 category: "streetwear",
                 subcategory: "T-Shirts",
                 image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Oversized boxy fit t-shirt with rubberized Essentials logo. Premium jersey cotton.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Oatmeal", "Dark Grey"]
@@ -852,6 +1011,7 @@
                 category: "streetwear",
                 subcategory: "Jackets",
                 image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Classic workwear jacket in durable duck canvas. Blanket lining for warmth.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Brown", "Black", "Hamilton Brown"]
@@ -863,6 +1023,7 @@
                 price: 850,
                 category: "streetwear",
                 subcategory: "Sweatshirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 badge: "LUXURY",
                 description: "Monochromatic ghost piece crewneck with signature badge. Garment dyed.",
                 sizes: ["S", "M", "L", "XL"],
@@ -876,6 +1037,7 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 description: "Heavyweight hoodie with embroidered winged foot logo. Made in Canada.",
                 sizes: ["S", "M", "L", "XL"],
                 colors: ["Navy", "Burgundy", "Forest Green"]
@@ -887,6 +1049,7 @@
                 price: 45,
                 category: "streetwear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Classic skate tee with Dime logo. 100% cotton construction.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["White", "Black", "Yellow"]
@@ -899,6 +1062,7 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Iconic flame logo hoodie. Heavyweight cotton fleece.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Grey", "White"]
@@ -910,6 +1074,7 @@
                 price: 78,
                 category: "streetwear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Oversized tee with signature logo print. Limited drop.",
                 sizes: ["S", "M", "L", "XL"],
                 colors: ["White", "Pink", "Black"]
@@ -921,6 +1086,7 @@
                 price: 160,
                 category: "streetwear",
                 subcategory: "Hoodies",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 badge: "LIMITED",
                 description: "All-over print hoodie with anti-establishment graphics.",
                 sizes: ["S", "M", "L", "XL"],
@@ -933,6 +1099,7 @@
                 price: 55,
                 category: "streetwear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Punk-inspired graphic tee. Soft vintage wash cotton.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "White", "Vintage Black"]
@@ -947,6 +1114,7 @@
                 category: "formal",
                 subcategory: "Suits",
                 image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 badge: "BESTSELLER",
                 description: "Modern slim fit suit in virgin wool. Two-button jacket with flat-front trousers.",
                 sizes: ["36R", "38R", "40R", "42R", "44R"],
@@ -960,6 +1128,7 @@
                 category: "formal",
                 subcategory: "Blazers",
                 image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Single-breasted blazer in stretch cotton. Notch lapel design.",
                 sizes: ["36", "38", "40", "42", "44"],
                 colors: ["Navy", "Light Grey", "Beige"]
@@ -972,6 +1141,7 @@
                 category: "formal",
                 subcategory: "Shirts",
                 image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Classic fit oxford shirt with embroidered pony logo. Button-down collar.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["White", "Light Blue", "Pink", "Navy"]
@@ -983,6 +1153,7 @@
                 price: 92,
                 category: "formal",
                 subcategory: "Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Madison fit non-iron dress shirt. 100% Supima cotton.",
                 sizes: ["14.5/32", "15/33", "15.5/34", "16/35", "16.5/36"],
                 colors: ["White", "Light Blue", "French Blue"]
@@ -995,6 +1166,7 @@
                 category: "formal",
                 subcategory: "Suits",
                 image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Slim fit tuxedo with satin peak lapels. Perfect for black tie events.",
                 sizes: ["36R", "38R", "40R", "42R", "44R"],
                 colors: ["Black"]
@@ -1006,6 +1178,7 @@
                 price: 195,
                 category: "formal",
                 subcategory: "Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Slim fit dress shirt in stretch cotton. Wrinkle-resistant finish.",
                 sizes: ["S", "M", "L", "XL"],
                 colors: ["White", "Light Blue", "Grey"]
@@ -1017,6 +1190,7 @@
                 price: 298,
                 category: "formal",
                 subcategory: "Blazers",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 description: "Ludlow slim fit blazer in Italian wool. Two-button closure.",
                 sizes: ["36", "38", "40", "42", "44"],
                 colors: ["Navy", "Charcoal", "Brown"]
@@ -1028,6 +1202,7 @@
                 price: 89,
                 category: "formal",
                 subcategory: "Pants",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Slim fit chino pants in stretch cotton. Classic flat front.",
                 sizes: ["30x30", "32x32", "33x32", "34x32", "36x32"],
                 colors: ["Khaki", "Navy", "Olive", "Grey"]
@@ -1039,6 +1214,7 @@
                 price: 98,
                 category: "formal",
                 subcategory: "Pants",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Athletic-fit chino with four-way stretch. Wrinkle-resistant.",
                 sizes: ["30", "32", "33", "34", "36", "38"],
                 colors: ["True Khaki", "Navy", "Black", "Olive"]
@@ -1050,6 +1226,7 @@
                 price: 65,
                 category: "formal",
                 subcategory: "Accessories",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "100% silk woven tie. Classic width and length.",
                 sizes: ["One Size"],
                 colors: ["Navy Stripe", "Burgundy", "Gold", "Silver"]
@@ -1064,6 +1241,7 @@
                 category: "casual",
                 subcategory: "T-Shirts",
                 image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 badge: "VALUE",
                 description: "U series crew neck in premium cotton. Relaxed fit with dropped shoulders.",
                 sizes: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -1076,6 +1254,7 @@
                 price: 38,
                 category: "casual",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Heavyweight 6.2oz organic cotton tee. Boxy, oversized fit.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "White", "Heather Grey", "Navy"]
@@ -1087,6 +1266,7 @@
                 price: 45,
                 category: "casual",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 description: "Classic P-6 logo tee in organic cotton. 1% for the Planet.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["White", "Black", "Navy", "Grey"]
@@ -1099,6 +1279,7 @@
                 category: "casual",
                 subcategory: "Jeans",
                 image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 badge: "CLASSIC",
                 description: "Original straight fit jeans in shrink-to-fit denim. Button fly.",
                 sizes: ["28", "30", "32", "33", "34", "36", "38"],
@@ -1111,6 +1292,7 @@
                 price: 68,
                 category: "casual",
                 subcategory: "Jeans",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Slim fit jeans with active stretch waistband. Modern comfort.",
                 sizes: ["29", "30", "32", "33", "34", "36"],
                 colors: ["Raw", "Medium Wash", "Dark Wash", "Black"]
@@ -1122,6 +1304,7 @@
                 price: 89,
                 category: "casual",
                 subcategory: "Jeans",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Slim boot cut jeans with retro styling. Premium denim.",
                 sizes: ["30", "32", "33", "34", "36", "38"],
                 colors: ["Dark Denim", "Light Denim", "Black"]
@@ -1133,6 +1316,7 @@
                 price: 45,
                 category: "casual",
                 subcategory: "Long Sleeve",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Vintage soft henley with three-button placket. Ultra-soft wash.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Heather Grey", "Navy", "Black", "Olive"]
@@ -1144,6 +1328,7 @@
                 price: 55,
                 category: "casual",
                 subcategory: "Polos",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Classic fit polo in pique cotton. Tonal moose logo.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["White", "Navy", "Pink", "Light Blue", "Grey"]
@@ -1155,6 +1340,7 @@
                 price: 98,
                 category: "casual",
                 subcategory: "Polos",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 badge: "PREMIUM",
                 description: "Original L.12.12 polo in petit pique cotton. Iconic croc logo.",
                 sizes: ["3", "4", "5", "6", "7", "8"],
@@ -1167,6 +1353,7 @@
                 price: 35,
                 category: "casual",
                 subcategory: "Sweatshirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Conscious collection sweatshirt in organic cotton blend.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Grey", "Beige", "Green"]
@@ -1178,6 +1365,7 @@
                 price: 49,
                 category: "casual",
                 subcategory: "Hoodies",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Basic hoodie in soft cotton blend. Kangaroo pocket.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Grey", "Navy", "Khaki"]
@@ -1189,6 +1377,7 @@
                 price: 22,
                 category: "casual",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Extreme oversized t-shirt in heavyweight jersey. Dropped shoulders.",
                 sizes: ["XS", "S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "White", "Neon", "Pastel"]
@@ -1203,6 +1392,7 @@
                 category: "activewear",
                 subcategory: "Base Layer",
                 image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Tight-fit compression tee with Dri-FIT technology. Flat seams.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "White", "Grey", "Navy"]
@@ -1214,6 +1404,7 @@
                 price: 30,
                 category: "activewear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "HeatGear fabric wicks sweat and regulates body temperature.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "White", "Red", "Blue", "Grey"]
@@ -1225,6 +1416,7 @@
                 price: 78,
                 category: "activewear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 badge: "PREMIUM",
                 description: "Seamless construction with anti-stink technology. Silverescent threads.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -1237,6 +1429,7 @@
                 price: 65,
                 category: "activewear",
                 subcategory: "Pants",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Slim-fit track pants with moisture-wicking fabric. Ankle zips.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Grey"]
@@ -1248,6 +1441,7 @@
                 price: 50,
                 category: "activewear",
                 subcategory: "Long Sleeve",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Seamless long sleeve with contouring shading. Sweat-wicking.",
                 sizes: ["S", "M", "L", "XL"],
                 colors: ["Black", "Charcoal", "Navy", "Olive"]
@@ -1259,6 +1453,7 @@
                 price: 68,
                 category: "activewear",
                 subcategory: "T-Shirts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 description: "Premium workout tee with GoldFusion anti-odor technology.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Heather Grey", "Olive"]
@@ -1270,6 +1465,7 @@
                 price: 68,
                 category: "activewear",
                 subcategory: "Shorts",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Versatile training short with phone pocket. 7-inch inseam.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Olive", "Grey"]
@@ -1281,6 +1477,7 @@
                 price: 98,
                 category: "activewear",
                 subcategory: "Pants",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Versatile pants for hiking to happy hour. Water-resistant.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Olive", "Khaki"]
@@ -1295,6 +1492,7 @@
                 category: "outerwear",
                 subcategory: "Jackets",
                 image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 badge: "BESTSELLER",
                 description: "Iconic boxy puffer jacket with 700-fill goose down. Packable into pocket.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -1307,6 +1505,7 @@
                 price: 299,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Lightweight synthetic insulated hoody. PrimaLoft Gold insulation.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Forge Grey", "Classic Navy"]
@@ -1318,6 +1517,7 @@
                 price: 379,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 badge: "PREMIUM",
                 description: "Versatile insulated hoody for alpine conditions. Coreloft Compact.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -1330,6 +1530,7 @@
                 price: 1150,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 badge: "LUXURY",
                 description: "Pilot-style bomber with 625-fill white duck down. Fur-trimmed hood.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -1342,6 +1543,7 @@
                 price: 850,
                 category: "outerwear",
                 subcategory: "Parkas",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-68-large.mp4",
                 description: "Heritage parka with Teflon coating. Removable fur trim.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Navy", "Dark Green", "Camel"]
@@ -1353,6 +1555,7 @@
                 price: 450,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-running-through-the-desert-328-large.mp4",
                 description: "Slim-fit waxed cotton jacket with corduroy collar. British-made.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Olive", "Black", "Navy"]
@@ -1364,6 +1567,7 @@
                 price: 180,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
                 badge: "CLASSIC",
                 description: "Authentic MA-1 bomber with reversible orange lining. Flight satin.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
@@ -1376,6 +1580,7 @@
                 price: 895,
                 category: "outerwear",
                 subcategory: "Leather",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-silhouette-of-a-man-dancing-481-large.mp4",
                 description: "Original Perfecto motorcycle jacket in steerhide leather. Made in USA.",
                 sizes: ["36", "38", "40", "42", "44", "46"],
                 colors: ["Black", "Brown"]
@@ -1387,6 +1592,7 @@
                 price: 650,
                 category: "outerwear",
                 subcategory: "Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-32808-large.mp4",
                 description: "Waxed cotton motorcycle jacket with four-pocket design.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
                 colors: ["Black", "Olive", "Brown"]
@@ -1398,6 +1604,7 @@
                 price: 99,
                 category: "outerwear",
                 subcategory: "Rain Jackets",
+                video: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-under-changing-lights-1240-large.mp4",
                 badge: "VALUE",
                 description: "Waterproof breathable parka with sealed seams. Packable design.",
                 sizes: ["S", "M", "L", "XL", "XXL", "3XL"],
@@ -1408,6 +1615,7 @@
         let cart = [];
         let currentCategory = 'all';
         let currentSort = 'newest';
+        let currentlyPlayingVideo = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -1416,7 +1624,7 @@
             updateCategoryTitle();
         });
 
-        // Render Products
+        // Render Products with Video
         function renderProducts(filter = 'all', searchTerm = '') {
             const grid = document.getElementById('products-grid');
             let filtered = products;
@@ -1440,15 +1648,42 @@
             }
 
             grid.innerHTML = filtered.map(product => `
-                <div class="product-card reveal">
-                    <div class="product-image-container rounded-2xl h-[400px] mb-4 relative gold-border">
+                <div class="product-card reveal" onmouseenter="playVideo(${product.id})" onmouseleave="pauseVideo(${product.id})">
+                    <div class="product-media-container h-[400px] mb-4 gold-border relative">
                         ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''}">${product.badge}</div>` : ''}
                         
+                        <div class="video-indicator">
+                            <i class="fas fa-play"></i>
+                        </div>
+
                         <button onclick="addToCart(${product.id})" class="quick-add-btn" title="Quick Add">
                             <i class="fas fa-plus"></i>
                         </button>
 
-                        <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="product-image">
+                        <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="product-image" id="img-${product.id}">
+                        
+                        <video 
+                            id="video-${product.id}"
+                            class="product-video" 
+                            muted 
+                            loop 
+                            playsinline
+                            preload="metadata"
+                            poster="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}"
+                        >
+                            <source src="${product.video}" type="video/mp4">
+                        </video>
+
+                        <div class="video-progress" id="progress-${product.id}"></div>
+
+                        <button onclick="openFullscreenVideo('${product.video}')" class="video-play-btn" title="Watch Full Video">
+                            <i class="fas fa-play"></i>
+                        </button>
+
+                        <div class="video-duration">
+                            <i class="fas fa-clock text-xs"></i>
+                            <span>0:15</span>
+                        </div>
                         
                         <div class="product-actions">
                             <button onclick="openQuickView(${product.id})" class="action-btn action-btn-secondary">
@@ -1482,11 +1717,62 @@
                 </div>
             `).join('');
 
-            document.getElementById('category-count').textContent = `Showing ${filtered.length} items`;
+            document.getElementById('category-count').textContent = `Showing ${filtered.length} items with video`;
 
             setTimeout(() => {
                 document.querySelectorAll('#products-grid .reveal').forEach(el => el.classList.add('active'));
             }, 100);
+        }
+
+        // Video Control Functions
+        function playVideo(productId) {
+            const video = document.getElementById(`video-${productId}`);
+            const progressBar = document.getElementById(`progress-${productId}`);
+            
+            if (video) {
+                video.play();
+                currentlyPlayingVideo = video;
+                
+                // Update progress bar
+                video.addEventListener('timeupdate', () => {
+                    if (progressBar) {
+                        const progress = (video.currentTime / 15) * 100; // 15 seconds max
+                        progressBar.style.width = `${Math.min(progress, 100)}%`;
+                    }
+                });
+            }
+        }
+
+        function pauseVideo(productId) {
+            const video = document.getElementById(`video-${productId}`);
+            const progressBar = document.getElementById(`progress-${productId}`);
+            
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                }
+            }
+        }
+
+        function openFullscreenVideo(videoSrc) {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            
+            video.src = videoSrc;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video');
+            
+            video.pause();
+            video.src = '';
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // Filter Functions
@@ -1690,8 +1976,13 @@
             const content = document.getElementById('modal-content');
 
             content.innerHTML = `
-                <div class="h-[300px] md:h-[600px] bg-dark-lighter">
-                    <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="w-full h-full object-cover">
+                <div class="h-[300px] md:h-[600px] bg-dark-lighter relative">
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                        <source src="${product.video}" type="video/mp4">
+                    </video>
+                    <div class="absolute bottom-4 right-4 bg-black/80 text-royal px-3 py-1 rounded-full text-sm font-bold border border-royal/30">
+                        <i class="fas fa-play-circle mr-1"></i> 15s Preview
+                    </div>
                 </div>
                 <div class="p-8 md:p-12 space-y-6">
                     <div>
@@ -1794,7 +2085,7 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // Close modal on outside click
+        // Close modals on outside click
         document.getElementById('quick-view-modal').addEventListener('click', (e) => {
             if (e.target.id === 'quick-view-modal') closeQuickView();
         });
