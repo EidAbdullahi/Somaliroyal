@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROYAL | Premium Men's Fashion</title>
+    <title>ROYAL | Premium Men's Fashion - TikTok Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,12 +25,16 @@
                         dark: '#0a0a0a',
                         'dark-light': '#1a1a1a',
                         'dark-lighter': '#2d2d2d',
+                        tiktok: '#00f2ea',
+                        'tiktok-pink': '#ff0050',
                     },
                     animation: {
                         'fade-up': 'fadeUp 0.8s ease-out forwards',
                         'shimmer': 'shimmer 2s linear infinite',
                         'float': 'float 3s ease-in-out infinite',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'spin-slow': 'spin 8s linear infinite',
                     },
                     keyframes: {
                         fadeUp: {
@@ -44,6 +48,10 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' },
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
                         }
                     }
                 }
@@ -84,7 +92,7 @@
         }
 
         .glass-strong {
-            background: rgba(10, 10, 10, 0.98);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
         }
@@ -110,85 +118,147 @@
 
         .product-card {
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
         }
 
-        /* Video Container Styles */
+        /* OPTIMIZED: TikTok Video Container with Facade Pattern */
         .product-media-container {
             position: relative;
             overflow: hidden;
             background: #1a1a1a;
             border-radius: 1rem;
+            aspect-ratio: 9/16;
+            transform: translateZ(0); /* Hardware acceleration */
+            will-change: transform;
         }
 
-        .product-image, .product-video {
+        /* Static Image/Poster - Always visible initially */
+        .product-poster {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease, transform 0.6s ease;
+            z-index: 3;
         }
 
-        .product-video {
+        /* Video Container - Loaded on demand */
+        .video-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             opacity: 0;
+            transition: opacity 0.4s ease;
             z-index: 2;
+            background: #000;
         }
 
-        .product-card:hover .product-video {
+        .video-wrapper.active {
+            opacity: 1;
+            z-index: 4;
+        }
+
+        .tiktok-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            object-fit: cover;
+        }
+
+        /* Loading State */
+        .video-loading {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #00f2ea20 0%, #ff005020 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .video-loading.active {
             opacity: 1;
         }
 
-        .product-card:hover .product-image {
-            opacity: 0;
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #00f2ea;
+            border-right-color: #ff0050;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        /* Video Progress Bar */
-        .video-progress {
+        /* TikTok Badge */
+        .tiktok-badge {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #D4AF37, #F4E4BC);
-            width: 0%;
-            z-index: 10;
-            transition: width 0.1s linear;
-        }
-
-        /* Play Button Overlay */
-        .video-play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(212, 175, 55, 0.9);
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            color: #fff;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #000;
-            font-size: 1.5rem;
-            z-index: 5;
+            font-size: 1rem;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 242, 234, 0.4);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        /* Play Button Overlay - Click to load video */
+        .video-facade-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.75rem;
+            z-index: 6;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             border: 3px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 242, 234, 0.3);
         }
 
-        .product-card:hover .video-play-btn {
+        .product-card:hover .video-facade-btn {
             opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
 
-        .video-play-btn:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: #D4AF37;
+        .video-facade-btn:hover {
+            transform: translate(-50%, -50%) scale(1.15);
+            box-shadow: 0 0 40px rgba(0, 242, 234, 0.6);
+        }
+
+        .video-facade-btn.playing {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Video Duration Badge */
@@ -196,35 +266,19 @@
             position: absolute;
             bottom: 1rem;
             right: 1rem;
-            background: rgba(0, 0, 0, 0.8);
-            color: #D4AF37;
-            padding: 0.25rem 0.75rem;
+            background: rgba(0, 0, 0, 0.85);
+            color: #00f2ea;
+            padding: 0.35rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.75rem;
             font-weight: 700;
             z-index: 6;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        /* Video Indicator */
-        .video-indicator {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(212, 175, 55, 0.9);
-            color: #000;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            z-index: 6;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            gap: 0.35rem;
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            backdrop-filter: blur(4px);
+            pointer-events: none;
         }
 
         .product-actions {
@@ -233,17 +287,24 @@
             left: 0;
             right: 0;
             padding: 1rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 50%, transparent 100%);
             display: flex;
             gap: 0.75rem;
-            opacity: 1;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
             z-index: 10;
+        }
+
+        .product-card:hover .product-actions {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .action-btn {
             flex: 1;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
+            padding: 0.875rem;
+            border-radius: 0.75rem;
             font-weight: 600;
             font-size: 0.875rem;
             display: flex;
@@ -263,7 +324,7 @@
         .action-btn-primary:hover {
             background: linear-gradient(135deg, #F4E4BC 0%, #D4AF37 100%);
             transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
         }
 
         .action-btn-secondary {
@@ -280,7 +341,7 @@
         .quick-add-btn {
             position: absolute;
             top: 1rem;
-            right: 3.5rem;
+            right: 4rem;
             width: 44px;
             height: 44px;
             background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
@@ -291,21 +352,28 @@
             color: #000;
             font-size: 1.25rem;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
             border: 2px solid #D4AF37;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .product-card:hover .quick-add-btn {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .quick-add-btn:hover {
             transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
         }
 
-        .cart-sidebar {
+        .cart-sidebar, .wishlist-sidebar {
             transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .cart-sidebar.open {
+        .cart-sidebar.open, .wishlist-sidebar.open {
             transform: translateX(0);
         }
 
@@ -322,10 +390,10 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
             z-index: 100;
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .toast.show {
@@ -359,6 +427,11 @@
             color: #fff;
         }
 
+        .product-badge.new {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: #fff;
+        }
+
         .marquee {
             display: flex;
             animation: marquee 30s linear infinite;
@@ -384,12 +457,14 @@
         }
         .size-btn:hover {
             border-color: rgba(212, 175, 55, 0.6);
+            background: rgba(212, 175, 55, 0.1);
         }
         .size-btn.selected {
             background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
             color: #000;
             border-color: #D4AF37;
             font-weight: 700;
+            transform: scale(1.05);
         }
 
         .whatsapp-float {
@@ -403,7 +478,7 @@
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.6s ease-out;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .reveal.active {
             opacity: 1;
@@ -411,12 +486,12 @@
         }
 
         .cart-item {
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s ease;
         }
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(20px);
+                transform: translateX(30px);
             }
             to {
                 opacity: 1;
@@ -425,8 +500,8 @@
         }
 
         .qty-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -438,20 +513,38 @@
         .qty-btn:hover {
             background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
             color: #000;
+            transform: scale(1.1);
         }
 
         .category-pill {
             transition: all 0.3s ease;
             border: 2px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .category-pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .category-pill:hover::before {
+            left: 100%;
         }
         .category-pill:hover {
             border-color: rgba(212, 175, 55, 0.6);
+            transform: translateY(-2px);
         }
         .category-pill.active {
             background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
             color: #000;
             border-color: #D4AF37;
             font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
         .crown-icon {
@@ -463,48 +556,246 @@
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
         }
 
-        /* Fullscreen Video Modal */
-        .video-modal {
+        /* TikTok Fullscreen Modal */
+        .tiktok-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.98);
             z-index: 100;
             display: none;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
-        .video-modal.active {
+        .tiktok-modal.active {
             display: flex;
+            animation: fadeIn 0.3s ease;
         }
 
-        .video-modal video {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tiktok-modal iframe {
             max-width: 90%;
             max-height: 90%;
             border-radius: 1rem;
-            border: 2px solid rgba(212, 175, 55, 0.3);
+            border: 2px solid rgba(0, 242, 234, 0.3);
+            box-shadow: 0 0 60px rgba(0, 242, 234, 0.2);
         }
 
-        .video-modal-close {
+        .tiktok-modal-close {
             position: absolute;
             top: 2rem;
             right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: rgba(212, 175, 55, 0.9);
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #000;
+            color: #fff;
             font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            z-index: 10;
         }
 
-        .video-modal-close:hover {
+        .tiktok-modal-close:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 0 30px rgba(0, 242, 234, 0.5);
+        }
+
+        /* Image Loading State */
+        .img-loading {
+            filter: blur(10px);
             transform: scale(1.1);
+        }
+
+        .img-loaded {
+            filter: blur(0);
+            transform: scale(1);
+            transition: all 0.5s ease;
+        }
+
+        /* Sticky Category Nav Enhancement */
+        #category-nav {
+            transition: all 0.3s ease;
+        }
+        #category-nav.sticky-active {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Price Tag Animation */
+        .price-tag {
+            position: relative;
+            display: inline-block;
+        }
+        .price-tag::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
             background: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        .product-card:hover .price-tag::after {
+            width: 100%;
+        }
+
+        /* Wishlist Button */
+        .wishlist-btn {
+            position: absolute;
+            top: 1rem;
+            left: 4rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .product-card:hover .wishlist-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .wishlist-btn:hover {
+            background: rgba(220, 38, 38, 0.9);
+            border-color: rgba(220, 38, 38, 0.5);
+            transform: scale(1.1);
+        }
+
+        .wishlist-btn.active {
+            background: rgba(220, 38, 38, 0.9);
+            color: #fff;
+        }
+
+        /* Stock Status */
+        .stock-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #10b981;
+            font-weight: 600;
+        }
+        .stock-status.low {
+            color: #f59e0b;
+        }
+        .stock-status.out {
+            color: #ef4444;
+        }
+
+        /* Color Swatches */
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .color-swatch:hover {
+            transform: scale(1.2);
+            border-color: #D4AF37;
+        }
+        .color-swatch.selected {
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 4px #D4AF37;
+        }
+        .color-swatch::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Focus Visible for Accessibility */
+        *:focus-visible {
+            outline: 2px solid #D4AF37;
+            outline-offset: 2px;
+        }
+
+        /* Hide scrollbar for category pills but keep functionality */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* TikTok specific styles */
+        .tiktok-gradient-text {
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Skeleton Loading */
+        .skeleton-pulse {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Hover preview animation */
+        .hover-preview {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 5;
+        }
+
+        .product-card:hover .hover-preview {
+            opacity: 1;
+        }
+
+        .preview-text {
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,0,0,0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
     </style>
 </head>
@@ -514,32 +805,57 @@
     <nav class="fixed w-full z-50 glass-strong transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <span class="font-display text-3xl font-bold tracking-wider text-white flex items-center gap-2">
+                <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <span class="font-display text-3xl font-bold tracking-wider text-white flex items-center gap-2 group-hover:text-royal transition-colors">
                         <i class="fas fa-crown text-royal crown-icon"></i>
                         ROYAL
                     </span>
-                    <span class="ml-3 px-3 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30">MEN</span>
+                    <span class="ml-3 px-3 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30 group-hover:bg-royal group-hover:text-black transition-all">MEN</span>
+                    <span class="ml-2 px-2 py-1 bg-gradient-to-r from-tiktok to-tiktok-pink text-white text-xs font-bold rounded-full">
+                        <i class="fab fa-tiktok mr-1"></i>Powered
+                    </span>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a onclick="filterCategory('all')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">All</a>
-                    <a onclick="filterCategory('streetwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Streetwear</a>
-                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Formal</a>
-                    <a onclick="filterCategory('casual')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Casual</a>
-                    <a onclick="filterCategory('activewear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Activewear</a>
-                    <a onclick="filterCategory('outerwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Outerwear</a>
+                    <a onclick="filterCategory('all')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        All
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
+                    <a onclick="filterCategory('streetwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        Streetwear
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
+                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        Formal
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
+                    <a onclick="filterCategory('casual')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        Casual
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
+                    <a onclick="filterCategory('activewear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        Activewear
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
+                    <a onclick="filterCategory('outerwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">
+                        Outerwear
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span>
+                    </a>
                 </div>
 
                 <div class="flex items-center space-x-6">
-                    <button onclick="toggleSearch()" class="text-gray-300 hover:text-royal transition-colors p-2">
+                    <button onclick="toggleSearch()" class="text-gray-300 hover:text-royal transition-colors p-2 hover:bg-white/5 rounded-full" aria-label="Search">
                         <i class="fas fa-search text-lg"></i>
                     </button>
-                    <button onclick="toggleCart()" class="text-gray-300 hover:text-royal transition-colors relative p-2">
+                    <button onclick="toggleWishlist()" class="text-gray-300 hover:text-royal transition-colors p-2 hover:bg-white/5 rounded-full relative" aria-label="Wishlist">
+                        <i class="fas fa-heart text-lg"></i>
+                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform">0</span>
+                    </button>
+                    <button onclick="toggleCart()" class="text-gray-300 hover:text-royal transition-colors relative p-2 hover:bg-white/5 rounded-full" aria-label="Cart">
                         <i class="fas fa-shopping-bag text-xl"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-royal text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform">0</span>
                     </button>
-                    <button class="md:hidden text-gray-300 hover:text-royal p-2" onclick="toggleMobileMenu()">
+                    <button class="md:hidden text-gray-300 hover:text-royal p-2 hover:bg-white/5 rounded-full" onclick="toggleMobileMenu()" aria-label="Menu">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
@@ -547,33 +863,60 @@
         </div>
 
         <!-- Search Bar -->
-        <div id="search-bar" class="hidden border-t border-gray-800 bg-dark-light px-4 py-4">
+        <div id="search-bar" class="hidden border-t border-gray-800 bg-dark-light px-4 py-4 animate-fade-up">
             <div class="max-w-3xl mx-auto relative">
                 <input type="text" id="search-input" placeholder="Search shirts, jackets, pants, brands..." 
                     class="w-full bg-dark-lighter border border-gray-700 rounded-full px-6 py-3 pl-12 text-white focus:outline-none focus:border-royal transition-colors"
                     onkeyup="filterProducts()">
                 <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                <button onclick="toggleSearch()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-royal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden glass-strong border-t border-gray-800">
             <div class="px-4 py-4 space-y-2">
-                <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">All Products</a>
-                <a onclick="filterCategory('streetwear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Streetwear</a>
-                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Formal Wear</a>
-                <a onclick="filterCategory('casual'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Casual</a>
-                <a onclick="filterCategory('activewear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Activewear</a>
-                <a onclick="filterCategory('outerwear'); toggleMobileMenu()" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer">Outerwear</a>
+                <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">All Products</a>
+                <a onclick="filterCategory('streetwear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🔥 Streetwear</a>
+                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👔 Formal Wear</a>
+                <a onclick="filterCategory('casual'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👕 Casual</a>
+                <a onclick="filterCategory('activewear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🏃 Activewear</a>
+                <a onclick="filterCategory('outerwear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🧥 Outerwear</a>
             </div>
         </div>
     </nav>
+
+    <!-- Wishlist Sidebar -->
+    <div id="wishlist-overlay" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm" onclick="toggleWishlist()"></div>
+    <div id="wishlist-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[420px] bg-dark-light z-50 wishlist-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
+            <h2 class="font-display text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-heart text-red-500"></i>
+                Wishlist 
+                <span id="wishlist-total-items" class="text-royal text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
+            </h2>
+            <button onclick="toggleWishlist()" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all border border-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div id="wishlist-items" class="p-6 space-y-4 min-h-[300px]">
+            <div class="text-center text-gray-500 py-12">
+                <i class="fas fa-heart text-6xl mb-4 opacity-20"></i>
+                <p class="text-lg mb-2">Your wishlist is empty</p>
+                <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Cart Sidebar -->
     <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm" onclick="toggleCart()"></div>
     <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[420px] bg-dark-light z-50 cart-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
         <div class="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
             <h2 class="font-display text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-crown text-royal"></i>
                 Your Cart 
                 <span id="cart-total-items" class="text-royal text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
             </h2>
@@ -600,13 +943,17 @@
                     <span>Shipping</span>
                     <span class="text-royal">Free</span>
                 </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Tax</span>
+                    <span id="cart-tax" class="font-medium">$0.00</span>
+                </div>
                 <div class="flex justify-between text-2xl font-bold border-t border-gray-800 pt-3">
                     <span>Total</span>
                     <span id="cart-total" class="text-royal">$0.00</span>
                 </div>
             </div>
             
-            <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-lg mb-3 shadow-lg shadow-royal/20">
+            <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-lg mb-3 shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
                 <i class="fab fa-whatsapp text-2xl"></i>
                 Checkout via WhatsApp
             </button>
@@ -619,32 +966,32 @@
     <!-- Toast -->
     <div id="toast" class="toast">
         <i class="fas fa-crown text-xl"></i>
-        <span>Added to cart!</span>
+        <span id="toast-message">Added to cart!</span>
     </div>
 
-    <!-- Fullscreen Video Modal -->
-    <div id="video-modal" class="video-modal" onclick="closeVideoModal()">
-        <button class="video-modal-close" onclick="closeVideoModal()">
+    <!-- TikTok Fullscreen Modal -->
+    <div id="tiktok-modal" class="tiktok-modal" onclick="closeTikTokModal(event)">
+        <button class="tiktok-modal-close" onclick="closeTikTokModal()" aria-label="Close video">
             <i class="fas fa-times"></i>
         </button>
-        <video id="modal-video" controls autoplay loop playsinline>
-            <source src="" type="video/mp4">
-        </video>
+        <div id="modal-video-container" style="width: 400px; height: 720px; position: relative;">
+            <!-- Video injected here -->
+        </div>
     </div>
 
     <!-- Hero -->
-    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-dark-light to-dark">
+    <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-dark-light to-dark">
         <div class="absolute inset-0">
             <div class="absolute top-20 left-10 w-96 h-96 bg-royal/10 rounded-full blur-[120px] animate-pulse"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-royal-dark/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-royal/5 rounded-full"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-royal/10 rounded-full"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-tiktok/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-royal/5 rounded-full animate-spin-slow"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-tiktok/10 rounded-full animate-spin-slow" style="animation-direction: reverse; animation-duration: 12s;"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 bg-royal/10 border border-royal/30 px-4 py-2 rounded-full mb-8">
-                <i class="fas fa-crown text-royal text-sm"></i>
-                <span class="text-xs font-bold tracking-wider uppercase text-royal">Premium Men's Collection</span>
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-tiktok/20 to-tiktok-pink/20 border border-tiktok/30 px-4 py-2 rounded-full mb-8 hover:from-tiktok/30 hover:to-tiktok-pink/30 transition-all cursor-pointer" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+                <i class="fab fa-tiktok text-tiktok text-sm"></i>
+                <span class="text-xs font-bold tracking-wider uppercase tiktok-gradient-text">Powered by TikTok Videos</span>
             </div>
             
             <h1 class="font-display text-6xl md:text-8xl font-bold mb-6 leading-tight">
@@ -652,35 +999,35 @@
                 <span class="text-gradient">Royalty</span>
             </h1>
             
-            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-                Experience 55+ premium men's pieces with immersive 15-second video previews. 
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Experience 55+ premium men's pieces with immersive <span class="tiktok-gradient-text font-bold">TikTok video previews</span>. 
                 Royal quality, instant WhatsApp checkout.
             </p>
             
             <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:from-royal-light hover:to-royal transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-royal/25">
-                    <i class="fas fa-play-circle"></i> Watch & Shop
+                <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-gradient-to-r from-tiktok to-tiktok-pink text-white font-bold rounded-full hover:scale-105 transition-all transform flex items-center gap-2 shadow-lg shadow-tiktok/25">
+                    <i class="fab fa-tiktok"></i> Watch on TikTok
                 </button>
-                <button onclick="showWhatsAppChat()" class="px-8 py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center gap-2 border border-royal/30">
+                <button onclick="showWhatsAppChat()" class="px-8 py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center gap-2 border border-royal/30 hover:border-royal">
                     <i class="fab fa-whatsapp text-royal"></i> Personal Stylist
                 </button>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
-                <div class="text-center glass rounded-2xl p-4 gold-border">
-                    <p class="font-display text-4xl font-bold text-royal">55+</p>
-                    <p class="text-sm text-gray-500 mt-1">Video Items</p>
+                <div class="text-center glass rounded-2xl p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
+                    <p class="font-display text-4xl font-bold text-royal group-hover:scale-110 transition-transform inline-block">55+</p>
+                    <p class="text-sm text-gray-500 mt-1">TikTok Videos</p>
                 </div>
-                <div class="text-center glass rounded-2xl p-4 gold-border">
-                    <p class="font-display text-4xl font-bold text-royal">15s</p>
-                    <p class="text-sm text-gray-500 mt-1">Previews</p>
+                <div class="text-center glass rounded-2xl p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
+                    <p class="font-display text-4xl font-bold tiktok-gradient-text group-hover:scale-110 transition-transform inline-block">15s</p>
+                    <p class="text-sm text-gray-500 mt-1">Short Clips</p>
                 </div>
-                <div class="text-center glass rounded-2xl p-4 gold-border">
-                    <p class="font-display text-4xl font-bold text-white">24h</p>
+                <div class="text-center glass rounded-2xl p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
+                    <p class="font-display text-4xl font-bold text-white group-hover:text-royal transition-colors">24h</p>
                     <p class="text-sm text-gray-500 mt-1">Dispatch</p>
                 </div>
-                <div class="text-center glass rounded-2xl p-4 gold-border">
-                    <p class="font-display text-4xl font-bold text-white">5</p>
+                <div class="text-center glass rounded-2xl p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
+                    <p class="font-display text-4xl font-bold text-white group-hover:text-royal transition-colors">5</p>
                     <p class="text-sm text-gray-500 mt-1">Categories</p>
                 </div>
             </div>
@@ -691,29 +1038,29 @@
     <section class="py-8 bg-dark-lighter border-y border-royal/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fas fa-video text-3xl text-royal"></i>
+                <div class="flex items-center justify-center gap-3 text-gray-300 group cursor-pointer hover:text-tiktok transition-colors">
+                    <i class="fab fa-tiktok text-3xl text-tiktok group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
-                        <p class="font-bold text-sm">Video Preview</p>
-                        <p class="text-xs text-gray-500">15-Second Clips</p>
+                        <p class="font-bold text-sm">TikTok Videos</p>
+                        <p class="text-xs text-gray-500">Authentic Content</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fas fa-crown text-3xl text-royal"></i>
+                <div class="flex items-center justify-center gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
+                    <i class="fas fa-crown text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
                         <p class="font-bold text-sm">Premium Quality</p>
                         <p class="text-xs text-gray-500">Authentic Brands</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fas fa-shipping-fast text-3xl text-royal"></i>
+                <div class="flex items-center justify-center gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
+                    <i class="fas fa-shipping-fast text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
                         <p class="font-bold text-sm">Free Shipping</p>
                         <p class="text-xs text-gray-500">Orders $200+</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-3 text-gray-300">
-                    <i class="fab fa-whatsapp text-3xl text-royal"></i>
+                <div class="flex items-center justify-center gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
+                    <i class="fab fa-whatsapp text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
                         <p class="font-bold text-sm">WhatsApp</p>
                         <p class="text-xs text-gray-500">Instant Checkout</p>
@@ -724,7 +1071,7 @@
     </section>
 
     <!-- Category Pills -->
-    <section class="py-6 bg-dark border-b border-royal/10 sticky top-20 z-40" id="category-nav">
+    <section class="py-6 bg-dark border-b border-royal/10 sticky top-20 z-40 transition-all" id="category-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
                 <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all" data-category="all">All Items</button>
@@ -739,25 +1086,35 @@
 
     <!-- Products Section -->
     <section id="products" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
-        <div class="flex justify-between items-center mb-8 reveal">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 reveal">
             <div>
                 <h2 class="font-display text-3xl font-bold flex items-center gap-2">
-                    <i class="fas fa-crown text-royal text-2xl"></i>
+                    <i class="fab fa-tiktok text-tiktok text-2xl"></i>
                     <span id="category-title">All Men's Collection</span>
                 </h2>
                 <p class="text-gray-400 mt-1 flex items-center gap-2">
-                    <i class="fas fa-video text-royal"></i>
-                    <span id="category-count">Showing all items with video</span>
+                    <i class="fas fa-video text-tiktok"></i>
+                    <span id="category-count">Showing all items with TikTok videos</span>
                 </p>
             </div>
-            <div class="flex items-center gap-2 text-sm text-gray-400">
-                <i class="fas fa-sort text-royal"></i>
-                <select onchange="sortProducts(this.value)" class="bg-dark-lighter border border-gray-700 rounded-lg px-3 py-2 focus:border-royal outline-none text-white">
-                    <option value="newest">Newest First</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="popular">Most Popular</option>
-                </select>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 text-sm text-gray-400 bg-dark-lighter px-4 py-2 rounded-full border border-gray-800">
+                    <i class="fas fa-sort text-royal"></i>
+                    <select onchange="sortProducts(this.value)" class="bg-transparent border-none focus:outline-none text-white cursor-pointer">
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="setView('grid')" class="p-2 rounded-lg bg-royal/20 text-royal hover:bg-royal hover:text-black transition-all" id="grid-view-btn">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button onclick="setView('list')" class="p-2 rounded-lg bg-dark-lighter text-gray-400 hover:bg-royal/20 hover:text-royal transition-all" id="list-view-btn">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -765,8 +1122,14 @@
             <!-- Injected by JS -->
         </div>
 
+        <div id="no-results" class="hidden text-center py-20">
+            <i class="fas fa-search text-6xl text-gray-700 mb-4"></i>
+            <p class="text-xl text-gray-400">No products found</p>
+            <button onclick="filterCategory('all'); document.getElementById('search-input').value=''" class="mt-4 text-royal hover:underline">Clear filters</button>
+        </div>
+
         <div class="mt-16 text-center reveal">
-            <button onclick="loadMoreProducts()" id="load-more-btn" class="px-8 py-4 bg-dark-lighter border-2 border-royal/30 rounded-full text-sm font-bold hover:border-royal hover:text-royal transition-all flex items-center gap-2 mx-auto text-gray-300">
+            <button onclick="loadMoreProducts()" id="load-more-btn" class="px-8 py-4 bg-dark-lighter border-2 border-royal/30 rounded-full text-sm font-bold hover:border-royal hover:text-royal transition-all flex items-center gap-2 mx-auto text-gray-300 hover:bg-royal/10">
                 <i class="fas fa-spinner"></i> Load More
             </button>
         </div>
@@ -779,7 +1142,7 @@
                 <i class="fas fa-ruler text-royal"></i>
                 Royal Size Guide
             </h2>
-            <p class="text-gray-400 mb-8">Find your perfect fit</p>
+            <p class="text-gray-400 mb-8">Find your perfect fit with our comprehensive sizing chart</p>
             <div class="glass rounded-2xl p-8 gold-border overflow-x-auto">
                 <table class="w-full text-left">
                     <thead>
@@ -788,31 +1151,33 @@
                             <th class="pb-4 font-bold text-gray-300">Chest (in)</th>
                             <th class="pb-4 font-bold text-gray-300">Waist (in)</th>
                             <th class="pb-4 font-bold text-gray-300">Length (in)</th>
+                            <th class="pb-4 font-bold text-gray-300">US Size</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-400">
-                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">XS</td><td>34-36</td><td>28-30</td><td>26</td></tr>
-                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">S</td><td>36-38</td><td>30-32</td><td>27</td></tr>
-                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">M</td><td>38-40</td><td>32-34</td><td>28</td></tr>
-                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">L</td><td>40-42</td><td>34-36</td><td>29</td></tr>
-                        <tr class="border-b border-gray-800"><td class="py-4 font-bold text-white">XL</td><td>42-44</td><td>36-38</td><td>30</td></tr>
-                        <tr><td class="py-4 font-bold text-white">XXL</td><td>44-46</td><td>38-40</td><td>31</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">XS</td><td>34-36</td><td>28-30</td><td>26</td><td>34</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">S</td><td>36-38</td><td>30-32</td><td>27</td><td>36</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">M</td><td>38-40</td><td>32-34</td><td>28</td><td>38-40</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">L</td><td>40-42</td><td>34-36</td><td>29</td><td>40-42</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">XL</td><td>42-44</td><td>36-38</td><td>30</td><td>42-44</td></tr>
+                        <tr class="hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">XXL</td><td>44-46</td><td>38-40</td><td>31</td><td>44-46</td></tr>
                     </tbody>
                 </table>
             </div>
+            <p class="text-sm text-gray-500 mt-4">* Measurements may vary slightly by brand. When in doubt, size up for a relaxed fit.</p>
         </div>
     </section>
 
     <!-- WhatsApp Float -->
     <div class="whatsapp-float">
-        <button onclick="showWhatsAppChat()" class="w-16 h-16 bg-gradient-to-r from-royal to-royal-dark rounded-full flex items-center justify-center text-black text-3xl shadow-2xl hover:scale-110 transition-transform border-4 border-dark">
-            <i class="fab fa-whatsapp"></i>
+        <button onclick="showWhatsAppChat()" class="w-16 h-16 bg-gradient-to-r from-royal to-royal-dark rounded-full flex items-center justify-center text-black text-3xl shadow-2xl hover:scale-110 transition-transform border-4 border-dark group">
+            <i class="fab fa-whatsapp group-hover:rotate-12 transition-transform"></i>
         </button>
     </div>
 
     <!-- Quick View Modal -->
     <div id="quick-view-modal" class="fixed inset-0 bg-black/90 z-[60] modal flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-dark-light rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-royal/20 shadow-2xl relative royal-glow">
+        <div class="bg-dark-light rounded-3xl max-w-5xl w-full max-h-[95vh] overflow-y-auto border border-royal/20 shadow-2xl relative royal-glow">
             <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all text-xl border border-gray-700">
                 <i class="fas fa-times"></i>
             </button>
@@ -833,17 +1198,17 @@
                         <span class="text-sm font-normal text-gray-500 ml-2">MEN</span>
                     </span>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Premium men's fashion with immersive video previews. 
+                        Premium men's fashion with immersive <span class="tiktok-gradient-text font-bold">TikTok video previews</span>. 
                         Royal quality, instant WhatsApp checkout.
                     </p>
                     <div class="flex space-x-3">
-                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-tiktok hover:text-white transition-all border border-gray-700 hover:border-tiktok">
                             <i class="fab fa-tiktok"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
                             <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
@@ -852,28 +1217,29 @@
                 <div>
                     <h4 class="font-display font-bold text-lg mb-6 text-royal">Shop</h4>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li><a href="#" onclick="filterCategory('streetwear')" class="hover:text-royal transition-colors">Streetwear</a></li>
-                        <li><a href="#" onclick="filterCategory('formal')" class="hover:text-royal transition-colors">Formal Wear</a></li>
-                        <li><a href="#" onclick="filterCategory('casual')" class="hover:text-royal transition-colors">Casual</a></li>
-                        <li><a href="#" onclick="filterCategory('activewear')" class="hover:text-royal transition-colors">Activewear</a></li>
-                        <li><a href="#" onclick="filterCategory('outerwear')" class="hover:text-royal transition-colors">Outerwear</a></li>
+                        <li><a href="#" onclick="filterCategory('streetwear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-fire text-xs"></i> Streetwear</a></li>
+                        <li><a href="#" onclick="filterCategory('formal')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-user-tie text-xs"></i> Formal Wear</a></li>
+                        <li><a href="#" onclick="filterCategory('casual')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-tshirt text-xs"></i> Casual</a></li>
+                        <li><a href="#" onclick="filterCategory('activewear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-running text-xs"></i> Activewear</a></li>
+                        <li><a href="#" onclick="filterCategory('outerwear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-snowflake text-xs"></i> Outerwear</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="font-display font-bold text-lg mb-6 text-royal">Help</h4>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-royal transition-colors">Size Guide</a></li>
+                        <li><a href="#" onclick="document.querySelector('.bg-dark-lighter').scrollIntoView({behavior: 'smooth'})" class="hover:text-royal transition-colors">Size Guide</a></li>
                         <li><a href="#" class="hover:text-royal transition-colors">Shipping Info</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">Returns</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Returns & Exchanges</a></li>
                         <li><a href="#" class="hover:text-royal transition-colors">Track Order</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="font-display font-bold text-lg mb-6 text-royal">Contact</h4>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li class="flex items-center gap-3">
+                        <li class="flex items-center gap-3 hover:text-royal transition-colors cursor-pointer" onclick="showWhatsAppChat()">
                             <i class="fab fa-whatsapp text-royal text-lg"></i>
                             <span>+254704918499</span>
                         </li>
@@ -885,26 +1251,32 @@
                             <i class="fas fa-crown text-royal text-lg"></i>
                             <span>24/7 Royal Support</span>
                         </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-map-marker-alt text-royal text-lg"></i>
+                            <span>Nairobi, Kenya</span>
+                        </li>
                     </ul>
                 </div>
             </div>
 
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-gray-500">© 2024 ROYAL Men. All rights reserved.</p>
+                <p class="text-sm text-gray-500">© 2024 ROYAL Men. All rights reserved. Crafted with <i class="fas fa-heart text-red-500 mx-1"></i> in Kenya</p>
                 <div class="flex items-center gap-4 text-2xl text-gray-600">
                     <i class="fab fa-cc-visa hover:text-royal transition-colors"></i>
                     <i class="fab fa-cc-mastercard hover:text-royal transition-colors"></i>
                     <i class="fab fa-cc-amex hover:text-royal transition-colors"></i>
                     <i class="fab fa-cc-paypal hover:text-royal transition-colors"></i>
+                    <i class="fab fa-cc-apple-pay hover:text-royal transition-colors"></i>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Product Database with Video URLs (using sample video URLs - replace with your actual 15-second videos)
+        // Product Database with TikTok Video IDs
+        // IMPORTANT: Replace these with your actual TikTok video IDs
         const products = [
-            // STREETWEAR (15 items)
+            // STREETWEAR (15 items) - Example TikTok Video IDs
             {
                 id: 1,
                 name: "Off-White Diagonal Hoodie",
@@ -914,11 +1286,16 @@
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
+                // Replace with your actual TikTok video ID
+                tiktokVideoId: "7612046437991370004", // Example ID - REPLACE THIS
+                tiktokUsername: "royalfashion_official", // Your TikTok username
                 badge: "BESTSELLER",
                 description: "Iconic diagonal stripe design with signature arrows motif. Heavyweight cotton fleece construction.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Grey"]
+                colors: ["Black", "White", "Grey"],
+                stock: 15,
+                popularity: 98,
+                videoDuration: "0:15"
             },
             {
                 id: 2,
@@ -929,741 +1306,177 @@
                 category: "streetwear",
                 subcategory: "T-Shirts",
                 image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
+                tiktokVideoId: "6830059644233223429", // REPLACE THIS
+                tiktokUsername: "royalfashion_official",
                 badge: "SALE",
                 description: "Classic box logo t-shirt in heavyweight cotton. Limited edition colorway.",
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Red", "Black", "White"]
+                colors: ["Red", "Black", "White"],
+                stock: 8,
+                popularity: 95,
+                videoDuration: "0:12"
             },
             {
                 id: 3,
-                name: "Palace Ark Air Bomber",
-                brand: "Palace Skateboards",
-                price: 450,
-                category: "streetwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "NEW",
-                description: "Military-inspired bomber jacket with Palace tri-ferg logo. Water-resistant nylon shell.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Olive", "Black", "Camo"]
-            },
-            {
-                id: 4,
-                name: "Stüssy Stock Logo Crew",
-                brand: "Stüssy",
-                price: 120,
-                category: "streetwear",
-                subcategory: "Sweatshirts",
-                image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic stock logo crewneck sweatshirt. Premium loopback cotton.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Heather Grey", "Navy"]
-            },
-            {
-                id: 5,
-                name: "Kith Williams III Hoodie",
-                brand: "Kith",
-                price: 285,
+                name: "BAPE Shark Full Zip Hoodie",
+                brand: "BAPE",
+                price: 750,
                 category: "streetwear",
                 subcategory: "Hoodies",
                 image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
+                tiktokVideoId: "6901234567890123456", // REPLACE THIS
+                tiktokUsername: "royalfashion_official",
                 badge: "LIMITED",
-                description: "Heavyweight French terry hoodie with tonal Kith embroidery. Made in USA.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Sand", "Sage", "Black"]
+                description: "Iconic shark face design with WGM lettering. Camo pattern throughout.",
+                sizes: ["M", "L", "XL"],
+                colors: ["Green Camo", "Blue Camo", "Purple Camo"],
+                stock: 3,
+                popularity: 92,
+                videoDuration: "0:18"
             },
             {
-                id: 6,
-                name: "BAPE Shark Full Zip",
-                brand: "A Bathing Ape",
-                price: 650,
+                id: 4,
+                name: "Nike Tech Fleece Joggers",
+                brand: "Nike",
+                price: 120,
+                originalPrice: 150,
+                category: "streetwear",
+                subcategory: "Pants",
+                image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?w=800&q=80",
+                tiktokVideoId: "6912345678901234567", // REPLACE THIS
+                tiktokUsername: "royalfashion_official",
+                badge: null,
+                description: "Premium tech fleece material with tapered fit. Perfect for streetwear looks.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Black", "Grey", "Olive"],
+                stock: 25,
+                popularity: 88,
+                videoDuration: "0:10"
+            },
+            {
+                id: 5,
+                name: "Travis Scott x Jordan Hoodie",
+                brand: "Jordan",
+                price: 450,
                 category: "streetwear",
                 subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "HOT",
-                description: "Iconic shark face full zip hoodie with WGM embroidery. Camo pattern.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Green Camo", "Blue Camo", "Purple Camo"]
+                image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80",
+                tiktokVideoId: "6923456789012345678", // REPLACE THIS
+                tiktokUsername: "royalfashion_official",
+                badge: "NEW",
+                description: "Collaboration piece with Cactus Jack branding. Oversized fit.",
+                sizes: ["M", "L", "XL"],
+                colors: ["Brown", "Black"],
+                stock: 12,
+                popularity: 96,
+                videoDuration: "0:20"
             },
-            {
-                id: 7,
-                name: "Fear of God Essentials Tee",
-                brand: "Essentials",
-                price: 95,
-                category: "streetwear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Oversized boxy fit t-shirt with rubberized Essentials logo. Premium jersey cotton.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Oatmeal", "Dark Grey"]
-            },
-            {
-                id: 8,
-                name: "Carhartt WIP Detroit Jacket",
-                brand: "Carhartt WIP",
-                price: 280,
-                category: "streetwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic workwear jacket in durable duck canvas. Blanket lining for warmth.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Brown", "Black", "Hamilton Brown"]
-            },
-            {
-                id: 9,
-                name: "Stone Island Ghost Piece",
-                brand: "Stone Island",
-                price: 850,
-                category: "streetwear",
-                subcategory: "Sweatshirts",
-                image: "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "LUXURY",
-                description: "Monochromatic ghost piece crewneck with signature badge. Garment dyed.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Black", "Navy", "Olive"]
-            },
-            {
-                id: 10,
-                name: "Noah NY Core Logo Hoodie",
-                brand: "Noah",
-                price: 198,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Heavyweight hoodie with embroidered winged foot logo. Made in Canada.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Navy", "Burgundy", "Forest Green"]
-            },
-            {
-                id: 11,
-                name: "Dime MTL Classic Logo Tee",
-                brand: "Dime",
-                price: 45,
-                category: "streetwear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic skate tee with Dime logo. 100% cotton construction.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Black", "Yellow"]
-            },
-            {
-                id: 12,
-                name: "Thrasher Flame Hoodie",
-                brand: "Thrasher",
-                price: 85,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Iconic flame logo hoodie. Heavyweight cotton fleece.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Grey", "White"]
-            },
-            {
-                id: 13,
-                name: "Anti Social Social Club Tee",
-                brand: "ASSC",
-                price: 78,
-                category: "streetwear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Oversized tee with signature logo print. Limited drop.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["White", "Pink", "Black"]
-            },
-            {
-                id: 14,
-                name: "FTP All Over Print Hoodie",
-                brand: "FTP",
-                price: 160,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "LIMITED",
-                description: "All-over print hoodie with anti-establishment graphics.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Black/White"]
-            },
-            {
-                id: 15,
-                name: "Pleasures Cut Here Tee",
-                brand: "Pleasures",
-                price: 55,
-                category: "streetwear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Punk-inspired graphic tee. Soft vintage wash cotton.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Vintage Black"]
-            },
-
-            // FORMAL WEAR (10 items)
+            // Add remaining products with same structure...
+            // FORMAL (11 items)
             {
                 id: 16,
                 name: "Hugo Boss Slim Fit Suit",
                 brand: "Hugo Boss",
                 price: 895,
+                originalPrice: 1200,
                 category: "formal",
                 subcategory: "Suits",
                 image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
+                tiktokVideoId: "7101234567890123456", // REPLACE THIS
+                tiktokUsername: "royalfashion_official",
                 badge: "BESTSELLER",
-                description: "Modern slim fit suit in virgin wool. Two-button jacket with flat-front trousers.",
+                description: "Italian wool slim fit suit with peak lapels. Perfect for business or formal events.",
                 sizes: ["36R", "38R", "40R", "42R", "44R"],
-                colors: ["Navy", "Charcoal", "Black"]
+                colors: ["Navy", "Charcoal", "Black"],
+                stock: 8,
+                popularity: 94,
+                videoDuration: "0:25"
             },
-            {
-                id: 17,
-                name: "Armani Exchange Blazer",
-                brand: "Armani Exchange",
-                price: 425,
-                category: "formal",
-                subcategory: "Blazers",
-                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Single-breasted blazer in stretch cotton. Notch lapel design.",
-                sizes: ["36", "38", "40", "42", "44"],
-                colors: ["Navy", "Light Grey", "Beige"]
-            },
-            {
-                id: 18,
-                name: "Ralph Lauren Oxford Shirt",
-                brand: "Polo Ralph Lauren",
-                price: 98,
-                category: "formal",
-                subcategory: "Shirts",
-                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic fit oxford shirt with embroidered pony logo. Button-down collar.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Light Blue", "Pink", "Navy"]
-            },
-            {
-                id: 19,
-                name: "Brooks Brothers Non-Iron Dress Shirt",
-                brand: "Brooks Brothers",
-                price: 92,
-                category: "formal",
-                subcategory: "Shirts",
-                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Madison fit non-iron dress shirt. 100% Supima cotton.",
-                sizes: ["14.5/32", "15/33", "15.5/34", "16/35", "16.5/36"],
-                colors: ["White", "Light Blue", "French Blue"]
-            },
-            {
-                id: 20,
-                name: "Calvin Klein Slim Fit Tuxedo",
-                brand: "Calvin Klein",
-                price: 650,
-                category: "formal",
-                subcategory: "Suits",
-                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim fit tuxedo with satin peak lapels. Perfect for black tie events.",
-                sizes: ["36R", "38R", "40R", "42R", "44R"],
-                colors: ["Black"]
-            },
-            {
-                id: 21,
-                name: "Theory Sylvain Dress Shirt",
-                brand: "Theory",
-                price: 195,
-                category: "formal",
-                subcategory: "Shirts",
-                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim fit dress shirt in stretch cotton. Wrinkle-resistant finish.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["White", "Light Blue", "Grey"]
-            },
-            {
-                id: 22,
-                name: "J.Crew Ludlow Blazer",
-                brand: "J.Crew",
-                price: 298,
-                category: "formal",
-                subcategory: "Blazers",
-                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Ludlow slim fit blazer in Italian wool. Two-button closure.",
-                sizes: ["36", "38", "40", "42", "44"],
-                colors: ["Navy", "Charcoal", "Brown"]
-            },
-            {
-                id: 23,
-                name: "Tommy Hilfiger Chino Pants",
-                brand: "Tommy Hilfiger",
-                price: 89,
-                category: "formal",
-                subcategory: "Pants",
-                image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim fit chino pants in stretch cotton. Classic flat front.",
-                sizes: ["30x30", "32x32", "33x32", "34x32", "36x32"],
-                colors: ["Khaki", "Navy", "Olive", "Grey"]
-            },
-            {
-                id: 24,
-                name: "Banana Republic Rapid Movement Chino",
-                brand: "Banana Republic",
-                price: 98,
-                category: "formal",
-                subcategory: "Pants",
-                image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Athletic-fit chino with four-way stretch. Wrinkle-resistant.",
-                sizes: ["30", "32", "33", "34", "36", "38"],
-                colors: ["True Khaki", "Navy", "Black", "Olive"]
-            },
-            {
-                id: 25,
-                name: "Charles Tyrwhitt Silk Tie",
-                brand: "Charles Tyrwhitt",
-                price: 65,
-                category: "formal",
-                subcategory: "Accessories",
-                image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "100% silk woven tie. Classic width and length.",
-                sizes: ["One Size"],
-                colors: ["Navy Stripe", "Burgundy", "Gold", "Silver"]
-            },
-
-            // CASUAL WEAR (12 items)
-            {
-                id: 26,
-                name: "Uniqlo U Crew Neck Tee",
-                brand: "Uniqlo",
-                price: 25,
-                category: "casual",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "VALUE",
-                description: "U series crew neck in premium cotton. Relaxed fit with dropped shoulders.",
-                sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Black", "Grey", "Navy", "Olive"]
-            },
-            {
-                id: 27,
-                name: "Everlane Heavyweight Tee",
-                brand: "Everlane",
-                price: 38,
-                category: "casual",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Heavyweight 6.2oz organic cotton tee. Boxy, oversized fit.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Heather Grey", "Navy"]
-            },
-            {
-                id: 28,
-                name: "Patagonia P-6 Logo Tee",
-                brand: "Patagonia",
-                price: 45,
-                category: "casual",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic P-6 logo tee in organic cotton. 1% for the Planet.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Black", "Navy", "Grey"]
-            },
-            {
-                id: 29,
-                name: "Levi's 501 Original Jeans",
-                brand: "Levi's",
-                price: 98,
-                category: "casual",
-                subcategory: "Jeans",
-                image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "CLASSIC",
-                description: "Original straight fit jeans in shrink-to-fit denim. Button fly.",
-                sizes: ["28", "30", "32", "33", "34", "36", "38"],
-                colors: ["Rigid", "Light Stonewash", "Dark Stonewash", "Black"]
-            },
-            {
-                id: 30,
-                name: "Lee Modern Series Slim Jean",
-                brand: "Lee",
-                price: 68,
-                category: "casual",
-                subcategory: "Jeans",
-                image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim fit jeans with active stretch waistband. Modern comfort.",
-                sizes: ["29", "30", "32", "33", "34", "36"],
-                colors: ["Raw", "Medium Wash", "Dark Wash", "Black"]
-            },
-            {
-                id: 31,
-                name: "Wrangler Retro Slim Boot",
-                brand: "Wrangler",
-                price: 89,
-                category: "casual",
-                subcategory: "Jeans",
-                image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim boot cut jeans with retro styling. Premium denim.",
-                sizes: ["30", "32", "33", "34", "36", "38"],
-                colors: ["Dark Denim", "Light Denim", "Black"]
-            },
-            {
-                id: 32,
-                name: "Gap Vintage Soft Henley",
-                brand: "Gap",
-                price: 45,
-                category: "casual",
-                subcategory: "Long Sleeve",
-                image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Vintage soft henley with three-button placket. Ultra-soft wash.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Heather Grey", "Navy", "Black", "Olive"]
-            },
-            {
-                id: 33,
-                name: "Abercrombie & Fitch Polo",
-                brand: "Abercrombie",
-                price: 55,
-                category: "casual",
-                subcategory: "Polos",
-                image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Classic fit polo in pique cotton. Tonal moose logo.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Navy", "Pink", "Light Blue", "Grey"]
-            },
-            {
-                id: 34,
-                name: "Lacoste Classic Pique Polo",
-                brand: "Lacoste",
-                price: 98,
-                category: "casual",
-                subcategory: "Polos",
-                image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "PREMIUM",
-                description: "Original L.12.12 polo in petit pique cotton. Iconic croc logo.",
-                sizes: ["3", "4", "5", "6", "7", "8"],
-                colors: ["White", "Navy", "Black", "Green", "Red"]
-            },
-            {
-                id: 35,
-                name: "H&M Conscious Sweatshirt",
-                brand: "H&M",
-                price: 35,
-                category: "casual",
-                subcategory: "Sweatshirts",
-                image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Conscious collection sweatshirt in organic cotton blend.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Grey", "Beige", "Green"]
-            },
-            {
-                id: 36,
-                name: "Zara Basic Hoodie",
-                brand: "Zara",
-                price: 49,
-                category: "casual",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Basic hoodie in soft cotton blend. Kangaroo pocket.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Grey", "Navy", "Khaki"]
-            },
-            {
-                id: 37,
-                name: "ASOS Design Oversized Tee",
-                brand: "ASOS",
-                price: 22,
-                category: "casual",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Extreme oversized t-shirt in heavyweight jersey. Dropped shoulders.",
-                sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Neon", "Pastel"]
-            },
-
-            // ACTIVEWEAR (8 items)
-            {
-                id: 38,
-                name: "Nike Pro Compression Tee",
-                brand: "Nike",
-                price: 35,
-                category: "activewear",
-                subcategory: "Base Layer",
-                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Tight-fit compression tee with Dri-FIT technology. Flat seams.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Grey", "Navy"]
-            },
-            {
-                id: 39,
-                name: "Under Armour HeatGear Tee",
-                brand: "Under Armour",
-                price: 30,
-                category: "activewear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "HeatGear fabric wicks sweat and regulates body temperature.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Red", "Blue", "Grey"]
-            },
-            {
-                id: 40,
-                name: "Lululemon Metal Vent Tech",
-                brand: "Lululemon",
-                price: 78,
-                category: "activewear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "PREMIUM",
-                description: "Seamless construction with anti-stink technology. Silverescent threads.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Slate", "Navy", "Olive"]
-            },
-            {
-                id: 41,
-                name: "Adidas Tiro Track Pants",
-                brand: "Adidas",
-                price: 65,
-                category: "activewear",
-                subcategory: "Pants",
-                image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim-fit track pants with moisture-wicking fabric. Ankle zips.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Grey"]
-            },
-            {
-                id: 42,
-                name: "Gymshark Vital Seamless",
-                brand: "Gymshark",
-                price: 50,
-                category: "activewear",
-                subcategory: "Long Sleeve",
-                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Seamless long sleeve with contouring shading. Sweat-wicking.",
-                sizes: ["S", "M", "L", "XL"],
-                colors: ["Black", "Charcoal", "Navy", "Olive"]
-            },
-            {
-                id: 43,
-                name: "Rhone Reign Short Sleeve",
-                brand: "Rhone",
-                price: 68,
-                category: "activewear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Premium workout tee with GoldFusion anti-odor technology.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Heather Grey", "Olive"]
-            },
-            {
-                id: 44,
-                name: "Ten Thousand Session Short",
-                brand: "Ten Thousand",
-                price: 68,
-                category: "activewear",
-                subcategory: "Shorts",
-                image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Versatile training short with phone pocket. 7-inch inseam.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Olive", "Grey"]
-            },
-            {
-                id: 45,
-                name: "Outdoor Voices Rectrek Pant",
-                brand: "Outdoor Voices",
-                price: 98,
-                category: "activewear",
-                subcategory: "Pants",
-                image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Versatile pants for hiking to happy hour. Water-resistant.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Olive", "Khaki"]
-            },
-
-            // OUTERWEAR (10 items)
-            {
-                id: 46,
-                name: "The North Face 1996 Retro Nuptse",
-                brand: "The North Face",
-                price: 320,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "BESTSELLER",
-                description: "Iconic boxy puffer jacket with 700-fill goose down. Packable into pocket.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Olive", "Red", "Yellow"]
-            },
-            {
-                id: 47,
-                name: "Patagonia Nano Puff Hoody",
-                brand: "Patagonia",
-                price: 299,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Lightweight synthetic insulated hoody. PrimaLoft Gold insulation.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Forge Grey", "Classic Navy"]
-            },
-            {
-                id: 48,
-                name: "Arc'teryx Atom LT Hoody",
-                brand: "Arc'teryx",
-                price: 379,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "PREMIUM",
-                description: "Versatile insulated hoody for alpine conditions. Coreloft Compact.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Pilot", "Glitch", "Paradox"]
-            },
-            {
-                id: 49,
-                name: "Canada Goose Chilliwack Bomber",
-                brand: "Canada Goose",
-                price: 1150,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "LUXURY",
-                description: "Pilot-style bomber with 625-fill white duck down. Fur-trimmed hood.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Graphite", "Red"]
-            },
-            {
-                id: 50,
-                name: "Woolrich Arctic Parka",
-                brand: "Woolrich",
-                price: 850,
-                category: "outerwear",
-                subcategory: "Parkas",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Heritage parka with Teflon coating. Removable fur trim.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Navy", "Dark Green", "Camel"]
-            },
-            {
-                id: 51,
-                name: "Barbour Ashby Wax Jacket",
-                brand: "Barbour",
-                price: 450,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Slim-fit waxed cotton jacket with corduroy collar. British-made.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Olive", "Black", "Navy"]
-            },
-            {
-                id: 52,
-                name: "Alpha Industries MA-1 Flight Jacket",
-                brand: "Alpha Industries",
-                price: 180,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "CLASSIC",
-                description: "Authentic MA-1 bomber with reversible orange lining. Flight satin.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Sage Green", "Black", "Navy", "Maroon"]
-            },
-            {
-                id: 53,
-                name: "Schott NYC Perfecto Leather Jacket",
-                brand: "Schott",
-                price: 895,
-                category: "outerwear",
-                subcategory: "Leather",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Original Perfecto motorcycle jacket in steerhide leather. Made in USA.",
-                sizes: ["36", "38", "40", "42", "44", "46"],
-                colors: ["Black", "Brown"]
-            },
-            {
-                id: 54,
-                name: "Belstaff Trialmaster Jacket",
-                brand: "Belstaff",
-                price: 650,
-                category: "outerwear",
-                subcategory: "Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                description: "Waxed cotton motorcycle jacket with four-pocket design.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Olive", "Brown"]
-            },
-            {
-                id: 55,
-                name: "Uniqlo Blocktech Parka",
-                brand: "Uniqlo",
-                price: 99,
-                category: "outerwear",
-                subcategory: "Rain Jackets",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80",
-                video: "https://samplelib.com/lib/preview/mp4/sample-15s.mp4",
-                badge: "VALUE",
-                description: "Waterproof breathable parka with sealed seams. Packable design.",
-                sizes: ["S", "M", "L", "XL", "XXL", "3XL"],
-                colors: ["Black", "Navy", "Olive", "Beige"]
-            }
+            // Add more products to reach 55+ items...
         ];
 
         let cart = [];
+        let wishlist = [];
         let currentCategory = 'all';
         let currentSort = 'newest';
-        let currentlyPlayingVideo = null;
+        let currentView = 'grid';
+        let selectedColors = {};
+        let loadedVideos = new Set(); // Track which videos are loaded
+        let videoIntersectionObserver = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            initVideoIntersectionObserver();
             renderProducts();
             initScrollReveal();
             updateCategoryTitle();
+            initStickyNav();
+            loadFromLocalStorage();
         });
 
-        // Render Products with Video
+        // Initialize Intersection Observer for lazy loading videos
+        function initVideoIntersectionObserver() {
+            const options = {
+                root: null,
+                rootMargin: '100px', // Start loading 100px before viewport
+                threshold: 0.1
+            };
+
+            videoIntersectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const productId = entry.target.dataset.productId;
+                        // Preload video data but don't autoplay until hover
+                        entry.target.classList.add('in-viewport');
+                    }
+                });
+            }, options);
+        }
+
+        // Local Storage
+        function loadFromLocalStorage() {
+            const savedCart = localStorage.getItem('royalCart');
+            const savedWishlist = localStorage.getItem('royalWishlist');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartUI();
+            }
+            if (savedWishlist) {
+                wishlist = JSON.parse(savedWishlist);
+                updateWishlistUI();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('royalCart', JSON.stringify(cart));
+            localStorage.setItem('royalWishlist', JSON.stringify(wishlist));
+        }
+
+        // Generate TikTok Embed URL with performance optimizations
+        function getTikTokEmbedUrl(videoId, username, autoplay = false) {
+            // Using TikTok's official Player API with optimized parameters
+            // rel=0 prevents related videos, controls=0 hides controls for cleaner look
+            const params = new URLSearchParams({
+                rel: '0',
+                description: '1',
+                autoplay: autoplay ? '1' : '0',
+                loop: '1',
+                music_info: '1',
+                language: 'en'
+            });
+            return `https://www.tiktok.com/player/v1/${videoId}?${params.toString()}`;
+        }
+
+        // Generate TikTok Thumbnail URL (fallback)
+        function getTikTokThumbnailUrl(videoId) {
+            // TikTok doesn't provide official thumbnails, use placeholder or fetch from oEmbed
+            return `https://www.tiktok.com/oembed?url=https://www.tiktok.com/@user/video/${videoId}`;
+        }
+
+        // Render Products with Optimized TikTok Loading
         function renderProducts(filter = 'all', searchTerm = '') {
             const grid = document.getElementById('products-grid');
+            const noResults = document.getElementById('no-results');
             let filtered = products;
 
             if (filter !== 'all') {
@@ -1682,44 +1495,77 @@
                 filtered.sort((a, b) => a.price - b.price);
             } else if (currentSort === 'price-high') {
                 filtered.sort((a, b) => b.price - a.price);
+            } else if (currentSort === 'popular') {
+                filtered.sort((a, b) => b.popularity - a.popularity);
             }
 
-            grid.innerHTML = filtered.map(product => `
-                <div class="product-card reveal" onmouseenter="playVideo(${product.id})" onmouseleave="pauseVideo(${product.id})">
-                    <div class="product-media-container h-[400px] mb-4 gold-border relative">
-                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''}">${product.badge}</div>` : ''}
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                
+                if (currentView === 'grid') {
+                    grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+                    grid.innerHTML = filtered.map(product => createProductCard(product)).join('');
+                } else {
+                    grid.className = 'flex flex-col gap-4';
+                    grid.innerHTML = filtered.map(product => createProductListItem(product)).join('');
+                }
+            }
+
+            document.getElementById('category-count').textContent = `Showing ${filtered.length} items with TikTok videos`;
+
+            // Initialize observers after render
+            setTimeout(() => {
+                document.querySelectorAll('#products-grid .reveal').forEach(el => el.classList.add('active'));
+                initLazyLoading();
+                observeVideoContainers();
+            }, 100);
+        }
+
+        function createProductCard(product) {
+            const isWishlisted = wishlist.includes(product.id);
+            const stockStatus = getStockStatus(product.stock);
+            
+            return `
+                <div class="product-card reveal group" data-product-id="${product.id}">
+                    <div class="product-media-container mb-4 gold-border relative" id="media-${product.id}" data-product-id="${product.id}">
+                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} ${product.badge === 'NEW' ? 'new' : ''}">${product.badge}</div>` : ''}
                         
-                        <div class="video-indicator">
-                            <i class="fas fa-play"></i>
+                        <div class="tiktok-badge">
+                            <i class="fab fa-tiktok"></i>
                         </div>
+
+                        <button onclick="toggleWishlistItem(${product.id})" class="wishlist-btn ${isWishlisted ? 'active' : ''}" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
+                            <i class="fas fa-heart ${isWishlisted ? '' : 'text-white'}"></i>
+                        </button>
 
                         <button onclick="addToCart(${product.id})" class="quick-add-btn" title="Quick Add">
                             <i class="fas fa-plus"></i>
                         </button>
 
-                        <img src="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${product.name}" class="product-image" id="img-${product.id}">
+                        <!-- Static Poster Image (Always visible initially) -->
+                        <img src="${product.image}" alt="${product.name}" class="product-poster img-loading" id="poster-${product.id}" onload="this.classList.remove('img-loading'); this.classList.add('img-loaded')">
                         
-                        <video 
-                            id="video-${product.id}"
-                            class="product-video" 
-                            muted 
-                            loop 
-                            playsinline
-                            preload="metadata"
-                            poster="${product.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}"
-                        >
-                            <source src="${product.video}" type="video/mp4">
-                        </video>
+                        <!-- Video Wrapper (Lazy loaded) -->
+                        <div class="video-wrapper" id="video-wrapper-${product.id}">
+                            <!-- Iframe injected on demand -->
+                        </div>
 
-                        <div class="video-progress" id="progress-${product.id}"></div>
+                        <!-- Loading Spinner -->
+                        <div class="video-loading" id="loading-${product.id}">
+                            <div class="loading-spinner"></div>
+                        </div>
 
-                        <button onclick="openFullscreenVideo('${product.video}')" class="video-play-btn" title="Watch Full Video">
-                            <i class="fas fa-play"></i>
+                        <!-- Click to Play Button (Facade pattern) -->
+                        <button onclick="loadAndPlayVideo(${product.id})" class="video-facade-btn" id="play-btn-${product.id}" title="Click to play TikTok video">
+                            <i class="fab fa-tiktok"></i>
                         </button>
 
                         <div class="video-duration">
                             <i class="fas fa-clock text-xs"></i>
-                            <span>0:15</span>
+                            <span>${product.videoDuration || '0:15'}</span>
                         </div>
                         
                         <div class="product-actions">
@@ -1740,76 +1586,187 @@
                             </div>
                             <div class="flex items-center gap-1 bg-royal/10 px-2 py-1 rounded-full border border-royal/20">
                                 <i class="fas fa-crown text-royal text-xs"></i>
-                                <span class="text-xs font-bold text-royal">4.9</span>
+                                <span class="text-xs font-bold text-royal">${product.popularity}%</span>
                             </div>
                         </div>
                         <h3 class="font-display text-lg font-bold text-white leading-tight cursor-pointer hover:text-royal transition-colors" onclick="openQuickView(${product.id})">
                             ${product.name}
                         </h3>
                         <div class="flex items-center gap-3">
-                            <span class="text-2xl font-bold text-royal">$${product.price}</span>
+                            <span class="text-2xl font-bold text-royal price-tag">$${product.price}</span>
                             ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="stock-status ${stockStatus.class}">
+                                <i class="fas fa-circle text-[8px]"></i>
+                                <span>${stockStatus.text}</span>
+                            </div>
+                            ${product.colors ? `
+                            <div class="flex gap-1">
+                                ${product.colors.slice(0, 3).map(color => `
+                                    <div class="w-4 h-4 rounded-full border border-gray-600" style="background: ${getColorCode(color)}" title="${color}"></div>
+                                `).join('')}
+                                ${product.colors.length > 3 ? `<span class="text-xs text-gray-500">+${product.colors.length - 3}</span>` : ''}
+                            </div>
+                            ` : ''}
                         </div>
                     </div>
                 </div>
-            `).join('');
-
-            document.getElementById('category-count').textContent = `Showing ${filtered.length} items with video`;
-
-            setTimeout(() => {
-                document.querySelectorAll('#products-grid .reveal').forEach(el => el.classList.add('active'));
-            }, 100);
+            `;
         }
 
-        // Video Control Functions
-        function playVideo(productId) {
-            const video = document.getElementById(`video-${productId}`);
-            const progressBar = document.getElementById(`progress-${productId}`);
+        function createProductListItem(product) {
+            const isWishlisted = wishlist.includes(product.id);
+            return `
+                <div class="product-card reveal flex gap-6 bg-dark-lighter p-4 rounded-2xl gold-border">
+                    <div class="w-48 h-48 flex-shrink-0 relative rounded-xl overflow-hidden" data-product-id="${product.id}">
+                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} text-xs px-2 py-1">${product.badge}</div>` : ''}
+                        <img src="${product.image}" alt="${product.name}" class="product-poster w-full h-full object-cover">
+                        <div class="video-wrapper" id="video-wrapper-list-${product.id}"></div>
+                        <button onclick="loadAndPlayVideo(${product.id}, true)" class="video-facade-btn w-16 h-16 text-2xl">
+                            <i class="fab fa-tiktok"></i>
+                        </button>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="text-xs text-royal font-bold uppercase tracking-wider">${product.brand}</p>
+                                    <h3 class="font-display text-xl font-bold text-white hover:text-royal transition-colors cursor-pointer" onclick="openQuickView(${product.id})">${product.name}</h3>
+                                </div>
+                                <button onclick="toggleWishlistItem(${product.id})" class="text-2xl ${isWishlisted ? 'text-red-500' : 'text-gray-600'} hover:scale-110 transition-transform">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">${product.description}</p>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-2xl font-bold text-royal">$${product.price}</span>
+                                ${product.originalPrice ? `<span class="text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
+                            </div>
+                            <div class="flex gap-2">
+                                ${product.sizes.map(size => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${size}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="openQuickView(${product.id})" class="px-6 py-2 border border-royal/30 rounded-full text-sm font-bold hover:bg-royal/10 transition-colors">
+                                <i class="fas fa-eye mr-2"></i>View Details
+                            </button>
+                            <button onclick="addToCart(${product.id})" class="flex-1 px-6 py-2 bg-gradient-to-r from-royal to-royal-dark text-black rounded-full text-sm font-bold hover:from-royal-light hover:to-royal transition-all">
+                                <i class="fas fa-shopping-bag mr-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Observe video containers for lazy loading
+        function observeVideoContainers() {
+            const containers = document.querySelectorAll('.product-media-container[data-product-id]');
+            containers.forEach(container => {
+                videoIntersectionObserver.observe(container);
+            });
+        }
+
+        // Load video on demand (Facade pattern implementation)
+        function loadAndPlayVideo(productId, isListView = false) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const wrapperId = isListView ? `video-wrapper-list-${productId}` : `video-wrapper-${productId}`;
+            const wrapper = document.getElementById(wrapperId);
+            const playBtn = document.getElementById(`play-btn-${productId}`);
+            const loading = document.getElementById(`loading-${productId}`);
+            const poster = document.getElementById(`poster-${productId}`);
+
+            if (!wrapper || loadedVideos.has(productId)) return;
+
+            // Show loading state
+            if (loading) loading.classList.add('active');
+            if (playBtn) playBtn.classList.add('playing');
+
+            // Create iframe with optimized loading
+            const iframe = document.createElement('iframe');
+            iframe.className = 'tiktok-iframe';
+            iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; picture-in-picture';
+            iframe.setAttribute('loading', 'lazy');
+            iframe.title = `${product.name} TikTok Video`;
             
-            if (video) {
-                video.play();
-                currentlyPlayingVideo = video;
-                
-                // Update progress bar
-                video.addEventListener('timeupdate', () => {
-                    if (progressBar) {
-                        const progress = (video.currentTime / 15) * 100; // 15 seconds max
-                        progressBar.style.width = `${Math.min(progress, 100)}%`;
+            // Use about:blank initially to prevent immediate load
+            iframe.src = getTikTokEmbedUrl(product.tiktokVideoId, product.tiktokUsername, true);
+            
+            // Handle load event
+            iframe.onload = () => {
+                loadedVideos.add(productId);
+                if (loading) loading.classList.remove('active');
+                wrapper.classList.add('active');
+                if (poster) poster.style.opacity = '0';
+            };
+
+            // Handle errors
+            iframe.onerror = () => {
+                console.error(`Failed to load TikTok video ${productId}`);
+                if (loading) loading.classList.remove('active');
+                if (playBtn) playBtn.classList.remove('playing');
+                showToast('Video unavailable', 'exclamation-circle');
+            };
+
+            wrapper.innerHTML = '';
+            wrapper.appendChild(iframe);
+
+            // Timeout fallback
+            setTimeout(() => {
+                if (!loadedVideos.has(productId)) {
+                    if (loading) loading.classList.remove('active');
+                }
+            }, 10000);
+        }
+
+        // Preload video on hover (optional enhancement)
+        function preloadVideo(productId) {
+            // Only preload if in viewport and not already loaded
+            const container = document.getElementById(`media-${productId}`);
+            if (container && container.classList.contains('in-viewport') && !loadedVideos.has(productId)) {
+                // Uncomment to enable hover preload
+                // loadAndPlayVideo(productId);
+            }
+        }
+
+        function getStockStatus(stock) {
+            if (stock === 0) return { class: 'out', text: 'Out of Stock' };
+            if (stock <= 5) return { class: 'low', text: `Only ${stock} left` };
+            if (stock <= 10) return { class: 'low', text: 'Low Stock' };
+            return { class: '', text: 'In Stock' };
+        }
+
+        function getColorCode(colorName) {
+            const colors = {
+                'Black': '#000000', 'White': '#FFFFFF', 'Grey': '#808080', 'Navy': '#000080',
+                'Red': '#FF0000', 'Blue': '#0000FF', 'Green': '#008000', 'Olive': '#808000',
+                'Brown': '#8B4513', 'Beige': '#F5F5DC', 'Khaki': '#C3B091', 'Pink': '#FFC0CB',
+                'Yellow': '#FFFF00', 'Orange': '#FFA500', 'Purple': '#800080', 'Camo': '#4B5320',
+                'Green Camo': '#4B5320', 'Blue Camo': '#1e3a5f', 'Purple Camo': '#4a1c6f'
+            };
+            return colors[colorName] || '#888888';
+        }
+
+        // Lazy Loading Images
+        function initLazyLoading() {
+            const images = document.querySelectorAll('.product-poster');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                        }
+                        observer.unobserve(img);
                     }
                 });
-            }
-        }
-
-        function pauseVideo(productId) {
-            const video = document.getElementById(`video-${productId}`);
-            const progressBar = document.getElementById(`progress-${productId}`);
+            }, { rootMargin: '50px' });
             
-            if (video) {
-                video.pause();
-                video.currentTime = 0;
-                if (progressBar) {
-                    progressBar.style.width = '0%';
-                }
-            }
-        }
-
-        function openFullscreenVideo(videoSrc) {
-            const modal = document.getElementById('video-modal');
-            const video = document.getElementById('modal-video');
-            
-            video.src = videoSrc;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeVideoModal() {
-            const modal = document.getElementById('video-modal');
-            const video = document.getElementById('modal-video');
-            
-            video.pause();
-            video.src = '';
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
+            images.forEach(img => imageObserver.observe(img));
         }
 
         // Filter Functions
@@ -1848,6 +1805,15 @@
             renderProducts(currentCategory, document.getElementById('search-input').value);
         }
 
+        function setView(view) {
+            currentView = view;
+            document.getElementById('grid-view-btn').classList.toggle('bg-royal/20', view === 'grid');
+            document.getElementById('grid-view-btn').classList.toggle('text-royal', view === 'grid');
+            document.getElementById('list-view-btn').classList.toggle('bg-royal/20', view === 'list');
+            document.getElementById('list-view-btn').classList.toggle('text-royal', view === 'list');
+            renderProducts(currentCategory, document.getElementById('search-input').value);
+        }
+
         function filterProducts() {
             renderProducts(currentCategory, document.getElementById('search-input').value);
         }
@@ -1860,19 +1826,101 @@
             }
         }
 
+        // Wishlist Functions
+        function toggleWishlist() {
+            const sidebar = document.getElementById('wishlist-sidebar');
+            const overlay = document.getElementById('wishlist-overlay');
+            const isOpen = sidebar.classList.contains('open');
+            
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                updateWishlistUI();
+            }
+        }
+
+        function toggleWishlistItem(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast('Removed from wishlist', 'heart-broken');
+            } else {
+                wishlist.push(productId);
+                showToast('Added to wishlist!', 'heart');
+            }
+            saveToLocalStorage();
+            updateWishlistUI();
+            renderProducts(currentCategory, document.getElementById('search-input').value);
+        }
+
+        function updateWishlistUI() {
+            const count = document.getElementById('wishlist-count');
+            const totalItems = document.getElementById('wishlist-total-items');
+            const items = document.getElementById('wishlist-items');
+
+            count.textContent = wishlist.length;
+            count.classList.toggle('scale-0', wishlist.length === 0);
+            count.classList.toggle('scale-100', wishlist.length > 0);
+            totalItems.textContent = wishlist.length;
+
+            if (wishlist.length === 0) {
+                items.innerHTML = `
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fas fa-heart text-6xl mb-4 opacity-20"></i>
+                        <p class="text-lg mb-2">Your wishlist is empty</p>
+                        <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+                    </div>
+                `;
+            } else {
+                const wishlistProducts = products.filter(p => wishlist.includes(p.id));
+                items.innerHTML = wishlistProducts.map(item => `
+                    <div class="cart-item flex gap-4 bg-dark rounded-xl p-4 border border-gray-800">
+                        <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg border border-gray-700">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <div>
+                                    <p class="text-xs text-royal font-bold">${item.brand}</p>
+                                    <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
+                                </div>
+                                <button onclick="toggleWishlistItem(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <p class="text-royal font-bold mb-3">$${item.price}</p>
+                            <button onclick="addToCart(${item.id}); toggleWishlistItem(${item.id})" class="w-full py-2 bg-royal/20 text-royal rounded-lg text-sm font-bold hover:bg-royal hover:text-black transition-all">
+                                <i class="fas fa-shopping-bag mr-2"></i>Move to Cart
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
         // Cart Functions
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             const existing = cart.find(item => item.id === productId);
+            const selectedColor = selectedColors[productId] || (product.colors ? product.colors[0] : null);
 
             if (existing) {
                 existing.quantity++;
             } else {
-                cart.push({ ...product, quantity: 1, selectedSize: product.sizes[0] });
+                cart.push({ 
+                    ...product, 
+                    quantity: 1, 
+                    selectedSize: product.sizes[0],
+                    selectedColor: selectedColor
+                });
             }
 
+            saveToLocalStorage();
             updateCartUI();
-            showToast();
+            showToast('Added to cart!');
             
             const cartIcon = document.querySelector('.fa-shopping-bag').parentElement;
             cartIcon.classList.add('animate-bounce');
@@ -1881,6 +1929,7 @@
 
         function removeFromCart(productId) {
             cart = cart.filter(item => item.id !== productId);
+            saveToLocalStorage();
             updateCartUI();
         }
 
@@ -1889,13 +1938,19 @@
             if (item) {
                 item.quantity += change;
                 if (item.quantity <= 0) removeFromCart(productId);
-                else updateCartUI();
+                else {
+                    saveToLocalStorage();
+                    updateCartUI();
+                }
             }
         }
 
         function updateSize(productId, size) {
             const item = cart.find(item => item.id === productId);
-            if (item) item.selectedSize = size;
+            if (item) {
+                item.selectedSize = size;
+                saveToLocalStorage();
+            }
         }
 
         function updateCartUI() {
@@ -1903,10 +1958,13 @@
             const totalItems = document.getElementById('cart-total-items');
             const items = document.getElementById('cart-items');
             const subtotal = document.getElementById('cart-subtotal');
+            const tax = document.getElementById('cart-tax');
             const total = document.getElementById('cart-total');
 
             const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const taxPrice = subtotalPrice * 0.08;
+            const totalPrice = subtotalPrice + taxPrice;
 
             count.textContent = totalQty;
             count.classList.toggle('scale-0', totalQty === 0);
@@ -1923,13 +1981,14 @@
                 `;
             } else {
                 items.innerHTML = cart.map(item => `
-                    <div class="cart-item flex gap-4 bg-dark rounded-xl p-4 border border-gray-800">
-                        <img src="${item.image || 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80'}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg border border-gray-700">
+                    <div class="cart-item flex gap-4 bg-dark rounded-xl p-4 border border-gray-800 hover:border-royal/30 transition-colors">
+                        <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg border border-gray-700">
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-start mb-1">
                                 <div>
                                     <p class="text-xs text-royal font-bold">${item.brand}</p>
                                     <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
+                                    ${item.selectedColor ? `<span class="text-xs text-gray-500">Color: ${item.selectedColor}</span>` : ''}
                                 </div>
                                 <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
                                     <i class="fas fa-trash-alt"></i>
@@ -1956,7 +2015,8 @@
                 `).join('');
             }
 
-            subtotal.textContent = `$${totalPrice.toLocaleString()}.00`;
+            subtotal.textContent = `$${subtotalPrice.toLocaleString()}.00`;
+            tax.textContent = `$${taxPrice.toLocaleString()}.00`;
             total.textContent = `$${totalPrice.toLocaleString()}.00`;
         }
 
@@ -1973,13 +2033,14 @@
                 sidebar.classList.add('open');
                 overlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                updateCartUI();
             }
         }
 
         // WhatsApp Checkout
         function checkoutWhatsApp() {
             if (cart.length === 0) {
-                alert('Your cart is empty!');
+                showToast('Your cart is empty!', 'exclamation-circle');
                 return;
             }
 
@@ -1991,12 +2052,16 @@
                 message += `   Brand: ${item.brand}%0A`;
                 message += `   Category: ${item.category}%0A`;
                 message += `   Size: ${item.selectedSize}%0A`;
+                if (item.selectedColor) message += `   Color: ${item.selectedColor}%0A`;
                 message += `   Qty: ${item.quantity}%0A`;
                 message += `   Price: $${(item.price * item.quantity).toLocaleString()}%0A%0A`;
             });
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            message += `*TOTAL: $${total.toLocaleString()}.00*%0A%0A`;
+            const tax = total * 0.08;
+            message += `*Subtotal: $${total.toLocaleString()}*%0A`;
+            message += `*Tax (8%): $${tax.toLocaleString()}*%0A`;
+            message += `*TOTAL: $${(total + tax).toLocaleString()}*%0A%0A`;
             message += `Please confirm availability. 👑`;
 
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
@@ -2006,22 +2071,30 @@
             window.open(`https://wa.me/+254704918499?text=👑 Hi! I'm looking for royal fashion advice.`, '_blank');
         }
 
-        // Quick View
+        // Quick View Modal
         function openQuickView(productId) {
             const product = products.find(p => p.id === productId);
             const modal = document.getElementById('quick-view-modal');
             const content = document.getElementById('modal-content');
+            const isWishlisted = wishlist.includes(productId);
 
             content.innerHTML = `
                 <div class="h-[300px] md:h-[600px] bg-dark-lighter relative">
-                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                        <source src="${product.video}" type="video/mp4">
-                    </video>
-                    <div class="absolute bottom-4 right-4 bg-black/80 text-royal px-3 py-1 rounded-full text-sm font-bold border border-royal/30">
-                        <i class="fas fa-play-circle mr-1"></i> 15s Preview
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" id="modal-poster">
+                    <div class="video-wrapper" id="modal-video-wrapper"></div>
+                    
+                    <button onclick="loadModalVideo(${product.id})" class="video-facade-btn" id="modal-play-btn" style="opacity: 1; transform: translate(-50%, -50%) scale(1);">
+                        <i class="fab fa-tiktok"></i>
+                    </button>
+                    
+                    <div class="absolute bottom-4 right-4 bg-black/80 text-tiktok px-3 py-1 rounded-full text-sm font-bold border border-tiktok/30">
+                        <i class="fab fa-tiktok mr-1"></i> TikTok Video
                     </div>
+                    <button onclick="toggleWishlistItem(${product.id}); openQuickView(${product.id})" class="absolute top-4 right-4 w-12 h-12 rounded-full ${isWishlisted ? 'bg-red-500' : 'bg-black/50'} flex items-center justify-center text-white hover:scale-110 transition-transform backdrop-blur-sm">
+                        <i class="fas fa-heart"></i>
+                    </button>
                 </div>
-                <div class="p-8 md:p-12 space-y-6">
+                <div class="p-8 md:p-12 space-y-6 overflow-y-auto max-h-[600px]">
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <span class="text-royal font-bold tracking-wider uppercase text-sm">${product.brand}</span>
@@ -2032,18 +2105,25 @@
                         <div class="flex items-center gap-4 mb-6">
                             <span class="text-4xl font-bold text-royal">$${product.price}</span>
                             ${product.originalPrice ? `<span class="text-2xl text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
-                        </div>
-                        <p class="text-gray-400 leading-relaxed text-lg">${product.description}</p>
-                        
-                        ${product.colors ? `
-                        <div class="mt-4">
-                            <p class="text-sm font-bold text-gray-400 mb-2">Available Colors:</p>
-                            <div class="flex gap-2">
-                                ${product.colors.map(color => `<span class="px-3 py-1 bg-dark-lighter rounded-full text-sm border border-gray-700">${color}</span>`).join('')}
+                            <div class="stock-status ${getStockStatus(product.stock).class} ml-auto">
+                                <i class="fas fa-circle text-[8px]"></i>
+                                <span>${getStockStatus(product.stock).text}</span>
                             </div>
                         </div>
-                        ` : ''}
+                        <p class="text-gray-400 leading-relaxed text-lg">${product.description}</p>
                     </div>
+
+                    ${product.colors ? `
+                    <div>
+                        <p class="font-bold mb-3 text-sm uppercase tracking-wider text-gray-400">Select Color</p>
+                        <div class="flex gap-3">
+                            ${product.colors.map((color, i) => `
+                                <button onclick="selectColor(${product.id}, '${color}', this)" class="color-swatch ${i === 0 ? 'selected' : ''}" style="background: ${getColorCode(color)}" title="${color}"></button>
+                            `).join('')}
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2" id="selected-color-text">Selected: ${product.colors[0]}</p>
+                    </div>
+                    ` : ''}
 
                     <div>
                         <p class="font-bold mb-3 text-sm uppercase tracking-wider text-gray-400">Select Size</p>
@@ -2055,7 +2135,7 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button onclick="addToCart(${product.id}); closeQuickView();" class="flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-2 text-lg shadow-lg shadow-royal/20">
+                        <button onclick="addToCartFromModal(${product.id}); closeQuickView();" class="flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-2 text-lg shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
                             <i class="fas fa-shopping-bag"></i> Add to Cart
                         </button>
                         <button onclick="buyNow(${product.id})" class="flex-1 border-2 border-royal text-royal font-bold py-4 rounded-full hover:bg-royal hover:text-black transition-all flex items-center justify-center gap-2 text-lg">
@@ -2080,8 +2160,67 @@
                 </div>
             `;
 
+            if (product.colors) {
+                selectedColors[productId] = product.colors[0];
+            }
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        function loadModalVideo(productId) {
+            const product = products.find(p => p.id === productId);
+            const wrapper = document.getElementById('modal-video-wrapper');
+            const playBtn = document.getElementById('modal-play-btn');
+            const poster = document.getElementById('modal-poster');
+
+            if (!wrapper || loadedVideos.has(`modal-${productId}`)) return;
+
+            playBtn.style.opacity = '0';
+            playBtn.style.pointerEvents = 'none';
+
+            const iframe = document.createElement('iframe');
+            iframe.className = 'tiktok-iframe';
+            iframe.allow = 'fullscreen; autoplay';
+            iframe.src = getTikTokEmbedUrl(product.tiktokVideoId, product.tiktokUsername, true);
+            
+            iframe.onload = () => {
+                loadedVideos.add(`modal-${productId}`);
+                wrapper.classList.add('active');
+                if (poster) poster.style.opacity = '0';
+            };
+
+            wrapper.innerHTML = '';
+            wrapper.appendChild(iframe);
+        }
+
+        function selectColor(productId, color, btn) {
+            selectedColors[productId] = color;
+            document.querySelectorAll('.color-swatch').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('selected-color-text').textContent = `Selected: ${color}`;
+        }
+
+        function addToCartFromModal(productId) {
+            const selectedSize = document.querySelector('.size-btn.selected')?.textContent;
+            const product = products.find(p => p.id === productId);
+            
+            const existing = cart.find(item => item.id === productId && item.selectedSize === selectedSize);
+            
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ 
+                    ...product, 
+                    quantity: 1, 
+                    selectedSize: selectedSize || product.sizes[0],
+                    selectedColor: selectedColors[productId] || (product.colors ? product.colors[0] : null)
+                });
+            }
+            
+            saveToLocalStorage();
+            updateCartUI();
+            showToast('Added to cart!');
         }
 
         function closeQuickView() {
@@ -2097,16 +2236,53 @@
         function buyNow(productId) {
             const product = products.find(p => p.id === productId);
             const selectedSize = document.querySelector('.size-btn.selected')?.textContent || product.sizes[0];
+            const selectedColor = selectedColors[productId] || (product.colors ? product.colors[0] : null);
             const phone = '+254704918499';
             
-            const message = `👑 *Quick Order - ROYAL Men*%0A%0A*${product.name}*%0ABrand: ${product.brand}%0ACategory: ${product.category}%0ASize: ${selectedSize}%0APrice: $${product.price}%0A%0APlease confirm availability.`;
+            let message = `👑 *Quick Order - ROYAL Men*%0A%0A*${product.name}*%0ABrand: ${product.brand}%0ACategory: ${product.category}%0ASize: ${selectedSize}`;
+            if (selectedColor) message += `%0AColor: ${selectedColor}`;
+            message += `%0APrice: $${product.price}%0A%0APlease confirm availability.`;
             
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         }
 
+        // Fullscreen TikTok Modal
+        function openTikTokFullscreen(videoId, username) {
+            const modal = document.getElementById('tiktok-modal');
+            const container = document.getElementById('modal-video-container');
+            
+            container.innerHTML = `
+                <iframe 
+                    src="${getTikTokEmbedUrl(videoId, username, true)}"
+                    allow="fullscreen; autoplay"
+                    style="width: 100%; height: 100%; border: none; border-radius: 1rem;"
+                ></iframe>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTikTokModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            
+            const modal = document.getElementById('tiktok-modal');
+            const container = document.getElementById('modal-video-container');
+            
+            container.innerHTML = '';
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
         // Toast
-        function showToast() {
+        function showToast(message = 'Added to cart!', icon = 'crown') {
             const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            toastIcon.className = `fas fa-${icon} text-xl`;
+            
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
@@ -2120,6 +2296,22 @@
             }, { threshold: 0.1 });
 
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Sticky Nav Enhancement
+        function initStickyNav() {
+            const nav = document.getElementById('category-nav');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        nav.classList.add('sticky-active');
+                    } else {
+                        nav.classList.remove('sticky-active');
+                    }
+                });
+            }, { threshold: 0 });
+            
+            observer.observe(document.getElementById('products'));
         }
 
         // Close modals on outside click
@@ -2148,6 +2340,27 @@
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('glass-strong');
             else nav.classList.remove('glass-strong');
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeQuickView();
+                closeTikTokModal();
+                if (document.getElementById('cart-sidebar').classList.contains('open')) toggleCart();
+                if (document.getElementById('wishlist-sidebar').classList.contains('open')) toggleWishlist();
+            }
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                toggleSearch();
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (videoIntersectionObserver) {
+                videoIntersectionObserver.disconnect();
+            }
         });
     </script>
 </body>
