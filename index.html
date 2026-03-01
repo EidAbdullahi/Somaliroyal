@@ -21,11 +21,10 @@
                         'royal-dark': '#B8941F',
                         'royal-light': '#F4E4BC',
                         dark: '#0a0a0a',
-                        'dark-light': '#1a1a1a',
-                        'dark-lighter': '#2d2d2d',
+                        'dark-light': '#111111',
+                        'dark-lighter': '#1a1a1a',
                         oud: '#3D2817',
                         'oud-light': '#5C4033',
-                        amber: '#FFBF00',
                         'islamic-green': '#0F4C3A',
                         'prayer-green': '#1B5E20',
                         'ivory': '#FFFFF0',
@@ -36,130 +35,750 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #ffffff; overflow-x: hidden; }
-        .font-display { font-family: 'Playfair Display', serif; }
-        .font-arabic { font-family: 'Amiri', serif; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
-        .glass { background: rgba(212, 175, 55, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(212, 175, 55, 0.1); }
-        .glass-strong { background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
-        .text-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F4E4BC 50%, #D4AF37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: shimmer 3s linear infinite; }
-        @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-        .gold-border { border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
-        .gold-border:hover { border-color: rgba(212, 175, 55, 0.6); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
-        .product-card { position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-8px); }
-        .product-media-container { position: relative; overflow: hidden; background: #1a1a1a; border-radius: 1rem; aspect-ratio: 4/5; transform: translateZ(0); will-change: transform; }
-        .product-poster { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease, transform 0.6s ease; z-index: 3; }
-        .video-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.4s ease; z-index: 2; background: #000; }
-        .video-wrapper.active { opacity: 1; z-index: 4; }
-        .tiktok-iframe { width: 100%; height: 100%; border: none; object-fit: cover; }
-        .video-loading { position: absolute; inset: 0; background: linear-gradient(135deg, #D4AF3720 0%, #3D281720 100%); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; z-index: 5; pointer-events: none; }
-        .video-loading.active { opacity: 1; }
-        .loading-spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #D4AF37; border-right-color: #3D2817; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .tiktok-badge { position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); animation: pulse 2s infinite; pointer-events: none; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
-        .video-facade-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 80px; height: 80px; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.75rem; z-index: 6; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 3px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); }
-        .product-card:hover .video-facade-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        .video-facade-btn:hover { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
-        .video-facade-btn.playing { opacity: 0; pointer-events: none; }
-        .video-duration { position: absolute; bottom: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.85); color: #D4AF37; padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; z-index: 6; display: flex; align-items: center; gap: 0.35rem; border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px); pointer-events: none; }
-        .product-actions { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 50%, transparent 100%); display: flex; gap: 0.75rem; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; z-index: 10; }
-        .product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
-        .action-btn { flex: 1; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease; border: none; cursor: pointer; }
-        .action-btn-primary { background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; }
-        .action-btn-primary:hover { background: linear-gradient(135deg, #F4E4BC 0%, #D4AF37 100%); transform: scale(1.02); box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5); }
-        .action-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .action-btn-secondary:hover { background: rgba(212, 175, 55, 0.2); border-color: rgba(212, 175, 55, 0.6); }
-        .quick-add-btn { position: absolute; top: 1rem; right: 4rem; width: 44px; height: 44px; background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 1.25rem; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; border: 2px solid #D4AF37; opacity: 0; transform: scale(0.8); }
-        .product-card:hover .quick-add-btn { opacity: 1; transform: scale(1); }
-        .quick-add-btn:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
-        .cart-sidebar, .wishlist-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .cart-sidebar.open, .wishlist-sidebar.open { transform: translateX(0); }
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; padding: 1rem 2rem; border-radius: 9999px; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); z-index: 100; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .product-badge { position: absolute; top: 1rem; left: 1rem; background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .product-badge.sale { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #fff; }
-        .product-badge.limited { background: linear-gradient(135deg, #3D2817 0%, #5C4033 100%); color: #fff; }
-        .product-badge.new { background: linear-gradient(135deg, #0F4C3A 0%, #1B5E20 100%); color: #fff; }
-        .modal { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-        .modal.active { opacity: 1; visibility: visible; }
-        .size-btn { transition: all 0.2s; border: 2px solid rgba(212, 175, 55, 0.3); }
-        .size-btn:hover { border-color: rgba(212, 175, 55, 0.6); background: rgba(212, 175, 55, 0.1); }
-        .size-btn.selected { background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; border-color: #D4AF37; font-weight: 700; transform: scale(1.05); }
-        .whatsapp-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .cart-item { animation: slideIn 0.4s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        .qty-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(212, 175, 55, 0.1); border-radius: 0.5rem; transition: all 0.2s; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .qty-btn:hover { background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; transform: scale(1.1); }
-        .category-pill { transition: all 0.3s ease; border: 2px solid rgba(212, 175, 55, 0.2); position: relative; overflow: hidden; }
-        .category-pill::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent); transition: left 0.5s; }
-        .category-pill:hover::before { left: 100%; }
-        .category-pill:hover { border-color: rgba(212, 175, 55, 0.6); transform: translateY(-2px); }
-        .category-pill.active { background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; border-color: #D4AF37; font-weight: 700; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
-        .crown-icon { display: inline-block; animation: float 2s ease-in-out infinite; }
-        .royal-glow { box-shadow: 0 0 40px rgba(212, 175, 55, 0.15); }
-        .tiktok-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .tiktok-modal.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .tiktok-modal iframe { max-width: 90%; max-height: 90%; border-radius: 1rem; border: 2px solid rgba(212, 175, 55, 0.3); box-shadow: 0 0 60px rgba(212, 175, 55, 0.2); }
-        .tiktok-modal-close { position: absolute; top: 2rem; right: 2rem; width: 56px; height: 56px; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; border: 3px solid rgba(255, 255, 255, 0.3); z-index: 10; }
-        .tiktok-modal-close:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
-        .img-loading { filter: blur(10px); transform: scale(1.1); }
-        .img-loaded { filter: blur(0); transform: scale(1); transition: all 0.5s ease; }
-        #category-nav { transition: all 0.3s ease; }
-        #category-nav.sticky-active { background: rgba(10, 10, 10, 0.98); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .price-tag { position: relative; display: inline-block; }
-        .price-tag::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #D4AF37; transition: width 0.3s ease; }
-        .product-card:hover .price-tag::after { width: 100%; }
-        .wishlist-btn { position: absolute; top: 1rem; left: 4rem; width: 44px; height: 44px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; transition: all 0.3s ease; z-index: 10; border: 2px solid rgba(255, 255, 255, 0.2); opacity: 0; transform: scale(0.8); }
-        .product-card:hover .wishlist-btn { opacity: 1; transform: scale(1); }
-        .wishlist-btn:hover { background: rgba(220, 38, 38, 0.9); border-color: rgba(220, 38, 38, 0.5); transform: scale(1.1); }
-        .wishlist-btn.active { background: rgba(220, 38, 38, 0.9); color: #fff; }
-        .stock-status { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #10b981; font-weight: 600; }
-        .stock-status.low { color: #f59e0b; }
-        .stock-status.out { color: #ef4444; }
-        .color-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; position: relative; }
-        .color-swatch:hover { transform: scale(1.2); border-color: #D4AF37; }
-        .color-swatch.selected { border-color: #D4AF37; box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 4px #D4AF37; }
-        .color-swatch::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
-        html { scroll-behavior: smooth; }
-        *:focus-visible { outline: 2px solid #D4AF37; outline-offset: 2px; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .arabic-pattern { background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 1px, transparent 1px); background-size: 20px 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Islamic geometric pattern */
-        .geometric-pattern {
-            background-color: #0a0a0a;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0a0a0a; 
+            color: #ffffff; 
+            overflow-x: hidden;
+            line-height: 1.6;
         }
         
-        /* Responsive Touch Optimizations */
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+        
+        /* Advanced Glassmorphism */
+        .glass { 
+            background: rgba(212, 175, 55, 0.03); 
+            backdrop-filter: blur(20px) saturate(180%); 
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(212, 175, 55, 0.08); 
+        }
+        
+        .glass-strong { 
+            background: rgba(10, 10, 10, 0.85); 
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.05); 
+        }
+        
+        /* Animated Gradient Text */
+        .text-gradient { 
+            background: linear-gradient(135deg, #D4AF37 0%, #F4E4BC 50%, #D4AF37 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text; 
+            background-size: 200% auto; 
+            animation: shimmer 4s linear infinite; 
+        }
+        
+        @keyframes shimmer { 
+            0% { background-position: -200% center; } 
+            100% { background-position: 200% center; } 
+        }
+        
+        /* Modern Gold Border with Glow */
+        .gold-border { 
+            border: 1px solid rgba(212, 175, 55, 0.15); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gold-border:hover { 
+            border-color: rgba(212, 175, 55, 0.4); 
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(212, 175, 55, 0.05);
+        }
+        
+        /* Modern Product Card */
+        .product-card { 
+            position: relative; 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .product-card:hover { 
+            transform: translateY(-12px); 
+            background: linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 100%);
+        }
+        
+        /* Modern Media Container */
+        .product-media-container { 
+            position: relative; 
+            overflow: hidden; 
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%); 
+            border-radius: 0.875rem; 
+            aspect-ratio: 4/5;
+        }
+        
+        .product-poster { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+        
+        .product-card:hover .product-poster {
+            transform: scale(1.05);
+        }
+        
+        /* Video Wrapper Modern */
+        .video-wrapper { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            opacity: 0; 
+            transition: opacity 0.5s ease; 
+            z-index: 3;
+            background: #000;
+        }
+        
+        .video-wrapper.active { 
+            opacity: 1; 
+            z-index: 4; 
+        }
+        
+        .tiktok-iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            object-fit: cover; 
+        }
+        
+        /* Modern Loading Spinner */
+        .video-loading { 
+            position: absolute; 
+            inset: 0; 
+            background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(61,40,23,0.2) 100%); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            z-index: 5; 
+            pointer-events: none; 
+        }
+        
+        .video-loading.active { opacity: 1; }
+        
+        .loading-spinner { 
+            width: 40px; 
+            height: 40px; 
+            border: 2px solid rgba(255,255,255,0.1); 
+            border-top-color: #D4AF37; 
+            border-right-color: #3D2817; 
+            border-radius: 50%; 
+            animation: spin 0.8s linear infinite; 
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Modern Play Button */
+        .video-facade-btn { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%) scale(0.9); 
+            width: 72px; 
+            height: 72px; 
+            background: linear-gradient(135deg, rgba(212,175,55,0.9) 0%, rgba(61,40,23,0.9) 100%); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #fff; 
+            font-size: 1.5rem; 
+            z-index: 6; 
+            opacity: 0; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .product-card:hover .video-facade-btn { 
+            opacity: 1; 
+            transform: translate(-50%, -50%) scale(1); 
+        }
+        
+        .video-facade-btn:hover { 
+            transform: translate(-50%, -50%) scale(1.1); 
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4); 
+        }
+        
+        .video-facade-btn.playing { 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+        
+        /* Modern Duration Badge */
+        .video-duration { 
+            position: absolute; 
+            bottom: 1rem; 
+            right: 1rem; 
+            background: rgba(0, 0, 0, 0.6); 
+            color: #D4AF37; 
+            padding: 0.5rem 1rem; 
+            border-radius: 9999px; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            z-index: 6; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem; 
+            border: 1px solid rgba(212, 175, 55, 0.2); 
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.05em;
+        }
+        
+        /* Modern Product Actions */
+        .product-actions { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            padding: 1.5rem; 
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 60%, transparent 100%); 
+            display: flex; 
+            gap: 0.75rem; 
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 10; 
+        }
+        
+        .product-card:hover .product-actions { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        
+        .action-btn { 
+            flex: 1; 
+            padding: 0.875rem; 
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            font-size: 0.875rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: none; 
+            cursor: pointer;
+            letter-spacing: 0.02em;
+        }
+        
+        .action-btn-primary { 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .action-btn-primary:hover { 
+            background: linear-gradient(135deg, #F4E4BC 0%, #D4AF37 100%); 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); 
+        }
+        
+        .action-btn-secondary { 
+            background: rgba(255,255,255,0.08); 
+            color: #fff; 
+            border: 1px solid rgba(212, 175, 55, 0.2); 
+            backdrop-filter: blur(10px);
+        }
+        
+        .action-btn-secondary:hover { 
+            background: rgba(212, 175, 55, 0.15); 
+            border-color: rgba(212, 175, 55, 0.4); 
+            transform: translateY(-2px);
+        }
+        
+        /* Modern Quick Add Button */
+        .quick-add-btn { 
+            position: absolute; 
+            top: 1rem; 
+            right: 4rem; 
+            width: 44px; 
+            height: 44px; 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #000; 
+            font-size: 1.25rem; 
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 10; 
+            border: 2px solid rgba(212, 175, 55, 0.5); 
+            opacity: 0; 
+            transform: scale(0.8) rotate(-90deg); 
+        }
+        
+        .product-card:hover .quick-add-btn { 
+            opacity: 1; 
+            transform: scale(1) rotate(0deg); 
+        }
+        
+        .quick-add-btn:hover { 
+            transform: scale(1.1) rotate(90deg); 
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5); 
+        }
+        
+        /* Modern Wishlist Button */
+        .wishlist-btn { 
+            position: absolute; 
+            top: 1rem; 
+            left: 4rem; 
+            width: 44px; 
+            height: 44px; 
+            background: rgba(255, 255, 255, 0.08); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #fff; 
+            font-size: 1.25rem; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 10; 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(10px);
+            opacity: 0; 
+            transform: scale(0.8); 
+        }
+        
+        .product-card:hover .wishlist-btn { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+        
+        .wishlist-btn:hover { 
+            background: rgba(220, 38, 38, 0.9); 
+            border-color: rgba(220, 38, 38, 0.4); 
+            transform: scale(1.1); 
+        }
+        
+        .wishlist-btn.active { 
+            background: rgba(220, 38, 38, 0.9); 
+            color: #fff; 
+        }
+        
+        /* Modern Sidebars */
+        .cart-sidebar, .wishlist-sidebar { 
+            transform: translateX(100%); 
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            background: rgba(17, 17, 17, 0.98);
+            backdrop-filter: blur(20px);
+        }
+        
+        .cart-sidebar.open, .wishlist-sidebar.open { 
+            transform: translateX(0); 
+        }
+        
+        /* Modern Toast */
+        .toast { 
+            position: fixed; 
+            bottom: 100px; 
+            left: 50%; 
+            transform: translateX(-50%) translateY(100px) scale(0.9); 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            padding: 1rem 2rem; 
+            border-radius: 9999px; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.3); 
+            z-index: 100; 
+            opacity: 0; 
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toast.show { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(0) scale(1); 
+        }
+        
+        /* Modern Badges */
+        .product-badge { 
+            position: absolute; 
+            top: 1rem; 
+            left: 1rem; 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            padding: 0.5rem 1rem; 
+            border-radius: 9999px; 
+            font-size: 0.7rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            z-index: 10; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .product-badge.sale { 
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
+            color: #fff; 
+        }
+        
+        .product-badge.limited { 
+            background: linear-gradient(135deg, #3D2817 0%, #5C4033 100%); 
+            color: #fff; 
+        }
+        
+        .product-badge.new { 
+            background: linear-gradient(135deg, #0F4C3A 0%, #1B5E20 100%); 
+            color: #fff; 
+        }
+        
+        /* Modern Modal */
+        .modal { 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
+        /* Modern Size Selector */
+        .size-btn { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: 1.5px solid rgba(212, 175, 55, 0.2);
+            background: transparent;
+            color: #fff;
+        }
+        
+        .size-btn:hover { 
+            border-color: rgba(212, 175, 55, 0.5); 
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .size-btn.selected { 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            border-color: #D4AF37; 
+            font-weight: 700; 
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        /* Modern WhatsApp Float */
+        .whatsapp-float { 
+            position: fixed; 
+            bottom: 2rem; 
+            right: 2rem; 
+            z-index: 50; 
+            animation: float 4s ease-in-out infinite; 
+        }
+        
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-15px); } 
+        }
+        
+        /* Modern Reveal Animation */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        
+        /* Modern Cart Item */
+        .cart-item { 
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(255,255,255,0.04);
+        }
+        
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateX(30px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+        
+        /* Modern Quantity Buttons */
+        .qty-btn { 
+            width: 36px; 
+            height: 36px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: rgba(212, 175, 55, 0.08); 
+            border-radius: 0.5rem; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            color: #fff;
+        }
+        
+        .qty-btn:hover { 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            transform: scale(1.1); 
+            border-color: #D4AF37;
+        }
+        
+        /* Modern Category Pills */
+        .category-pill { 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: 1.5px solid rgba(212, 175, 55, 0.15); 
+            position: relative; 
+            overflow: hidden;
+            background: transparent;
+        }
+        
+        .category-pill::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: -100%; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent); 
+            transition: left 0.6s; 
+        }
+        
+        .category-pill:hover::before { left: 100%; }
+        
+        .category-pill:hover { 
+            border-color: rgba(212, 175, 55, 0.4); 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+        
+        .category-pill.active { 
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); 
+            color: #000; 
+            border-color: #D4AF37; 
+            font-weight: 700; 
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Modern Crown Animation */
+        .crown-icon { 
+            display: inline-block; 
+            animation: gentleFloat 3s ease-in-out infinite; 
+        }
+        
+        @keyframes gentleFloat { 
+            0%, 100% { transform: translateY(0) rotate(0deg); } 
+            50% { transform: translateY(-5px) rotate(5deg); } 
+        }
+        
+        /* Modern Royal Glow */
+        .royal-glow { 
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.15), 0 0 100px rgba(212, 175, 55, 0.05);
+        }
+        
+        /* Modern TikTok Modal */
+        .tiktok-modal { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.95); 
+            z-index: 100; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(20px);
+        }
+        
+        .tiktok-modal.active { 
+            display: flex; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: scale(0.95); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
+        
+        .tiktok-modal iframe { 
+            max-width: 90%; 
+            max-height: 90%; 
+            border-radius: 1.5rem; 
+            border: 1px solid rgba(212, 175, 55, 0.2); 
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.2); 
+        }
+        
+        .tiktok-modal-close { 
+            position: absolute; 
+            top: 2rem; 
+            right: 2rem; 
+            width: 56px; 
+            height: 56px; 
+            background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #fff; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            z-index: 10; 
+        }
+        
+        .tiktok-modal-close:hover { 
+            transform: scale(1.1) rotate(90deg); 
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); 
+        }
+        
+        /* Modern Image Loading */
+        .img-loading { 
+            filter: blur(20px); 
+            transform: scale(1.1); 
+        }
+        
+        .img-loaded { 
+            filter: blur(0); 
+            transform: scale(1); 
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        
+        /* Modern Sticky Nav */
+        #category-nav { 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        
+        #category-nav.sticky-active { 
+            background: rgba(10, 10, 10, 0.95); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+        }
+        
+        /* Modern Price Tag */
+        .price-tag { 
+            position: relative; 
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .price-tag::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: -2px; 
+            left: 0; 
+            width: 0; 
+            height: 2px; 
+            background: linear-gradient(90deg, #D4AF37, transparent); 
+            transition: width 0.4s ease; 
+        }
+        
+        .product-card:hover .price-tag::after { 
+            width: 100%; 
+        }
+        
+        /* Modern Color Swatch */
+        .color-swatch { 
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%; 
+            border: 2px solid transparent; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .color-swatch:hover { 
+            transform: scale(1.2); 
+            border-color: #D4AF37; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .color-swatch.selected { 
+            border-color: #D4AF37; 
+            box-shadow: 0 0 0 3px #0a0a0a, 0 0 0 5px #D4AF37, 0 4px 15px rgba(0,0,0,0.3); 
+            transform: scale(1.1);
+        }
+        
+        /* Smooth Scroll */
+        html { 
+            scroll-behavior: smooth; 
+        }
+        
+        /* Focus Visible */
+        *:focus-visible { 
+            outline: 2px solid #D4AF37; 
+            outline-offset: 3px; 
+        }
+        
+        /* Hide Scrollbar */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Islamic Pattern Background */
+        .geometric-pattern {
+            background-color: #0a0a0a;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Modern Mobile Optimizations */
         @media (max-width: 640px) {
-            .product-card:hover { transform: translateY(-4px); }
-            .video-facade-btn { width: 64px; height: 64px; font-size: 1.5rem; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            .product-actions { opacity: 1; transform: translateY(0); padding: 0.75rem; }
-            .action-btn { padding: 0.75rem; font-size: 0.75rem; }
-            .quick-add-btn, .wishlist-btn { opacity: 1; transform: scale(1); width: 36px; height: 36px; font-size: 1rem; }
+            .product-card:hover { transform: translateY(-6px); }
+            .video-facade-btn { 
+                width: 56px; 
+                height: 56px; 
+                font-size: 1.25rem; 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            .product-actions { 
+                opacity: 1; 
+                transform: translateY(0); 
+                padding: 1rem; 
+                background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 100%);
+            }
+            .action-btn { padding: 0.75rem; font-size: 0.8rem; }
+            .quick-add-btn, .wishlist-btn { 
+                opacity: 1; 
+                transform: scale(1); 
+                width: 36px; 
+                height: 36px; 
+                font-size: 1rem; 
+            }
             .quick-add-btn { right: 3.5rem; }
             .wishlist-btn { left: 3.5rem; }
-            .tiktok-badge { width: 32px; height: 32px; font-size: 0.875rem; }
-            .product-badge { font-size: 0.625rem; padding: 0.375rem 0.75rem; }
-            .video-duration { font-size: 0.625rem; padding: 0.25rem 0.5rem; }
-            .whatsapp-float { bottom: 1rem; right: 1rem; }
+            .product-badge { font-size: 0.65rem; padding: 0.4rem 0.8rem; }
+            .video-duration { font-size: 0.7rem; padding: 0.4rem 0.8rem; }
+            .whatsapp-float { bottom: 1.5rem; right: 1.5rem; }
             .whatsapp-float button { width: 56px; height: 56px; font-size: 1.75rem; }
-            .toast { padding: 0.75rem 1.5rem; font-size: 0.875rem; bottom: 80px; }
+            .toast { padding: 0.875rem 1.5rem; font-size: 0.875rem; bottom: 90px; }
             .cart-sidebar, .wishlist-sidebar { width: 100%; }
-            #quick-view-modal > div { max-height: 100vh; border-radius: 0; }
-            #quick-view-modal .grid { grid-template-columns: 1fr; }
-            #quick-view-modal .h-\[300px\] { height: 250px; }
         }
         
         @media (max-width: 768px) {
@@ -177,159 +796,299 @@
         body { max-width: 100vw; overflow-x: hidden; }
         
         @supports (padding: max(0px)) {
-            .fixed.bottom-0, .fixed.bottom-2, .whatsapp-float { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+            .fixed.bottom-0, .fixed.bottom-2, .whatsapp-float { 
+                padding-bottom: max(1rem, env(safe-area-inset-bottom)); 
+            }
             .fixed.top-0 { padding-top: max(0px, env(safe-area-inset-top)); }
             .fixed.left-0 { padding-left: max(0px, env(safe-area-inset-left)); }
             .fixed.right-0 { padding-right: max(0px, env(safe-area-inset-right)); }
         }
+        
+        /* Modern Grid View Toggle */
+        .view-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        
+        .view-btn.active {
+            background: linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.1) 100%);
+            border-color: rgba(212, 175, 55, 0.3);
+            color: #D4AF37;
+        }
+        
+        /* Modern Search Bar */
+        .search-input {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Modern Stock Status */
+        .stock-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .stock-status.low {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .stock-status.out {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        /* Modern Hero Stats */
+        .hero-stat {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hero-stat:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Modern Navigation Links */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #D4AF37, transparent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Modern Button Hover Effects */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        /* Modern Footer Links */
+        .footer-link {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
     </style>
 </head>
 <body class="antialiased geometric-pattern">
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-strong transition-all duration-300" id="navbar">
+    <!-- Modern Navigation -->
+    <nav class="fixed w-full z-50 glass-strong transition-all duration-500" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
-                    <span class="font-display text-2xl sm:text-3xl font-bold tracking-wider text-white flex items-center gap-2 group-hover:text-royal transition-colors">
-                        <i class="fas fa-mosque text-royal crown-icon"></i>
-                        <span class="hidden sm:inline">ROYAL</span>
+                    <span class="font-display text-2xl sm:text-3xl font-bold tracking-wider text-white flex items-center gap-3 group-hover:text-royal transition-colors duration-300">
+                        <i class="fas fa-mosque text-royal crown-icon text-2xl sm:text-3xl"></i>
+                        <span class="hidden sm:inline tracking-[0.2em]">ROYAL</span>
                     </span>
-                    <span class="ml-2 px-2 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30 group-hover:bg-royal group-hover:text-black transition-all sm:ml-3 sm:px-3">ISLAMIC</span>
-                    <span class="ml-2 px-2 py-1 bg-gradient-to-r from-oud to-oud-light text-white text-xs font-bold rounded-full hidden sm:inline-flex">
-                        <i class="fas fa-star-and-crescent mr-1"></i>Halal
-                    </span>
+                    <div class="hidden sm:flex items-center gap-2 ml-4">
+                        <span class="px-3 py-1 bg-royal/10 text-royal text-xs font-bold rounded-full border border-royal/20 group-hover:bg-royal group-hover:text-black transition-all duration-300">ISLAMIC</span>
+                        <span class="px-3 py-1 bg-gradient-to-r from-oud to-oud-light text-white text-xs font-bold rounded-full flex items-center gap-1">
+                            <i class="fas fa-star-and-crescent text-[10px]"></i>Halal
+                        </span>
+                    </div>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-6">
-                    <a onclick="filterCategory('all')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">All<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Formal Wear<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('perfumes')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Perfumes<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('shoes')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Shoes<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('attars')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Attars<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('essentials')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Essentials<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a onclick="filterCategory('all')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">All</a>
+                    <a onclick="filterCategory('formal')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Formal Wear</a>
+                    <a onclick="filterCategory('perfumes')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Perfumes</a>
+                    <a onclick="filterCategory('shoes')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Shoes</a>
+                    <a onclick="filterCategory('attars')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Attars</a>
+                    <a onclick="filterCategory('essentials')" class="nav-link text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer">Essentials</a>
                 </div>
 
-                <div class="flex items-center space-x-3 sm:space-x-6">
-                    <button onclick="toggleSearch()" class="text-gray-300 hover:text-royal transition-colors p-2 hover:bg-white/5 rounded-full" aria-label="Search">
+                <!-- Actions -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <button onclick="toggleSearch()" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-royal hover:bg-white/5 transition-all duration-300" aria-label="Search">
                         <i class="fas fa-search text-lg"></i>
                     </button>
-                    <button onclick="toggleWishlist()" class="text-gray-300 hover:text-royal transition-colors p-2 hover:bg-white/5 rounded-full relative" aria-label="Wishlist">
+                    <button onclick="toggleWishlist()" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-royal hover:bg-white/5 transition-all duration-300 relative" aria-label="Wishlist">
                         <i class="fas fa-heart text-lg"></i>
-                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform">0</span>
+                        <span id="wishlist-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform duration-300 shadow-lg">0</span>
                     </button>
-                    <button onclick="toggleCart()" class="text-gray-300 hover:text-royal transition-colors relative p-2 hover:bg-white/5 rounded-full" aria-label="Cart">
+                    <button onclick="toggleCart()" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-royal hover:bg-white/5 transition-all duration-300 relative" aria-label="Cart">
                         <i class="fas fa-shopping-bag text-xl"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-royal text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform">0</span>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-royal to-royal-dark text-black text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform duration-300 shadow-lg shadow-royal/30">0</span>
                     </button>
-                    <button class="md:hidden text-gray-300 hover:text-royal p-2 hover:bg-white/5 rounded-full" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <button class="md:hidden w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-royal hover:bg-white/5 transition-all duration-300" onclick="toggleMobileMenu()" aria-label="Menu">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Search Bar -->
-        <div id="search-bar" class="hidden border-t border-gray-800 bg-dark-light px-4 py-4 animate-fade-up">
+        <!-- Modern Search Bar -->
+        <div id="search-bar" class="hidden border-t border-white/5 bg-dark-light/95 backdrop-blur-xl px-4 py-4 animate-fade-up">
             <div class="max-w-3xl mx-auto relative">
                 <input type="text" id="search-input" placeholder="Search thobes, perfumes, attars, prayer items..." 
-                    class="w-full bg-dark-lighter border border-gray-700 rounded-full px-6 py-3 pl-12 text-white focus:outline-none focus:border-royal transition-colors text-sm sm:text-base"
+                    class="search-input w-full rounded-full px-6 py-3.5 pl-14 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none"
                     onkeyup="filterProducts()">
-                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                <button onclick="toggleSearch()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-royal">
+                <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg"></i>
+                <button onclick="toggleSearch()" class="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-royal transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass-strong border-t border-gray-800">
-            <div class="px-4 py-4 space-y-2">
-                <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">All Products</a>
-                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👔 Official Formal Wear</a>
-                <a onclick="filterCategory('perfumes'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🧴 Premium Perfumes</a>
-                <a onclick="filterCategory('shoes'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👞 Islamic Footwear</a>
-                <a onclick="filterCategory('attars'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🕌 Attars & Oils</a>
-                <a onclick="filterCategory('essentials'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">📿 Islamic Essentials</a>
+        <!-- Modern Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-strong border-t border-white/5">
+            <div class="px-4 py-6 space-y-1">
+                <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300">All Products</a>
+                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-3"><i class="fas fa-user-tie w-6 text-center"></i> Formal Wear</a>
+                <a onclick="filterCategory('perfumes'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-3"><i class="fas fa-spray-can w-6 text-center"></i> Perfumes</a>
+                <a onclick="filterCategory('shoes'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-3"><i class="fas fa-shoe-prints w-6 text-center"></i> Footwear</a>
+                <a onclick="filterCategory('attars'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-3"><i class="fas fa-oil-can w-6 text-center"></i> Attars & Oils</a>
+                <a onclick="filterCategory('essentials'); toggleMobileMenu()" class="block px-4 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-3"><i class="fas fa-pray w-6 text-center"></i> Essentials</a>
             </div>
         </div>
     </nav>
 
-    <!-- Wishlist Sidebar -->
-    <div id="wishlist-overlay" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm" onclick="toggleWishlist()"></div>
-    <div id="wishlist-sidebar" class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-dark-light z-50 wishlist-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
-        <div class="p-4 sm:p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
-            <h2 class="font-display text-xl sm:text-2xl font-bold flex items-center gap-2">
+    <!-- Modern Wishlist Sidebar -->
+    <div id="wishlist-overlay" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm transition-opacity duration-300" onclick="toggleWishlist()"></div>
+    <div id="wishlist-sidebar" class="fixed right-0 top-0 h-full w-full sm:w-[420px] z-50 wishlist-sidebar overflow-y-auto border-l border-royal/10 shadow-2xl">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-[#111]/95 backdrop-blur-xl z-10">
+            <h2 class="font-display text-2xl font-bold flex items-center gap-3">
                 <i class="fas fa-heart text-red-500"></i>
                 Wishlist 
-                <span id="wishlist-total-items" class="text-royal text-base sm:text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
+                <span id="wishlist-total-items" class="text-royal text-sm bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
             </h2>
-            <button onclick="toggleWishlist()" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all border border-gray-700">
+            <button onclick="toggleWishlist()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-royal hover:text-black transition-all duration-300 border border-white/10">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <div id="wishlist-items" class="p-4 sm:p-6 space-y-4 min-h-[300px]">
-            <div class="text-center text-gray-500 py-12">
-                <i class="fas fa-heart text-5xl sm:text-6xl mb-4 opacity-20"></i>
-                <p class="text-base sm:text-lg mb-2">Your wishlist is empty</p>
-                <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+        <div id="wishlist-items" class="p-6 space-y-4 min-h-[300px]">
+            <div class="text-center text-gray-500 py-16">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+                    <i class="fas fa-heart text-4xl opacity-20"></i>
+                </div>
+                <p class="text-lg mb-3 font-medium">Your wishlist is empty</p>
+                <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:text-royal-light transition-colors font-medium text-sm">Discover Products</button>
             </div>
         </div>
     </div>
 
-    <!-- Cart Sidebar -->
-    <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm" onclick="toggleCart()"></div>
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-dark-light z-50 cart-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
-        <div class="p-4 sm:p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
-            <h2 class="font-display text-xl sm:text-2xl font-bold flex items-center gap-2">
+    <!-- Modern Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm transition-opacity duration-300" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full sm:w-[420px] z-50 cart-sidebar overflow-y-auto border-l border-royal/10 shadow-2xl">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-[#111]/95 backdrop-blur-xl z-10">
+            <h2 class="font-display text-2xl font-bold flex items-center gap-3">
                 <i class="fas fa-mosque text-royal"></i>
                 Your Cart 
-                <span id="cart-total-items" class="text-royal text-base sm:text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
+                <span id="cart-total-items" class="text-royal text-sm bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
             </h2>
-            <button onclick="toggleCart()" class="w-10 h-10 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all border border-gray-700">
+            <button onclick="toggleCart()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-royal hover:text-black transition-all duration-300 border border-white/10">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <div id="cart-items" class="p-4 sm:p-6 space-y-4 min-h-[300px]">
-            <div class="text-center text-gray-500 py-12">
-                <i class="fas fa-mosque text-5xl sm:text-6xl mb-4 opacity-20"></i>
-                <p class="text-base sm:text-lg mb-2">Your cart is empty</p>
-                <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+        <div id="cart-items" class="p-6 space-y-4 min-h-[300px]">
+            <div class="text-center text-gray-500 py-16">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+                    <i class="fas fa-mosque text-4xl opacity-20"></i>
+                </div>
+                <p class="text-lg mb-3 font-medium">Your cart is empty</p>
+                <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:text-royal-light transition-colors font-medium text-sm">Start Shopping</button>
             </div>
         </div>
 
-        <div class="p-4 sm:p-6 border-t border-gray-800 sticky bottom-0 bg-dark-light">
+        <div class="p-6 border-t border-white/5 sticky bottom-0 bg-[#111]/95 backdrop-blur-xl">
             <div class="space-y-3 mb-6">
-                <div class="flex justify-between text-gray-400 text-sm sm:text-base">
+                <div class="flex justify-between text-gray-400 text-sm">
                     <span>Subtotal</span>
-                    <span id="cart-subtotal" class="font-medium">$0.00</span>
+                    <span id="cart-subtotal" class="font-medium tabular-nums">$0.00</span>
                 </div>
-                <div class="flex justify-between text-gray-400 text-sm sm:text-base">
+                <div class="flex justify-between text-gray-400 text-sm">
                     <span>Shipping</span>
-                    <span class="text-royal">Free</span>
+                    <span class="text-royal font-medium">Free</span>
                 </div>
-                <div class="flex justify-between text-gray-400 text-sm sm:text-base">
-                    <span>Tax</span>
-                    <span id="cart-tax" class="font-medium">$0.00</span>
+                <div class="flex justify-between text-gray-400 text-sm">
+                    <span>Tax (8%)</span>
+                    <span id="cart-tax" class="font-medium tabular-nums">$0.00</span>
                 </div>
-                <div class="flex justify-between text-xl sm:text-2xl font-bold border-t border-gray-800 pt-3">
+                <div class="flex justify-between text-xl font-bold border-t border-white/10 pt-3 mt-3">
                     <span>Total</span>
-                    <span id="cart-total" class="text-royal">$0.00</span>
+                    <span id="cart-total" class="text-royal tabular-nums">$0.00</span>
                 </div>
             </div>
             
-            <button onclick="checkoutWhatsApp()" class="w-full bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-3 sm:py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-base sm:text-lg mb-3 shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
-                <i class="fab fa-whatsapp text-xl sm:text-2xl"></i>
+            <button onclick="checkoutWhatsApp()" class="btn-primary w-full bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-base shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02] mb-3">
+                <i class="fab fa-whatsapp text-xl"></i>
                 Checkout via WhatsApp
             </button>
-            <button onclick="toggleCart()" class="w-full border border-gray-600 text-gray-300 font-medium py-3 rounded-full hover:bg-white/5 transition-all text-sm">
+            <button onclick="toggleCart()" class="w-full border border-white/10 text-gray-400 font-medium py-3.5 rounded-full hover:bg-white/5 hover:text-white transition-all text-sm">
                 Continue Shopping
             </button>
         </div>
     </div>
 
-    <!-- Toast -->
+    <!-- Modern Toast -->
     <div id="toast" class="toast">
         <i class="fas fa-mosque text-xl"></i>
         <span id="toast-message">Added to cart!</span>
@@ -345,139 +1104,157 @@
         </div>
     </div>
 
-    <!-- Hero -->
-    <section class="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden pt-16 sm:pt-20 bg-gradient-to-b from-dark-light to-dark">
-        <div class="absolute inset-0">
-            <div class="absolute top-20 left-4 sm:left-10 w-48 sm:w-96 h-48 sm:h-96 bg-royal/10 rounded-full blur-[80px] sm:blur-[120px] animate-pulse"></div>
-            <div class="absolute bottom-20 right-4 sm:right-10 w-48 sm:w-96 h-48 sm:h-96 bg-oud/30 rounded-full blur-[80px] sm:blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] border border-royal/5 rounded-full animate-[spin_20s_linear_infinite]"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] border border-islamic-green/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+    <!-- Modern Hero Section -->
+    <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a]">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-royal/5 rounded-full blur-[100px] animate-pulse"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-oud/20 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-royal/5 rounded-full animate-[spin_30s_linear_infinite]"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-islamic-green/5 rounded-full animate-[spin_25s_linear_infinite_reverse]"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-royal/20 to-oud/20 border border-royal/30 px-3 sm:px-4 py-2 rounded-full mb-6 sm:mb-8 hover:from-royal/30 hover:to-oud/30 transition-all cursor-pointer" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
-                <i class="fas fa-star-and-crescent text-royal text-xs sm:text-sm"></i>
-                <span class="text-xs font-bold tracking-wider uppercase text-gradient">Authentic Islamic Lifestyle</span>
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-royal/10 to-oud/10 border border-royal/20 px-5 py-2.5 rounded-full mb-8 hover:from-royal/20 hover:to-oud/20 transition-all duration-500 cursor-pointer group" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-star-and-crescent text-royal text-sm group-hover:rotate-12 transition-transform duration-300"></i>
+                <span class="text-xs font-bold tracking-[0.2em] uppercase text-gradient">Authentic Islamic Lifestyle</span>
             </div>
             
-            <h1 class="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 leading-tight">
+            <!-- Main Title -->
+            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[1.1] tracking-tight">
                 Elegance in <br>
-                <span class="text-gradient">Modesty</span>
+                <span class="text-gradient inline-block mt-2">Modesty</span>
             </h1>
             
-            <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed px-4">
-                Premium <span class="text-royal font-bold">Official Formal Wear</span>, Halal fragrances, and Islamic essentials. 
-                Dress with dignity, scent with purity, live with faith.
+            <!-- Subtitle -->
+            <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                Premium <span class="text-royal font-semibold">Official Formal Wear</span>, Halal fragrances, and Islamic essentials. 
+                <span class="block mt-2 text-gray-500">Dress with dignity, scent with purity, live with faith.</span>
             </p>
             
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4">
-                <button onclick="filterCategory('formal')" class="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:scale-105 transition-all transform flex items-center justify-center gap-2 shadow-lg shadow-royal/25 text-sm sm:text-base">
-                    <i class="fas fa-user-tie"></i> Formal Collection
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 px-4 mb-16">
+                <button onclick="filterCategory('formal')" class="btn-primary px-8 py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center justify-center gap-3 shadow-xl shadow-royal/20 text-sm sm:text-base group">
+                    <i class="fas fa-user-tie group-hover:rotate-12 transition-transform"></i> 
+                    Formal Collection
                 </button>
-                <button onclick="showWhatsAppChat()" class="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center justify-center gap-2 border border-royal/30 hover:border-royal text-sm sm:text-base">
-                    <i class="fab fa-whatsapp text-royal"></i> Personal Stylist
+                <button onclick="showWhatsAppChat()" class="px-8 py-4 bg-white/5 text-white font-semibold rounded-full hover:bg-white/10 transition-all flex items-center justify-center gap-3 border border-white/10 hover:border-royal/30 text-sm sm:text-base backdrop-blur-sm">
+                    <i class="fab fa-whatsapp text-royal text-xl"></i> 
+                    Personal Stylist
                 </button>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-8 mt-10 sm:mt-16 max-w-5xl mx-auto px-4">
-                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-3xl font-bold text-royal group-hover:scale-110 transition-transform inline-block">100%</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Halal Certified</p>
+            <!-- Modern Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto px-4">
+                <div class="hero-stat text-center rounded-2xl p-5 cursor-pointer group">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-royal group-hover:scale-110 transition-transform duration-300 inline-block">100%</p>
+                    <p class="text-xs text-gray-500 mt-2 font-medium tracking-wide">Halal Certified</p>
                 </div>
-                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-3xl font-bold text-oud-light group-hover:scale-110 transition-transform inline-block">50+</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Premium Attars</p>
+                <div class="hero-stat text-center rounded-2xl p-5 cursor-pointer group">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-oud-light group-hover:scale-110 transition-transform duration-300 inline-block">50+</p>
+                    <p class="text-xs text-gray-500 mt-2 font-medium tracking-wide">Premium Attars</p>
                 </div>
-                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-3xl font-bold text-islamic-green group-hover:scale-110 transition-transform inline-block">30+</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Formal Designs</p>
+                <div class="hero-stat text-center rounded-2xl p-5 cursor-pointer group">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-islamic-green group-hover:scale-110 transition-transform duration-300 inline-block">30+</p>
+                    <p class="text-xs text-gray-500 mt-2 font-medium tracking-wide">Formal Designs</p>
                 </div>
-                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-royal transition-colors">24h</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Dispatch</p>
+                <div class="hero-stat text-center rounded-2xl p-5 cursor-pointer group">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-white group-hover:text-royal transition-colors duration-300">24h</p>
+                    <p class="text-xs text-gray-500 mt-2 font-medium tracking-wide">Dispatch</p>
                 </div>
-                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-royal transition-colors">5</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Categories</p>
+                <div class="hero-stat text-center rounded-2xl p-5 cursor-pointer group">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-white group-hover:text-royal transition-colors duration-300">5</p>
+                    <p class="text-xs text-gray-500 mt-2 font-medium tracking-wide">Categories</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features -->
-    <section class="py-6 sm:py-8 bg-dark-lighter border-y border-royal/10">
+    <!-- Modern Features Bar -->
+    <section class="py-8 bg-[#111] border-y border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fas fa-user-tie text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Formal Wear</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Premium Thobes</p>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+                <div class="flex items-center justify-center gap-3 text-gray-400 group cursor-pointer hover:text-royal transition-colors duration-300">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                        <i class="fas fa-user-tie text-xl text-royal"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="font-bold text-sm">Formal Wear</p>
+                        <p class="text-xs text-gray-600">Premium Thobes</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fas fa-wine-bottle-slash text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">100% Halal</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Alcohol-Free</p>
+                <div class="flex items-center justify-center gap-3 text-gray-400 group cursor-pointer hover:text-royal transition-colors duration-300">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                        <i class="fas fa-wine-bottle-slash text-xl text-royal"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="font-bold text-sm">100% Halal</p>
+                        <p class="text-xs text-gray-600">Alcohol-Free</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fas fa-mosque text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Islamic Values</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Authentic Products</p>
+                <div class="flex items-center justify-center gap-3 text-gray-400 group cursor-pointer hover:text-royal transition-colors duration-300">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                        <i class="fas fa-mosque text-xl text-royal"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="font-bold text-sm">Islamic Values</p>
+                        <p class="text-xs text-gray-600">Authentic Products</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fas fa-shipping-fast text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Global Shipping</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Orders $100+</p>
+                <div class="flex items-center justify-center gap-3 text-gray-400 group cursor-pointer hover:text-royal transition-colors duration-300">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                        <i class="fas fa-shipping-fast text-xl text-royal"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="font-bold text-sm">Global Shipping</p>
+                        <p class="text-xs text-gray-600">Orders $100+</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fab fa-whatsapp text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Islamic Support</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Scholar Verified</p>
+                <div class="flex items-center justify-center gap-3 text-gray-400 group cursor-pointer hover:text-royal transition-colors duration-300">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                        <i class="fab fa-whatsapp text-xl text-royal"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="font-bold text-sm">Islamic Support</p>
+                        <p class="text-xs text-gray-600">Scholar Verified</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Category Pills -->
-    <section class="py-4 sm:py-6 bg-dark border-b border-royal/10 sticky top-16 sm:top-20 z-40 transition-all" id="category-nav">
+    <!-- Modern Category Pills -->
+    <section class="py-6 bg-[#0a0a0a] border-b border-white/5 sticky top-16 sm:top-20 z-40 transition-all duration-300" id="category-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex overflow-x-auto gap-2 sm:gap-3 pb-2 scrollbar-hide">
-                <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all" data-category="all">All Items</button>
-                <button onclick="filterCategory('formal')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="formal">👔 Formal Wear</button>
-                <button onclick="filterCategory('perfumes')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="perfumes">🧴 Perfumes</button>
-                <button onclick="filterCategory('shoes')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="shoes">👞 Shoes</button>
-                <button onclick="filterCategory('attars')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="attars">🕌 Attars & Oils</button>
-                <button onclick="filterCategory('essentials')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="essentials">📿 Essentials</button>
+            <div class="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+                <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all" data-category="all">All Items</button>
+                <button onclick="filterCategory('formal')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-400" data-category="formal">👔 Formal Wear</button>
+                <button onclick="filterCategory('perfumes')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-400" data-category="perfumes">🧴 Perfumes</button>
+                <button onclick="filterCategory('shoes')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-400" data-category="shoes">👞 Shoes</button>
+                <button onclick="filterCategory('attars')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-400" data-category="attars">🕌 Attars & Oils</button>
+                <button onclick="filterCategory('essentials')" class="category-pill whitespace-nowrap px-6 py-3 rounded-full text-sm font-bold transition-all text-gray-400" data-category="essentials">📿 Essentials</button>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
-    <section id="products" class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 sm:mb-8 gap-4 reveal">
+    <!-- Modern Products Section -->
+    <section id="products" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 reveal">
             <div>
-                <h2 class="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                    <i class="fas fa-star-and-crescent text-royal text-xl sm:text-2xl"></i>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold flex items-center gap-3 mb-2">
+                    <i class="fas fa-star-and-crescent text-royal text-2xl"></i>
                     <span id="category-title">All Islamic Collection</span>
                 </h2>
-                <p class="text-gray-400 mt-1 flex items-center gap-2 text-sm sm:text-base">
-                    <i class="fas fa-check-circle text-royal"></i>
+                <p class="text-gray-500 flex items-center gap-2 text-sm">
+                    <i class="fas fa-check-circle text-royal text-xs"></i>
                     <span id="category-count">Showing all halal-certified items</span>
                 </p>
             </div>
-            <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
-                <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-400 bg-dark-lighter px-3 sm:px-4 py-2 rounded-full border border-gray-800 flex-1 md:flex-none">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <div class="flex items-center gap-2 text-sm text-gray-400 bg-[#111] px-4 py-2.5 rounded-full border border-white/5 flex-1 md:flex-none">
                     <i class="fas fa-sort text-royal"></i>
-                    <select onchange="sortProducts(this.value)" class="bg-transparent border-none focus:outline-none text-white cursor-pointer w-full">
+                    <select onchange="sortProducts(this.value)" class="bg-transparent border-none focus:outline-none text-white cursor-pointer w-full text-sm">
                         <option value="newest">Newest First</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -485,76 +1262,82 @@
                     </select>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="setView('grid')" class="p-2 rounded-lg bg-royal/20 text-royal hover:bg-royal hover:text-black transition-all" id="grid-view-btn">
+                    <button onclick="setView('grid')" class="view-btn active w-10 h-10 rounded-lg flex items-center justify-center transition-all" id="grid-view-btn">
                         <i class="fas fa-th-large"></i>
                     </button>
-                    <button onclick="setView('list')" class="p-2 rounded-lg bg-dark-lighter text-gray-400 hover:bg-royal/20 hover:text-royal transition-all" id="list-view-btn">
+                    <button onclick="setView('list')" class="view-btn w-10 h-10 rounded-lg flex items-center justify-center text-gray-400 hover:text-royal transition-all" id="list-view-btn">
                         <i class="fas fa-list"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             <!-- Injected by JS -->
         </div>
 
-        <div id="no-results" class="hidden text-center py-12 sm:py-20">
-            <i class="fas fa-search text-4xl sm:text-6xl text-gray-700 mb-4"></i>
-            <p class="text-lg sm:text-xl text-gray-400">No products found</p>
-            <button onclick="filterCategory('all'); document.getElementById('search-input').value=''" class="mt-4 text-royal hover:underline">Clear filters</button>
+        <div id="no-results" class="hidden text-center py-20">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+                <i class="fas fa-search text-3xl text-gray-600"></i>
+            </div>
+            <p class="text-xl text-gray-400 mb-4">No products found</p>
+            <button onclick="filterCategory('all'); document.getElementById('search-input').value=''" class="text-royal hover:text-royal-light transition-colors font-medium text-sm">Clear all filters</button>
         </div>
 
-        <div class="mt-10 sm:mt-16 text-center reveal">
-            <button onclick="loadMoreProducts()" id="load-more-btn" class="px-6 sm:px-8 py-3 sm:py-4 bg-dark-lighter border-2 border-royal/30 rounded-full text-xs sm:text-sm font-bold hover:border-royal hover:text-royal transition-all flex items-center gap-2 mx-auto text-gray-300 hover:bg-royal/10">
-                <i class="fas fa-spinner"></i> Load More
+        <div class="mt-16 text-center reveal">
+            <button onclick="loadMoreProducts()" id="load-more-btn" class="px-8 py-4 bg-[#111] border border-white/10 rounded-full text-sm font-bold hover:border-royal/30 hover:text-royal transition-all flex items-center gap-3 mx-auto text-gray-400 hover:bg-royal/5 group">
+                <i class="fas fa-spinner group-hover:animate-spin"></i> 
+                Load More Products
             </button>
         </div>
     </section>
 
-    <!-- Size Guide -->
-    <section class="py-16 sm:py-24 bg-dark-lighter border-y border-royal/10">
+    <!-- Modern Size Guide -->
+    <section class="py-20 sm:py-28 bg-[#111] border-y border-white/5">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
-            <h2 class="font-display text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center gap-3">
-                <i class="fas fa-ruler text-royal"></i>
-                Clothing & Footwear Size Guide
-            </h2>
-            <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">Find your perfect fit for our formal wear and footwear collection</p>
-            <div class="glass rounded-xl sm:rounded-2xl p-4 sm:p-8 gold-border overflow-x-auto">
-                <table class="w-full text-left text-xs sm:text-sm">
+            <div class="inline-flex items-center gap-2 mb-6">
+                <i class="fas fa-ruler text-royal text-xl"></i>
+                <span class="text-xs font-bold tracking-[0.2em] uppercase text-royal">Size Guide</span>
+            </div>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold mb-3">Clothing & Footwear Size Guide</h2>
+            <p class="text-gray-500 mb-10 text-sm sm:text-base max-w-xl mx-auto">Find your perfect fit for our formal wear and footwear collection. All measurements are in inches.</p>
+            
+            <div class="glass rounded-2xl p-6 sm:p-10 gold-border overflow-x-auto">
+                <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-royal/20">
-                            <th class="pb-3 sm:pb-4 font-bold text-royal">Size</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300">Chest (in)</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300">Length (in)</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300">US Shoe</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300 hidden sm:table-cell">Height</th>
+                            <th class="pb-4 font-bold text-royal text-sm uppercase tracking-wider">Size</th>
+                            <th class="pb-4 font-bold text-gray-400 text-sm uppercase tracking-wider">Chest (in)</th>
+                            <th class="pb-4 font-bold text-gray-400 text-sm uppercase tracking-wider">Length (in)</th>
+                            <th class="pb-4 font-bold text-gray-400 text-sm uppercase tracking-wider">US Shoe</th>
+                            <th class="pb-4 font-bold text-gray-400 text-sm uppercase tracking-wider hidden sm:table-cell">Height</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-400">
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">S</td><td>36-38</td><td>52</td><td>7-8</td><td class="hidden sm:table-cell">5'4"-5'6"</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">M</td><td>38-40</td><td>54</td><td>8-9</td><td class="hidden sm:table-cell">5'6"-5'8"</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">L</td><td>40-42</td><td>56</td><td>9-10</td><td class="hidden sm:table-cell">5'8"-5'10"</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XL</td><td>42-44</td><td>58</td><td>10-11</td><td class="hidden sm:table-cell">5'10"-6'0"</td></tr>
-                        <tr class="hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XXL</td><td>44-46</td><td>60</td><td>11-12</td><td class="hidden sm:table-cell">6'0"+</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">S</td><td>36-38</td><td>52</td><td>7-8</td><td class="hidden sm:table-cell">5'4"-5'6"</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">M</td><td>38-40</td><td>54</td><td>8-9</td><td class="hidden sm:table-cell">5'6"-5'8"</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">L</td><td>40-42</td><td>56</td><td>9-10</td><td class="hidden sm:table-cell">5'8"-5'10"</td></tr>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">XL</td><td>42-44</td><td>58</td><td>10-11</td><td class="hidden sm:table-cell">5'10"-6'0"</td></tr>
+                        <tr class="hover:bg-white/5 transition-colors"><td class="py-4 font-bold text-white">XXL</td><td>44-46</td><td>60</td><td>11-12</td><td class="hidden sm:table-cell">6'0"+</td></tr>
                     </tbody>
                 </table>
             </div>
-            <p class="text-xs text-gray-500 mt-4">* Thobes are designed for a relaxed, modest fit. For a tailored look, size down. Shoes run true to size.</p>
+            <p class="text-xs text-gray-600 mt-6 italic">* Thobes are designed for a relaxed, modest fit. For a tailored look, size down. Shoes run true to size.</p>
         </div>
     </section>
 
-    <!-- WhatsApp Float -->
+    <!-- Modern WhatsApp Float -->
     <div class="whatsapp-float">
-        <button onclick="showWhatsAppChat()" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-royal to-royal-dark rounded-full flex items-center justify-center text-black text-2xl sm:text-3xl shadow-2xl hover:scale-110 transition-transform border-4 border-dark group">
-            <i class="fab fa-whatsapp group-hover:rotate-12 transition-transform"></i>
+        <button onclick="showWhatsAppChat()" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-royal to-royal-dark rounded-full flex items-center justify-center text-black text-2xl sm:text-3xl shadow-2xl hover:scale-110 transition-transform border-4 border-[#0a0a0a] group relative overflow-hidden">
+            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <i class="fab fa-whatsapp relative z-10 group-hover:rotate-12 transition-transform duration-300"></i>
         </button>
     </div>
 
-    <!-- Quick View Modal -->
-    <div id="quick-view-modal" class="fixed inset-0 bg-black/90 z-[60] modal flex items-center justify-center p-0 sm:p-4 backdrop-blur-sm">
-        <div class="bg-dark-light rounded-none sm:rounded-3xl max-w-5xl w-full max-h-[100vh] sm:max-h-[95vh] overflow-y-auto border-0 sm:border border-royal/20 shadow-2xl relative royal-glow">
-            <button onclick="closeQuickView()" class="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-dark-lighter flex items-center justify-center hover:bg-royal hover:text-black transition-all text-lg sm:text-xl border border-gray-700">
+    <!-- Modern Quick View Modal -->
+    <div id="quick-view-modal" class="fixed inset-0 bg-black/80 z-[60] modal flex items-center justify-center p-0 sm:p-4 backdrop-blur-md">
+        <div class="bg-[#111] rounded-none sm:rounded-3xl max-w-5xl w-full max-h-[100vh] sm:max-h-[90vh] overflow-y-auto border border-white/10 shadow-2xl relative">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-royal hover:text-black transition-all duration-300 text-xl border border-white/10">
                 <i class="fas fa-times"></i>
             </button>
             <div id="modal-content" class="grid md:grid-cols-2 gap-0">
@@ -563,109 +1346,123 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark border-t border-royal/10 pt-12 sm:pt-16 pb-8">
+    <!-- Modern Footer -->
+    <footer class="bg-[#0a0a0a] border-t border-white/5 pt-16 sm:pt-20 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 sm:gap-12 mb-16">
+                <!-- Brand Column -->
                 <div class="lg:col-span-2">
-                    <span class="font-display text-2xl sm:text-3xl font-bold tracking-wider text-white mb-4 sm:mb-6 block flex items-center gap-2">
-                        <i class="fas fa-mosque text-royal crown-icon"></i>
+                    <span class="font-display text-3xl font-bold tracking-wider text-white mb-6 block flex items-center gap-3">
+                        <i class="fas fa-mosque text-royal crown-icon text-2xl"></i>
                         ROYAL
-                        <span class="text-xs sm:text-sm font-normal text-gray-500 ml-2">ISLAMIC</span>
+                        <span class="text-sm font-normal text-gray-600 ml-2 tracking-normal">ISLAMIC</span>
                     </span>
-                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-                        Premium <span class="text-royal font-bold">Official Formal Wear</span>, Halal fragrances, and Islamic lifestyle products. 
-                        Dress with dignity, scent with purity, live with faith. <span class="font-arabic text-royal">بسم الله الرحمن الرحيم</span>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6 max-w-sm">
+                        Premium <span class="text-royal font-semibold">Official Formal Wear</span>, Halal fragrances, and Islamic lifestyle products. 
+                        Dress with dignity, scent with purity, live with faith. 
+                        <span class="font-arabic text-royal block mt-2 text-lg">بسم الله الرحمن الرحيم</span>
                     </p>
                     <div class="flex space-x-3">
-                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all duration-300 border border-white/10 hover:border-royal">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all duration-300 border border-white/10 hover:border-royal">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all duration-300 border border-white/10 hover:border-royal">
                             <i class="fas fa-envelope"></i>
                         </a>
                     </div>
                 </div>
 
+                <!-- Shop Links -->
                 <div>
-                    <h4 class="font-display font-bold text-base sm:text-lg mb-4 sm:mb-6 text-royal">Shop</h4>
-                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
-                        <li><a href="#" onclick="filterCategory('formal')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-user-tie text-xs"></i> Formal Wear</a></li>
-                        <li><a href="#" onclick="filterCategory('perfumes')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-spray-can text-xs"></i> Perfumes</a></li>
-                        <li><a href="#" onclick="filterCategory('shoes')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-shoe-prints text-xs"></i> Footwear</a></li>
-                        <li><a href="#" onclick="filterCategory('attars')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-oil-can text-xs"></i> Attars & Oils</a></li>
-                        <li><a href="#" onclick="filterCategory('essentials')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-pray text-xs"></i> Essentials</a></li>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Shop</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" onclick="filterCategory('formal')" class="footer-link hover:text-royal transition-colors flex items-center gap-3"><i class="fas fa-user-tie w-4 text-center text-xs"></i> Formal Wear</a></li>
+                        <li><a href="#" onclick="filterCategory('perfumes')" class="footer-link hover:text-royal transition-colors flex items-center gap-3"><i class="fas fa-spray-can w-4 text-center text-xs"></i> Perfumes</a></li>
+                        <li><a href="#" onclick="filterCategory('shoes')" class="footer-link hover:text-royal transition-colors flex items-center gap-3"><i class="fas fa-shoe-prints w-4 text-center text-xs"></i> Footwear</a></li>
+                        <li><a href="#" onclick="filterCategory('attars')" class="footer-link hover:text-royal transition-colors flex items-center gap-3"><i class="fas fa-oil-can w-4 text-center text-xs"></i> Attars & Oils</a></li>
+                        <li><a href="#" onclick="filterCategory('essentials')" class="footer-link hover:text-royal transition-colors flex items-center gap-3"><i class="fas fa-pray w-4 text-center text-xs"></i> Essentials</a></li>
                     </ul>
                 </div>
 
+                <!-- Help Links -->
                 <div>
-                    <h4 class="font-display font-bold text-base sm:text-lg mb-4 sm:mb-6 text-royal">Help</h4>
-                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-royal transition-colors">Size Guide</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">Halal Certification</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">Shipping Info</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">Returns & Exchanges</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">FAQ</a></li>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Help</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="footer-link hover:text-royal transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="footer-link hover:text-royal transition-colors">Halal Certification</a></li>
+                        <li><a href="#" class="footer-link hover:text-royal transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="footer-link hover:text-royal transition-colors">Returns & Exchanges</a></li>
+                        <li><a href="#" class="footer-link hover:text-royal transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
+                <!-- Contact -->
                 <div>
-                    <h4 class="font-display font-bold text-base sm:text-lg mb-4 sm:mb-6 text-royal">Contact</h4>
-                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
-                        <li class="flex items-center gap-3 hover:text-royal transition-colors cursor-pointer" onclick="showWhatsAppChat()">
-                            <i class="fab fa-whatsapp text-royal text-base sm:text-lg"></i>
+                    <h4 class="font-display font-bold text-lg mb-6 text-royal">Contact</h4>
+                    <ul class="space-y-4 text-sm text-gray-500">
+                        <li class="flex items-center gap-3 hover:text-royal transition-colors cursor-pointer group" onclick="showWhatsAppChat()">
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-royal/10 transition-colors">
+                                <i class="fab fa-whatsapp text-royal"></i>
+                            </div>
                             <span>+254704918499</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i class="fas fa-envelope text-royal text-base sm:text-lg"></i>
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                                <i class="fas fa-envelope text-royal"></i>
+                            </div>
                             <span>salam@royalislamic.com</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i class="fas fa-mosque text-royal text-base sm:text-lg"></i>
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                                <i class="fas fa-mosque text-royal"></i>
+                            </div>
                             <span>24/7 Islamic Support</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i class="fas fa-map-marker-alt text-royal text-base sm:text-lg"></i>
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-royal"></i>
+                            </div>
                             <span>Nairobi, Kenya</span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="border-t border-gray-800 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-xs sm:text-sm text-gray-500 text-center sm:text-left">© 2024 ROYAL Islamic. All rights reserved. <span class="font-arabic text-royal">بارك الله فيك</span></p>
-                <div class="flex items-center gap-3 sm:gap-4 text-xl sm:text-2xl text-gray-600">
-                    <i class="fas fa-certificate text-royal hover:scale-110 transition-transform" title="Halal Certified"></i>
-                    <i class="fab fa-cc-visa hover:text-royal transition-colors"></i>
-                    <i class="fab fa-cc-mastercard hover:text-royal transition-colors"></i>
-                    <i class="fab fa-cc-paypal hover:text-royal transition-colors"></i>
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-600 text-center sm:text-left">© 2024 ROYAL Islamic. All rights reserved. <span class="font-arabic text-royal mr-2">بارك الله فيك</span></p>
+                <div class="flex items-center gap-4 text-xl text-gray-700">
+                    <i class="fas fa-certificate text-royal hover:scale-110 transition-transform cursor-pointer" title="Halal Certified"></i>
+                    <i class="fab fa-cc-visa hover:text-royal transition-colors cursor-pointer"></i>
+                    <i class="fab fa-cc-mastercard hover:text-royal transition-colors cursor-pointer"></i>
+                    <i class="fab fa-cc-paypal hover:text-royal transition-colors cursor-pointer"></i>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Updated Product Database with Official Formal Wear Category
+        // Modern Product Database
         const products = [
-            // FORMAL WEAR CATEGORY - OFFICIAL ISLAMIC CLOTHING
+            // FORMAL WEAR CATEGORY
             {
                 id: 101,
                 name: "Royal White Thobe - Premium",
                 brand: "ROYAL",
-                price: 180,
-                originalPrice: 220,
+                price: 38,
+                originalPrice: 45,
                 category: "formal",
                 subcategory: "Thobes",
-                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
-                tiktokVideoId: "7609288857728666900",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3Bv0lfRqyjIZthmx3yquScoQFHV9K4LIetg&s",
+                tiktokVideoId: "7612379510498938113",
                 tiktokUsername: "royalislamic",
                 badge: "BESTSELLER",
-                description: "Luxurious white thobe crafted from premium cotton blend. Perfect for Jumu'ah, Eid, and formal occasions. Features subtle gold embroidery and comfortable modest fit.",
+                description: "Premium thobes, bishts with gold-thread embroidery, and executive jubbas worthy of palace gates..",
                 sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["White", "Off-White", "Ivory"],
+                colors: ["Black", "Dark Brown", "Navy", "Cream", "Light Grey"],  
                 stock: 25,
                 popularity: 98,
                 videoDuration: "0:20",
@@ -1235,7 +2032,7 @@
             } else {
                 noResults.classList.add('hidden');
                 if (currentView === 'grid') {
-                    grid.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6';
+                    grid.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6';
                     grid.innerHTML = filtered.map(product => createProductCard(product)).join('');
                 } else {
                     grid.className = 'flex flex-col gap-4';
@@ -1259,9 +2056,9 @@
             
             return `
                 <div class="product-card reveal group" data-product-id="${product.id}">
-                    <div class="product-media-container mb-3 sm:mb-4 gold-border relative" id="media-${product.id}" data-product-id="${product.id}">
+                    <div class="product-media-container mb-4 gold-border relative" id="media-${product.id}" data-product-id="${product.id}">
                         ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} ${product.badge === 'NEW' ? 'new' : ''}">${product.badge}</div>` : ''}
-                        ${product.halalCertified ? `<div class="absolute top-1 right-1 bg-islamic-green/90 text-white text-[10px] font-bold px-2 py-1 rounded-full z-10 border border-white/20"><i class="fas fa-check-circle mr-1"></i>HALAL</div>` : ''}
+                        ${product.halalCertified ? `<div class="absolute top-3 right-3 bg-islamic-green/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full z-10 border border-white/20 backdrop-blur-sm"><i class="fas fa-check-circle mr-1"></i>HALAL</div>` : ''}
                         <button onclick="event.stopPropagation(); toggleWishlistItem(${product.id})" class="wishlist-btn ${isWishlisted ? 'active' : ''}" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
                             <i class="fas fa-heart ${isWishlisted ? '' : 'text-white'}"></i>
                         </button>
@@ -1272,55 +2069,55 @@
                         <div class="video-wrapper" id="video-wrapper-${product.id}"></div>
                         <div class="video-loading" id="loading-${product.id}"><div class="loading-spinner"></div></div>
                         <button onclick="event.stopPropagation(); loadAndPlayVideo(${product.id})" class="video-facade-btn" id="play-btn-${product.id}" title="Click to play video">
-                            <i class="fas fa-play"></i>
+                            <i class="fas fa-play ml-1"></i>
                         </button>
                         <div class="video-duration">
-                            <i class="fas fa-clock text-xs"></i>
+                            <i class="fas fa-play-circle text-xs"></i>
                             <span>${product.videoDuration || '0:15'}</span>
                         </div>
                         <div class="product-actions">
-                            <button onclick="openQuickView(${product.id})" class="action-btn action-btn-secondary text-xs sm:text-sm">
+                            <button onclick="openQuickView(${product.id})" class="action-btn action-btn-secondary">
                                 <i class="fas fa-eye"></i> <span class="hidden sm:inline">View</span>
                             </button>
-                            <button onclick="addToCart(${product.id})" class="action-btn action-btn-primary text-xs sm:text-sm">
+                            <button onclick="addToCart(${product.id})" class="action-btn action-btn-primary">
                                 <i class="fas fa-shopping-bag"></i> <span class="hidden sm:inline">Add</span>
                             </button>
                         </div>
                     </div>
-                    <div class="space-y-1 sm:space-y-2 px-1">
+                    <div class="space-y-2 px-1">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs text-royal font-bold uppercase tracking-wider">${product.brand}</p>
-                                <p class="text-xs text-gray-500 hidden sm:block">${product.subcategory}</p>
+                                <p class="text-xs text-royal font-bold uppercase tracking-wider mb-0.5">${product.brand}</p>
+                                <p class="text-[10px] text-gray-600 hidden sm:block">${product.subcategory}</p>
                             </div>
                             <div class="flex items-center gap-1 bg-royal/10 px-2 py-1 rounded-full border border-royal/20">
-                                <i class="fas fa-star text-royal text-xs"></i>
-                                <span class="text-xs font-bold text-royal">${product.popularity}%</span>
+                                <i class="fas fa-star text-royal text-[10px]"></i>
+                                <span class="text-[10px] font-bold text-royal">${product.popularity}%</span>
                             </div>
                         </div>
-                        <h3 class="font-display text-sm sm:text-lg font-bold text-white leading-tight cursor-pointer hover:text-royal transition-colors line-clamp-2" onclick="openQuickView(${product.id})">
+                        <h3 class="font-display text-sm sm:text-base font-bold text-white leading-tight cursor-pointer hover:text-royal transition-colors line-clamp-2" onclick="openQuickView(${product.id})">
                             ${product.name}
                         </h3>
-                        ${isClothing && product.fabric ? `<p class="text-xs text-gray-400 italic">${product.fabric}</p>` : ''}
+                        ${isClothing && product.fabric ? `<p class="text-[11px] text-gray-500 italic">${product.fabric}</p>` : ''}
                         <div class="flex items-center gap-2">
-                            <span class="text-lg sm:text-2xl font-bold text-royal price-tag">$${product.price}</span>
-                            ${product.originalPrice ? `<span class="text-xs sm:text-sm text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
+                            <span class="text-lg sm:text-xl font-bold text-royal price-tag">$${product.price}</span>
+                            ${product.originalPrice ? `<span class="text-xs text-gray-600 line-through">$${product.originalPrice}</span>` : ''}
                         </div>
-                        <div class="flex items-center justify-between">
-                            <div class="stock-status ${stockStatus.class} text-xs">
-                                <i class="fas fa-circle text-[6px] sm:text-[8px]"></i>
+                        <div class="flex items-center justify-between pt-1">
+                            <div class="stock-status ${stockStatus.class} text-[10px] px-2 py-0.5">
+                                <i class="fas fa-circle text-[5px]"></i>
                                 <span>${stockStatus.text}</span>
                             </div>
                             ${product.colors ? `
                             <div class="flex gap-1">
                                 ${product.colors.slice(0, 3).map(color => `
-                                    <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-gray-600" style="background: ${getColorCode(color)}" title="${color}"></div>
+                                    <div class="w-4 h-4 rounded-full border border-gray-700 shadow-sm" style="background: ${getColorCode(color)}" title="${color}"></div>
                                 `).join('')}
-                                ${product.colors.length > 3 ? `<span class="text-xs text-gray-500">+${product.colors.length - 3}</span>` : ''}
+                                ${product.colors.length > 3 ? `<span class="text-[10px] text-gray-600">+${product.colors.length - 3}</span>` : ''}
                             </div>
                             ` : hasConcentrations ? `
                             <div class="flex gap-1">
-                                <span class="text-xs text-gray-500 bg-dark px-2 py-1 rounded">${product.concentrations[0]}</span>
+                                <span class="text-[10px] text-gray-600 bg-[#111] px-2 py-0.5 rounded border border-white/5">${product.concentrations[0]}</span>
                             </div>
                             ` : ''}
                         </div>
@@ -1334,44 +2131,44 @@
             const hasConcentrations = product.concentrations && product.concentrations.length > 0;
             const isClothing = product.category === 'formal';
             return `
-                <div class="product-card reveal flex gap-3 sm:gap-6 bg-dark-lighter p-3 sm:p-4 rounded-xl sm:rounded-2xl gold-border">
-                    <div class="w-32 sm:w-48 h-32 sm:h-48 flex-shrink-0 relative rounded-lg sm:rounded-xl overflow-hidden" data-product-id="${product.id}">
-                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} text-xs px-2 py-1">${product.badge}</div>` : ''}
-                        ${product.halalCertified ? `<div class="absolute top-1 right-1 bg-islamic-green/90 text-white text-[8px] font-bold px-1 py-0.5 rounded z-10"><i class="fas fa-check"></i></div>` : ''}
+                <div class="product-card reveal flex gap-4 sm:gap-6 bg-[#111] p-4 rounded-2xl gold-border">
+                    <div class="w-32 sm:w-48 h-32 sm:h-48 flex-shrink-0 relative rounded-xl overflow-hidden" data-product-id="${product.id}">
+                        ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} text-xs px-2 py-0.5">${product.badge}</div>` : ''}
+                        ${product.halalCertified ? `<div class="absolute top-2 right-2 bg-islamic-green/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded z-10"><i class="fas fa-check"></i></div>` : ''}
                         <img src="${product.image}" alt="${product.name}" class="product-poster w-full h-full object-cover">
                         <div class="video-wrapper" id="video-wrapper-list-${product.id}"></div>
-                        <button onclick="loadAndPlayVideo(${product.id}, true)" class="video-facade-btn w-12 h-12 sm:w-16 sm:h-16 text-lg sm:text-2xl">
-                            <i class="fas fa-play"></i>
+                        <button onclick="loadAndPlayVideo(${product.id}, true)" class="video-facade-btn w-14 h-14 text-xl">
+                            <i class="fas fa-play ml-1"></i>
                         </button>
                     </div>
                     <div class="flex-1 flex flex-col justify-between min-w-0">
                         <div>
-                            <div class="flex justify-between items-start mb-1 sm:mb-2">
+                            <div class="flex justify-between items-start mb-2">
                                 <div class="min-w-0 pr-2">
-                                    <p class="text-xs text-royal font-bold uppercase tracking-wider">${product.brand}</p>
-                                    <h3 class="font-display text-base sm:text-xl font-bold text-white hover:text-royal transition-colors cursor-pointer line-clamp-2" onclick="openQuickView(${product.id})">${product.name}</h3>
-                                    ${isClothing && product.fabric ? `<p class="text-xs text-gray-400 italic mt-1">${product.fabric}</p>` : ''}
+                                    <p class="text-xs text-royal font-bold uppercase tracking-wider mb-0.5">${product.brand}</p>
+                                    <h3 class="font-display text-lg sm:text-xl font-bold text-white hover:text-royal transition-colors cursor-pointer line-clamp-2" onclick="openQuickView(${product.id})">${product.name}</h3>
+                                    ${isClothing && product.fabric ? `<p class="text-xs text-gray-500 italic mt-1">${product.fabric}</p>` : ''}
                                 </div>
-                                <button onclick="toggleWishlistItem(${product.id})" class="text-xl sm:text-2xl ${isWishlisted ? 'text-red-500' : 'text-gray-600'} hover:scale-110 transition-transform flex-shrink-0">
+                                <button onclick="toggleWishlistItem(${product.id})" class="text-xl ${isWishlisted ? 'text-red-500' : 'text-gray-700'} hover:scale-110 transition-transform flex-shrink-0">
                                     <i class="fas fa-heart"></i>
                                 </button>
                             </div>
-                            <p class="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">${product.description}</p>
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl sm:text-2xl font-bold text-royal">$${product.price}</span>
-                                ${product.originalPrice ? `<span class="text-gray-500 line-through text-sm">$${product.originalPrice}</span>` : ''}
+                            <p class="text-gray-500 text-sm mb-3 line-clamp-2">${product.description}</p>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xl font-bold text-royal">$${product.price}</span>
+                                ${product.originalPrice ? `<span class="text-gray-600 line-through text-sm">$${product.originalPrice}</span>` : ''}
                             </div>
-                            <div class="flex flex-wrap gap-1 sm:gap-2">
-                                ${product.sizes ? product.sizes.map(size => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${size}</span>`).join('') : 
-                                  hasConcentrations ? product.concentrations.map(c => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${c}</span>`).join('') : ''}
+                            <div class="flex flex-wrap gap-2">
+                                ${product.sizes ? product.sizes.map(size => `<span class="px-2.5 py-1 bg-[#1a1a1a] rounded-lg text-xs border border-white/5 text-gray-400">${size}</span>`).join('') : 
+                                  hasConcentrations ? product.concentrations.map(c => `<span class="px-2.5 py-1 bg-[#1a1a1a] rounded-lg text-xs border border-white/5 text-gray-400">${c}</span>`).join('') : ''}
                             </div>
                         </div>
-                        <div class="flex gap-2 sm:gap-3 mt-3 sm:mt-4">
-                            <button onclick="openQuickView(${product.id})" class="px-4 sm:px-6 py-2 border border-royal/30 rounded-full text-xs sm:text-sm font-bold hover:bg-royal/10 transition-colors">
-                                <i class="fas fa-eye mr-1 sm:mr-2"></i>View
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="openQuickView(${product.id})" class="px-5 py-2.5 border border-white/10 rounded-full text-sm font-bold hover:border-royal/30 hover:text-royal transition-all bg-white/5">
+                                <i class="fas fa-eye mr-2"></i>View
                             </button>
-                            <button onclick="addToCart(${product.id})" class="flex-1 px-4 sm:px-6 py-2 bg-gradient-to-r from-royal to-royal-dark text-black rounded-full text-xs sm:text-sm font-bold hover:from-royal-light hover:to-royal transition-all">
-                                <i class="fas fa-shopping-bag mr-1 sm:mr-2"></i>Add to Cart
+                            <button onclick="addToCart(${product.id})" class="flex-1 px-5 py-2.5 bg-gradient-to-r from-royal to-royal-dark text-black rounded-full text-sm font-bold hover:from-royal-light hover:to-royal transition-all">
+                                <i class="fas fa-shopping-bag mr-2"></i>Add to Cart
                             </button>
                         </div>
                     </div>
@@ -1458,8 +2255,8 @@
             currentCategory = category;
             document.querySelectorAll('.category-pill').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.category === category);
-                if (btn.dataset.category === category) btn.classList.remove('text-gray-300');
-                else btn.classList.add('text-gray-300');
+                if (btn.dataset.category === category) btn.classList.remove('text-gray-400');
+                else btn.classList.add('text-gray-400');
             });
             renderProducts(category);
             updateCategoryTitle();
@@ -1485,10 +2282,10 @@
 
         function setView(view) {
             currentView = view;
-            document.getElementById('grid-view-btn').classList.toggle('bg-royal/20', view === 'grid');
-            document.getElementById('grid-view-btn').classList.toggle('text-royal', view === 'grid');
-            document.getElementById('list-view-btn').classList.toggle('bg-royal/20', view === 'list');
-            document.getElementById('list-view-btn').classList.toggle('text-royal', view === 'list');
+            document.getElementById('grid-view-btn').classList.toggle('active', view === 'grid');
+            document.getElementById('grid-view-btn').classList.toggle('text-gray-400', view !== 'grid');
+            document.getElementById('list-view-btn').classList.toggle('active', view === 'list');
+            document.getElementById('list-view-btn').classList.toggle('text-gray-400', view !== 'list');
             renderProducts(currentCategory, document.getElementById('search-input').value);
         }
 
@@ -1499,7 +2296,9 @@
         function toggleSearch() {
             const bar = document.getElementById('search-bar');
             bar.classList.toggle('hidden');
-            if (!bar.classList.contains('hidden')) document.getElementById('search-input').focus();
+            if (!bar.classList.contains('hidden')) {
+                setTimeout(() => document.getElementById('search-input').focus(), 100);
+            }
         }
 
         function toggleWishlist() {
@@ -1544,29 +2343,31 @@
 
             if (wishlist.length === 0) {
                 items.innerHTML = `
-                    <div class="text-center text-gray-500 py-12">
-                        <i class="fas fa-heart text-5xl sm:text-6xl mb-4 opacity-20"></i>
-                        <p class="text-base sm:text-lg mb-2">Your wishlist is empty</p>
-                        <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+                    <div class="text-center text-gray-500 py-16">
+                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+                            <i class="fas fa-heart text-4xl opacity-20"></i>
+                        </div>
+                        <p class="text-lg mb-3 font-medium">Your wishlist is empty</p>
+                        <button onclick="toggleWishlist(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:text-royal-light transition-colors font-medium text-sm">Discover Products</button>
                     </div>
                 `;
             } else {
                 const wishlistProducts = products.filter(p => wishlist.includes(p.id));
                 items.innerHTML = wishlistProducts.map(item => `
-                    <div class="cart-item flex gap-3 sm:gap-4 bg-dark rounded-xl p-3 sm:p-4 border border-gray-800">
-                        <img src="${item.image}" alt="${item.name}" class="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg border border-gray-700">
+                    <div class="cart-item flex gap-4 bg-[#1a1a1a] rounded-xl p-4 border border-white/5">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg border border-white/5">
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-start mb-1">
                                 <div>
-                                    <p class="text-xs text-royal font-bold">${item.brand}</p>
+                                    <p class="text-xs text-royal font-bold mb-0.5">${item.brand}</p>
                                     <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
                                 </div>
-                                <button onclick="toggleWishlistItem(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
+                                <button onclick="toggleWishlistItem(${item.id})" class="text-gray-600 hover:text-red-500 transition-colors p-1">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
-                            <p class="text-royal font-bold mb-2 sm:mb-3">$${item.price}</p>
-                            <button onclick="addToCart(${item.id}); toggleWishlistItem(${item.id})" class="w-full py-2 bg-royal/20 text-royal rounded-lg text-xs sm:text-sm font-bold hover:bg-royal hover:text-black transition-all">
+                            <p class="text-royal font-bold mb-3">$${item.price}</p>
+                            <button onclick="addToCart(${item.id}); toggleWishlistItem(${item.id})" class="w-full py-2 bg-royal/10 text-royal rounded-lg text-xs font-bold hover:bg-royal hover:text-black transition-all border border-royal/20">
                                 <i class="fas fa-shopping-bag mr-2"></i>Move to Cart
                             </button>
                         </div>
@@ -1642,43 +2443,45 @@
 
             if (cart.length === 0) {
                 items.innerHTML = `
-                    <div class="text-center text-gray-500 py-12">
-                        <i class="fas fa-mosque text-5xl sm:text-6xl mb-4 opacity-20"></i>
-                        <p class="text-base sm:text-lg mb-2">Your cart is empty</p>
-                        <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
+                    <div class="text-center text-gray-500 py-16">
+                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+                            <i class="fas fa-mosque text-4xl opacity-20"></i>
+                        </div>
+                        <p class="text-lg mb-3 font-medium">Your cart is empty</p>
+                        <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:text-royal-light transition-colors font-medium text-sm">Start Shopping</button>
                     </div>
                 `;
             } else {
                 items.innerHTML = cart.map(item => `
-                    <div class="cart-item flex gap-3 sm:gap-4 bg-dark rounded-xl p-3 sm:p-4 border border-gray-800 hover:border-royal/30 transition-colors">
-                        <img src="${item.image}" alt="${item.name}" class="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg border border-gray-700">
+                    <div class="cart-item flex gap-4 bg-[#1a1a1a] rounded-xl p-4 border border-white/5 hover:border-royal/20 transition-colors">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg border border-white/5">
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-start mb-1">
                                 <div>
-                                    <p class="text-xs text-royal font-bold">${item.brand}</p>
+                                    <p class="text-xs text-royal font-bold mb-0.5">${item.brand}</p>
                                     <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
                                     ${item.selectedColor ? `<span class="text-xs text-gray-500">Color: ${item.selectedColor}</span>` : ''}
                                     ${item.selectedConcentration ? `<span class="text-xs text-gray-500 block">Type: ${item.selectedConcentration}</span>` : ''}
                                 </div>
-                                <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
+                                <button onclick="removeFromCart(${item.id})" class="text-gray-600 hover:text-red-500 transition-colors p-1">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
                             ${item.sizes ? `
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs text-gray-400">Size:</span>
-                                <select onchange="updateSize(${item.id}, this.value)" class="bg-dark-lighter border border-gray-700 rounded text-xs px-2 py-1 focus:border-royal outline-none">
+                                <span class="text-xs text-gray-500">Size:</span>
+                                <select onchange="updateSize(${item.id}, this.value)" class="bg-[#111] border border-white/10 rounded text-xs px-2 py-1 focus:border-royal outline-none">
                                     ${item.sizes.map(size => `<option value="${size}" ${size === item.selectedSize ? 'selected' : ''}>${size}</option>`).join('')}
                                 </select>
                             </div>
                             ` : ''}
                             <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-1 bg-dark-lighter rounded-lg p-1">
-                                    <button onclick="updateQuantity(${item.id}, -1)" class="qty-btn text-gray-400 hover:text-black text-xs sm:text-sm w-7 h-7 sm:w-9 sm:h-9">-</button>
-                                    <span class="w-6 sm:w-8 text-center font-bold text-sm">${item.quantity}</span>
-                                    <button onclick="updateQuantity(${item.id}, 1)" class="qty-btn text-gray-400 hover:text-black text-xs sm:text-sm w-7 h-7 sm:w-9 sm:h-9">+</button>
+                                <div class="flex items-center gap-1 bg-[#111] rounded-lg p-1 border border-white/5">
+                                    <button onclick="updateQuantity(${item.id}, -1)" class="qty-btn text-gray-400 hover:text-black text-xs w-7 h-7">-</button>
+                                    <span class="w-6 text-center font-bold text-sm">${item.quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, 1)" class="qty-btn text-gray-400 hover:text-black text-xs w-7 h-7">+</button>
                                 </div>
-                                <p class="font-bold text-royal text-base sm:text-lg">$${(item.price * item.quantity).toLocaleString()}</p>
+                                <p class="font-bold text-royal text-base">$${(item.price * item.quantity).toLocaleString()}</p>
                             </div>
                         </div>
                     </div>
@@ -1745,46 +2548,46 @@
             const isClothing = product.category === 'formal';
 
             content.innerHTML = `
-                <div class="h-[250px] sm:h-[300px] md:h-[600px] bg-dark-lighter relative">
+                <div class="h-[300px] sm:h-[400px] md:h-[600px] bg-[#111] relative">
                     <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" id="modal-poster">
                     <div class="video-wrapper" id="modal-video-wrapper"></div>
                     <button onclick="loadModalVideo(${product.id})" class="video-facade-btn" id="modal-play-btn" style="opacity: 1; transform: translate(-50%, -50%) scale(1);">
-                        <i class="fas fa-play"></i>
+                        <i class="fas fa-play ml-1"></i>
                     </button>
-                    <div class="absolute bottom-4 right-4 bg-black/80 text-royal px-3 py-1 rounded-full text-xs sm:text-sm font-bold border border-royal/30">
-                        <i class="fas fa-video mr-1"></i> Product Video
+                    <div class="absolute bottom-4 right-4 bg-black/80 text-royal px-4 py-2 rounded-full text-xs font-bold border border-royal/20 backdrop-blur-sm">
+                        <i class="fas fa-video mr-2"></i> Product Video
                     </div>
-                    ${product.halalCertified ? `<div class="absolute top-4 left-4 bg-islamic-green/90 text-white px-3 py-2 rounded-lg text-sm font-bold border border-white/20 flex items-center gap-2"><i class="fas fa-check-circle"></i> HALAL CERTIFIED</div>` : ''}
-                    <button onclick="toggleWishlistItem(${product.id}); openQuickView(${product.id})" class="absolute top-4 right-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full ${isWishlisted ? 'bg-red-500' : 'bg-black/50'} flex items-center justify-center text-white hover:scale-110 transition-transform backdrop-blur-sm">
+                    ${product.halalCertified ? `<div class="absolute top-4 left-4 bg-islamic-green/90 text-white px-4 py-2 rounded-lg text-sm font-bold border border-white/20 flex items-center gap-2"><i class="fas fa-check-circle"></i> HALAL CERTIFIED</div>` : ''}
+                    <button onclick="toggleWishlistItem(${product.id}); openQuickView(${product.id})" class="absolute top-4 right-4 w-12 h-12 rounded-full ${isWishlisted ? 'bg-red-500' : 'bg-black/50'} flex items-center justify-center text-white hover:scale-110 transition-transform backdrop-blur-sm border border-white/20">
                         <i class="fas fa-heart"></i>
                     </button>
                 </div>
-                <div class="p-6 sm:p-8 md:p-12 space-y-4 sm:space-y-6 overflow-y-auto max-h-[400px] sm:max-h-[600px]">
+                <div class="p-6 sm:p-8 md:p-12 space-y-6 overflow-y-auto max-h-[400px] sm:max-h-[600px]">
                     <div>
-                        <div class="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
-                            <span class="text-royal font-bold tracking-wider uppercase text-xs sm:text-sm">${product.brand}</span>
-                            <span class="text-gray-500 text-xs sm:text-sm">• ${product.subcategory}</span>
-                            ${product.badge ? `<span class="bg-royal/20 text-royal text-xs font-bold px-2 sm:px-3 py-1 rounded-full border border-royal/30">${product.badge}</span>` : ''}
+                        <div class="flex items-center gap-3 mb-3 flex-wrap">
+                            <span class="text-royal font-bold tracking-wider uppercase text-xs">${product.brand}</span>
+                            <span class="text-gray-600 text-xs">• ${product.subcategory}</span>
+                            ${product.badge ? `<span class="bg-royal/10 text-royal text-xs font-bold px-3 py-1 rounded-full border border-royal/20">${product.badge}</span>` : ''}
                         </div>
-                        <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 leading-tight">${product.name}</h2>
-                        <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 flex-wrap">
+                        <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">${product.name}</h2>
+                        <div class="flex items-center gap-4 mb-6 flex-wrap">
                             <span class="text-3xl sm:text-4xl font-bold text-royal">$${product.price}</span>
-                            ${product.originalPrice ? `<span class="text-xl sm:text-2xl text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
-                            <div class="stock-status ${getStockStatus(product.stock).class} ml-auto text-xs sm:text-sm">
-                                <i class="fas fa-circle text-[6px] sm:text-[8px]"></i>
+                            ${product.originalPrice ? `<span class="text-xl text-gray-600 line-through">$${product.originalPrice}</span>` : ''}
+                            <div class="stock-status ${getStockStatus(product.stock).class} ml-auto">
+                                <i class="fas fa-circle text-[6px]"></i>
                                 <span>${getStockStatus(product.stock).text}</span>
                             </div>
                         </div>
-                        <p class="text-gray-400 leading-relaxed text-base sm:text-lg">${product.description}</p>
-                        ${isClothing && product.fabric ? `<p class="text-sm text-royal mt-2"><i class="fas fa-tshirt mr-2"></i>Fabric: ${product.fabric}</p>` : ''}
+                        <p class="text-gray-400 leading-relaxed text-base">${product.description}</p>
+                        ${isClothing && product.fabric ? `<p class="text-sm text-royal mt-3"><i class="fas fa-tshirt mr-2"></i>Fabric: ${product.fabric}</p>` : ''}
                     </div>
 
                     ${hasConcentrations ? `
                     <div>
-                        <p class="font-bold mb-2 sm:mb-3 text-xs sm:text-sm uppercase tracking-wider text-gray-400">Select Type</p>
-                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                        <p class="font-bold mb-3 text-xs uppercase tracking-wider text-gray-500">Select Type</p>
+                        <div class="flex flex-wrap gap-2">
                             ${product.concentrations.map((conc, i) => `
-                                <button onclick="selectConcentration(${product.id}, '${conc}', this)" class="px-4 py-2 rounded-full border-2 ${i === 0 ? 'border-royal bg-royal text-black font-bold' : 'border-gray-700 text-gray-300 hover:border-royal'} transition-all text-sm">${conc}</button>
+                                <button onclick="selectConcentration(${product.id}, '${conc}', this)" class="px-4 py-2 rounded-full border-2 ${i === 0 ? 'border-royal bg-royal text-black font-bold' : 'border-white/10 text-gray-400 hover:border-royal/50'} transition-all text-sm">${conc}</button>
                             `).join('')}
                         </div>
                     </div>
@@ -1792,47 +2595,47 @@
 
                     ${product.colors ? `
                     <div>
-                        <p class="font-bold mb-2 sm:mb-3 text-xs sm:text-sm uppercase tracking-wider text-gray-400">Select Color</p>
-                        <div class="flex gap-2 sm:gap-3">
+                        <p class="font-bold mb-3 text-xs uppercase tracking-wider text-gray-500">Select Color</p>
+                        <div class="flex gap-3">
                             ${product.colors.map((color, i) => `
                                 <button onclick="selectColor(${product.id}, '${color}', this)" class="color-swatch ${i === 0 ? 'selected' : ''}" style="background: ${getColorCode(color)}" title="${color}"></button>
                             `).join('')}
                         </div>
-                        <p class="text-xs sm:text-sm text-gray-500 mt-2" id="selected-color-text">Selected: ${product.colors[0]}</p>
+                        <p class="text-sm text-gray-500 mt-3" id="selected-color-text">Selected: ${product.colors[0]}</p>
                     </div>
                     ` : ''}
 
                     ${product.sizes ? `
                     <div>
-                        <p class="font-bold mb-2 sm:mb-3 text-xs sm:text-sm uppercase tracking-wider text-gray-400">Select Size</p>
-                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                        <p class="font-bold mb-3 text-xs uppercase tracking-wider text-gray-500">Select Size</p>
+                        <div class="flex flex-wrap gap-2">
                             ${product.sizes.map((size, i) => `
-                                <button onclick="selectSize(this)" class="size-btn w-12 h-12 sm:w-14 sm:h-14 rounded-xl font-bold text-sm sm:text-base hover:border-royal ${i === 0 ? 'selected' : ''}">${size}</button>
+                                <button onclick="selectSize(this)" class="size-btn w-12 h-12 rounded-xl font-bold text-sm ${i === 0 ? 'selected' : ''}">${size}</button>
                             `).join('')}
                         </div>
                     </div>
                     ` : ''}
 
-                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-                        <button onclick="addToCartFromModal(${product.id}); closeQuickView();" class="flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-3 sm:py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-2 text-base sm:text-lg shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button onclick="addToCartFromModal(${product.id}); closeQuickView();" class="btn-primary flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-3 text-base shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
                             <i class="fas fa-shopping-bag"></i> Add to Cart
                         </button>
-                        <button onclick="buyNow(${product.id})" class="flex-1 border-2 border-royal text-royal font-bold py-3 sm:py-4 rounded-full hover:bg-royal hover:text-black transition-all flex items-center justify-center gap-2 text-base sm:text-lg">
+                        <button onclick="buyNow(${product.id})" class="flex-1 border-2 border-royal text-royal font-bold py-4 rounded-full hover:bg-royal hover:text-black transition-all flex items-center justify-center gap-3 text-base">
                             <i class="fab fa-whatsapp"></i> Buy Now
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-gray-800 text-center">
-                        <div class="text-gray-400">
-                            <i class="fas fa-certificate text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/5 text-center">
+                        <div class="text-gray-500">
+                            <i class="fas fa-certificate text-royal mb-2 text-xl"></i>
                             <p class="text-xs">Halal</p>
                         </div>
-                        <div class="text-gray-400">
-                            <i class="fas fa-truck text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
+                        <div class="text-gray-500">
+                            <i class="fas fa-truck text-royal mb-2 text-xl"></i>
                             <p class="text-xs">Free Ship</p>
                         </div>
-                        <div class="text-gray-400">
-                            <i class="fas fa-undo text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
+                        <div class="text-gray-500">
+                            <i class="fas fa-undo text-royal mb-2 text-xl"></i>
                             <p class="text-xs">Returns</p>
                         </div>
                     </div>
@@ -1883,9 +2686,9 @@
             selectedConcentrations[productId] = concentration;
             btn.parentElement.querySelectorAll('button').forEach(b => {
                 b.classList.remove('border-royal', 'bg-royal', 'text-black', 'font-bold');
-                b.classList.add('border-gray-700', 'text-gray-300');
+                b.classList.add('border-white/10', 'text-gray-400');
             });
-            btn.classList.remove('border-gray-700', 'text-gray-300');
+            btn.classList.remove('border-white/10', 'text-gray-400');
             btn.classList.add('border-royal', 'bg-royal', 'text-black', 'font-bold');
         }
 
@@ -1960,10 +2763,10 @@
             const toastIcon = toast.querySelector('i');
             
             toastMessage.textContent = message;
-            toastIcon.className = `fas fa-${icon} text-lg sm:text-xl`;
+            toastIcon.className = `fas fa-${icon} text-xl`;
             
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function initScrollReveal() {
@@ -1994,9 +2797,9 @@
 
         function loadMoreProducts() {
             const btn = document.getElementById('load-more-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
             setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-check"></i> All Items Loaded';
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> All Items Loaded';
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
             }, 1000);
