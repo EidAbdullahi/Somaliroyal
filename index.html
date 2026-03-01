@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROYAL | Premium Men's Fashion</title>
+    <title>ROYAL | Premium Islamic Lifestyle & Fragrances</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -14,6 +14,7 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
+                        arabic: ['Amiri', 'serif'],
                     },
                     colors: {
                         royal: '#D4AF37',
@@ -22,8 +23,13 @@
                         dark: '#0a0a0a',
                         'dark-light': '#1a1a1a',
                         'dark-lighter': '#2d2d2d',
-                        tiktok: '#00f2ea',
-                        'tiktok-pink': '#ff0050',
+                        oud: '#3D2817',
+                        'oud-light': '#5C4033',
+                        amber: '#FFBF00',
+                        'islamic-green': '#0F4C3A',
+                        'prayer-green': '#1B5E20',
+                        'ivory': '#FFFFF0',
+                        'pearl': '#F0EAD6',
                     }
                 }
             }
@@ -32,6 +38,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #ffffff; overflow-x: hidden; }
         .font-display { font-family: 'Playfair Display', serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
@@ -44,22 +51,22 @@
         .gold-border:hover { border-color: rgba(212, 175, 55, 0.6); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
         .product-card { position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .product-card:hover { transform: translateY(-8px); }
-        .product-media-container { position: relative; overflow: hidden; background: #1a1a1a; border-radius: 1rem; aspect-ratio: 9/16; transform: translateZ(0); will-change: transform; }
+        .product-media-container { position: relative; overflow: hidden; background: #1a1a1a; border-radius: 1rem; aspect-ratio: 4/5; transform: translateZ(0); will-change: transform; }
         .product-poster { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease, transform 0.6s ease; z-index: 3; }
         .video-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.4s ease; z-index: 2; background: #000; }
         .video-wrapper.active { opacity: 1; z-index: 4; }
         .tiktok-iframe { width: 100%; height: 100%; border: none; object-fit: cover; }
-        .video-loading { position: absolute; inset: 0; background: linear-gradient(135deg, #00f2ea20 0%, #ff005020 100%); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; z-index: 5; pointer-events: none; }
+        .video-loading { position: absolute; inset: 0; background: linear-gradient(135deg, #D4AF3720 0%, #3D281720 100%); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; z-index: 5; pointer-events: none; }
         .video-loading.active { opacity: 1; }
-        .loading-spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #00f2ea; border-right-color: #ff0050; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading-spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #D4AF37; border-right-color: #3D2817; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .tiktok-badge { position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 15px rgba(0, 242, 234, 0.4); animation: pulse 2s infinite; pointer-events: none; }
+        .tiktok-badge { position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); animation: pulse 2s infinite; pointer-events: none; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
-        .video-facade-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 80px; height: 80px; background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.75rem; z-index: 6; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 3px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(0, 242, 234, 0.3); }
+        .video-facade-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 80px; height: 80px; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.75rem; z-index: 6; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 3px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3); }
         .product-card:hover .video-facade-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        .video-facade-btn:hover { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 40px rgba(0, 242, 234, 0.6); }
+        .video-facade-btn:hover { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
         .video-facade-btn.playing { opacity: 0; pointer-events: none; }
-        .video-duration { position: absolute; bottom: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.85); color: #00f2ea; padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; z-index: 6; display: flex; align-items: center; gap: 0.35rem; border: 1px solid rgba(0, 242, 234, 0.3); backdrop-filter: blur(4px); pointer-events: none; }
+        .video-duration { position: absolute; bottom: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.85); color: #D4AF37; padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; z-index: 6; display: flex; align-items: center; gap: 0.35rem; border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px); pointer-events: none; }
         .product-actions { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 50%, transparent 100%); display: flex; gap: 0.75rem; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; z-index: 10; }
         .product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
         .action-btn { flex: 1; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s ease; border: none; cursor: pointer; }
@@ -76,8 +83,8 @@
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .product-badge { position: absolute; top: 1rem; left: 1rem; background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #000; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .product-badge.sale { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #fff; }
-        .product-badge.limited { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: #fff; }
-        .product-badge.new { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #fff; }
+        .product-badge.limited { background: linear-gradient(135deg, #3D2817 0%, #5C4033 100%); color: #fff; }
+        .product-badge.new { background: linear-gradient(135deg, #0F4C3A 0%, #1B5E20 100%); color: #fff; }
         .modal { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .modal.active { opacity: 1; visibility: visible; }
         .size-btn { transition: all 0.2s; border: 2px solid rgba(212, 175, 55, 0.3); }
@@ -101,9 +108,9 @@
         .tiktok-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .tiktok-modal.active { display: flex; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .tiktok-modal iframe { max-width: 90%; max-height: 90%; border-radius: 1rem; border: 2px solid rgba(0, 242, 234, 0.3); box-shadow: 0 0 60px rgba(0, 242, 234, 0.2); }
-        .tiktok-modal-close { position: absolute; top: 2rem; right: 2rem; width: 56px; height: 56px; background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; border: 3px solid rgba(255, 255, 255, 0.3); z-index: 10; }
-        .tiktok-modal-close:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 0 30px rgba(0, 242, 234, 0.5); }
+        .tiktok-modal iframe { max-width: 90%; max-height: 90%; border-radius: 1rem; border: 2px solid rgba(212, 175, 55, 0.3); box-shadow: 0 0 60px rgba(212, 175, 55, 0.2); }
+        .tiktok-modal-close { position: absolute; top: 2rem; right: 2rem; width: 56px; height: 56px; background: linear-gradient(135deg, #D4AF37 0%, #3D2817 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; border: 3px solid rgba(255, 255, 255, 0.3); z-index: 10; }
+        .tiktok-modal-close:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
         .img-loading { filter: blur(10px); transform: scale(1.1); }
         .img-loaded { filter: blur(0); transform: scale(1); transition: all 0.5s ease; }
         #category-nav { transition: all 0.3s ease; }
@@ -126,7 +133,13 @@
         *:focus-visible { outline: 2px solid #D4AF37; outline-offset: 2px; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .tiktok-gradient-text { background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .arabic-pattern { background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 1px, transparent 1px); background-size: 20px 20px; }
+        
+        /* Islamic geometric pattern */
+        .geometric-pattern {
+            background-color: #0a0a0a;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
         
         /* Responsive Touch Optimizations */
         @media (max-width: 640px) {
@@ -161,10 +174,8 @@
             .video-facade-btn { opacity: 1; }
         }
         
-        /* Prevent horizontal scroll */
         body { max-width: 100vw; overflow-x: hidden; }
         
-        /* Safe area insets for notched devices */
         @supports (padding: max(0px)) {
             .fixed.bottom-0, .fixed.bottom-2, .whatsapp-float { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
             .fixed.top-0 { padding-top: max(0px, env(safe-area-inset-top)); }
@@ -173,29 +184,29 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased geometric-pattern">
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass-strong transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
                     <span class="font-display text-2xl sm:text-3xl font-bold tracking-wider text-white flex items-center gap-2 group-hover:text-royal transition-colors">
-                        <i class="fas fa-crown text-royal crown-icon"></i>
+                        <i class="fas fa-mosque text-royal crown-icon"></i>
                         <span class="hidden sm:inline">ROYAL</span>
                     </span>
-                    <span class="ml-2 px-2 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30 group-hover:bg-royal group-hover:text-black transition-all sm:ml-3 sm:px-3">MEN</span>
-                    <span class="ml-2 px-2 py-1 bg-gradient-to-r from-tiktok to-tiktok-pink text-white text-xs font-bold rounded-full hidden sm:inline-flex">
-                        <i class="fab fa-tiktok mr-1"></i>Powered
+                    <span class="ml-2 px-2 py-1 bg-royal/20 text-royal text-xs font-bold rounded-full border border-royal/30 group-hover:bg-royal group-hover:text-black transition-all sm:ml-3 sm:px-3">ISLAMIC</span>
+                    <span class="ml-2 px-2 py-1 bg-gradient-to-r from-oud to-oud-light text-white text-xs font-bold rounded-full hidden sm:inline-flex">
+                        <i class="fas fa-star-and-crescent mr-1"></i>Halal
                     </span>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-8">
+                <div class="hidden md:flex items-center space-x-6">
                     <a onclick="filterCategory('all')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">All<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('streetwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Streetwear<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Formal<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('casual')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Casual<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('activewear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Activewear<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
-                    <a onclick="filterCategory('outerwear')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Outerwear<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                    <a onclick="filterCategory('formal')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Formal Wear<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                    <a onclick="filterCategory('perfumes')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Perfumes<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                    <a onclick="filterCategory('shoes')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Shoes<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                    <a onclick="filterCategory('attars')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Attars<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
+                    <a onclick="filterCategory('essentials')" class="text-sm font-medium text-gray-300 hover:text-royal transition-colors cursor-pointer relative group">Essentials<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-royal transition-all group-hover:w-full"></span></a>
                 </div>
 
                 <div class="flex items-center space-x-3 sm:space-x-6">
@@ -220,7 +231,7 @@
         <!-- Search Bar -->
         <div id="search-bar" class="hidden border-t border-gray-800 bg-dark-light px-4 py-4 animate-fade-up">
             <div class="max-w-3xl mx-auto relative">
-                <input type="text" id="search-input" placeholder="Search shirts, jackets, pants, brands..." 
+                <input type="text" id="search-input" placeholder="Search thobes, perfumes, attars, prayer items..." 
                     class="w-full bg-dark-lighter border border-gray-700 rounded-full px-6 py-3 pl-12 text-white focus:outline-none focus:border-royal transition-colors text-sm sm:text-base"
                     onkeyup="filterProducts()">
                 <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
@@ -234,11 +245,11 @@
         <div id="mobile-menu" class="hidden md:hidden glass-strong border-t border-gray-800">
             <div class="px-4 py-4 space-y-2">
                 <a onclick="filterCategory('all'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">All Products</a>
-                <a onclick="filterCategory('streetwear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🔥 Streetwear</a>
-                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👔 Formal Wear</a>
-                <a onclick="filterCategory('casual'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👕 Casual</a>
-                <a onclick="filterCategory('activewear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🏃 Activewear</a>
-                <a onclick="filterCategory('outerwear'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🧥 Outerwear</a>
+                <a onclick="filterCategory('formal'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👔 Official Formal Wear</a>
+                <a onclick="filterCategory('perfumes'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🧴 Premium Perfumes</a>
+                <a onclick="filterCategory('shoes'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">👞 Islamic Footwear</a>
+                <a onclick="filterCategory('attars'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">🕌 Attars & Oils</a>
+                <a onclick="filterCategory('essentials'); toggleMobileMenu()" class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-royal hover:bg-white/5 rounded-md cursor-pointer transition-colors">📿 Islamic Essentials</a>
             </div>
         </div>
     </nav>
@@ -271,7 +282,7 @@
     <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-dark-light z-50 cart-sidebar overflow-y-auto border-l border-royal/20 shadow-2xl">
         <div class="p-4 sm:p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-dark-light z-10">
             <h2 class="font-display text-xl sm:text-2xl font-bold flex items-center gap-2">
-                <i class="fas fa-crown text-royal"></i>
+                <i class="fas fa-mosque text-royal"></i>
                 Your Cart 
                 <span id="cart-total-items" class="text-royal text-base sm:text-lg bg-royal/10 px-3 py-1 rounded-full border border-royal/20">0</span>
             </h2>
@@ -282,7 +293,7 @@
         
         <div id="cart-items" class="p-4 sm:p-6 space-y-4 min-h-[300px]">
             <div class="text-center text-gray-500 py-12">
-                <i class="fas fa-crown text-5xl sm:text-6xl mb-4 opacity-20"></i>
+                <i class="fas fa-mosque text-5xl sm:text-6xl mb-4 opacity-20"></i>
                 <p class="text-base sm:text-lg mb-2">Your cart is empty</p>
                 <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
             </div>
@@ -320,7 +331,7 @@
 
     <!-- Toast -->
     <div id="toast" class="toast">
-        <i class="fas fa-crown text-xl"></i>
+        <i class="fas fa-mosque text-xl"></i>
         <span id="toast-message">Added to cart!</span>
     </div>
 
@@ -338,51 +349,55 @@
     <section class="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden pt-16 sm:pt-20 bg-gradient-to-b from-dark-light to-dark">
         <div class="absolute inset-0">
             <div class="absolute top-20 left-4 sm:left-10 w-48 sm:w-96 h-48 sm:h-96 bg-royal/10 rounded-full blur-[80px] sm:blur-[120px] animate-pulse"></div>
-            <div class="absolute bottom-20 right-4 sm:right-10 w-48 sm:w-96 h-48 sm:h-96 bg-tiktok/10 rounded-full blur-[80px] sm:blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute bottom-20 right-4 sm:right-10 w-48 sm:w-96 h-48 sm:h-96 bg-oud/30 rounded-full blur-[80px] sm:blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] border border-royal/5 rounded-full animate-[spin_20s_linear_infinite]"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] border border-tiktok/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] border border-islamic-green/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-tiktok/20 to-tiktok-pink/20 border border-tiktok/30 px-3 sm:px-4 py-2 rounded-full mb-6 sm:mb-8 hover:from-tiktok/30 hover:to-tiktok-pink/30 transition-all cursor-pointer" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
-                <i class="fab fa-tiktok text-tiktok text-xs sm:text-sm"></i>
-                <span class="text-xs font-bold tracking-wider uppercase tiktok-gradient-text">Powered by TikTok Videos</span>
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-royal/20 to-oud/20 border border-royal/30 px-3 sm:px-4 py-2 rounded-full mb-6 sm:mb-8 hover:from-royal/30 hover:to-oud/30 transition-all cursor-pointer" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-star-and-crescent text-royal text-xs sm:text-sm"></i>
+                <span class="text-xs font-bold tracking-wider uppercase text-gradient">Authentic Islamic Lifestyle</span>
             </div>
             
             <h1 class="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 leading-tight">
-                Dress Like <br>
-                <span class="text-gradient">Royalty</span>
+                Elegance in <br>
+                <span class="text-gradient">Modesty</span>
             </h1>
             
             <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed px-4">
-                Experience 55+ premium men's pieces with immersive <span class="tiktok-gradient-text font-bold">TikTok video previews</span>. 
-                Royal quality, instant WhatsApp checkout.
+                Premium <span class="text-royal font-bold">Official Formal Wear</span>, Halal fragrances, and Islamic essentials. 
+                Dress with dignity, scent with purity, live with faith.
             </p>
             
             <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4">
-                <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-tiktok to-tiktok-pink text-white font-bold rounded-full hover:scale-105 transition-all transform flex items-center justify-center gap-2 shadow-lg shadow-tiktok/25 text-sm sm:text-base">
-                    <i class="fab fa-tiktok"></i> Watch on TikTok
+                <button onclick="filterCategory('formal')" class="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-royal to-royal-dark text-black font-bold rounded-full hover:scale-105 transition-all transform flex items-center justify-center gap-2 shadow-lg shadow-royal/25 text-sm sm:text-base">
+                    <i class="fas fa-user-tie"></i> Formal Collection
                 </button>
                 <button onclick="showWhatsAppChat()" class="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all flex items-center justify-center gap-2 border border-royal/30 hover:border-royal text-sm sm:text-base">
                     <i class="fab fa-whatsapp text-royal"></i> Personal Stylist
                 </button>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 mt-10 sm:mt-16 max-w-4xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-8 mt-10 sm:mt-16 max-w-5xl mx-auto px-4">
                 <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-4xl font-bold text-royal group-hover:scale-110 transition-transform inline-block">55+</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">TikTok Videos</p>
+                    <p class="font-display text-2xl sm:text-3xl font-bold text-royal group-hover:scale-110 transition-transform inline-block">100%</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Halal Certified</p>
                 </div>
                 <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-4xl font-bold tiktok-gradient-text group-hover:scale-110 transition-transform inline-block">15s</p>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Short Clips</p>
+                    <p class="font-display text-2xl sm:text-3xl font-bold text-oud-light group-hover:scale-110 transition-transform inline-block">50+</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Premium Attars</p>
                 </div>
                 <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-4xl font-bold text-white group-hover:text-royal transition-colors">24h</p>
+                    <p class="font-display text-2xl sm:text-3xl font-bold text-islamic-green group-hover:scale-110 transition-transform inline-block">30+</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">Formal Designs</p>
+                </div>
+                <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
+                    <p class="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-royal transition-colors">24h</p>
                     <p class="text-xs sm:text-sm text-gray-500 mt-1">Dispatch</p>
                 </div>
                 <div class="text-center glass rounded-xl sm:rounded-2xl p-3 sm:p-4 gold-border hover:scale-105 transition-transform cursor-pointer group">
-                    <p class="font-display text-2xl sm:text-4xl font-bold text-white group-hover:text-royal transition-colors">5</p>
+                    <p class="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-royal transition-colors">5</p>
                     <p class="text-xs sm:text-sm text-gray-500 mt-1">Categories</p>
                 </div>
             </div>
@@ -392,33 +407,40 @@
     <!-- Features -->
     <section class="py-6 sm:py-8 bg-dark-lighter border-y border-royal/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
-                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-tiktok transition-colors">
-                    <i class="fab fa-tiktok text-2xl sm:text-3xl text-tiktok group-hover:scale-110 transition-transform"></i>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
+                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
+                    <i class="fas fa-user-tie text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">TikTok Videos</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Authentic Content</p>
+                        <p class="font-bold text-xs sm:text-sm">Formal Wear</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">Premium Thobes</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
-                    <i class="fas fa-crown text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
+                    <i class="fas fa-wine-bottle-slash text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Premium Quality</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Authentic Brands</p>
+                        <p class="font-bold text-xs sm:text-sm">100% Halal</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">Alcohol-Free</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
+                    <i class="fas fa-mosque text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-xs sm:text-sm">Islamic Values</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">Authentic Products</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
                     <i class="fas fa-shipping-fast text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">Free Shipping</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Orders $200+</p>
+                        <p class="font-bold text-xs sm:text-sm">Global Shipping</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">Orders $100+</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-center gap-2 sm:gap-3 text-gray-300 group cursor-pointer hover:text-royal transition-colors">
                     <i class="fab fa-whatsapp text-2xl sm:text-3xl text-royal group-hover:scale-110 transition-transform"></i>
                     <div class="text-left">
-                        <p class="font-bold text-xs sm:text-sm">WhatsApp</p>
-                        <p class="text-xs text-gray-500 hidden sm:block">Instant Checkout</p>
+                        <p class="font-bold text-xs sm:text-sm">Islamic Support</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">Scholar Verified</p>
                     </div>
                 </div>
             </div>
@@ -430,11 +452,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex overflow-x-auto gap-2 sm:gap-3 pb-2 scrollbar-hide">
                 <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all" data-category="all">All Items</button>
-                <button onclick="filterCategory('streetwear')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="streetwear">🔥 Streetwear</button>
-                <button onclick="filterCategory('formal')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="formal">👔 Formal</button>
-                <button onclick="filterCategory('casual')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="casual">👕 Casual</button>
-                <button onclick="filterCategory('activewear')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="activewear">🏃 Activewear</button>
-                <button onclick="filterCategory('outerwear')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="outerwear">🧥 Outerwear</button>
+                <button onclick="filterCategory('formal')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="formal">👔 Formal Wear</button>
+                <button onclick="filterCategory('perfumes')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="perfumes">🧴 Perfumes</button>
+                <button onclick="filterCategory('shoes')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="shoes">👞 Shoes</button>
+                <button onclick="filterCategory('attars')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="attars">🕌 Attars & Oils</button>
+                <button onclick="filterCategory('essentials')" class="category-pill whitespace-nowrap px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all text-gray-300" data-category="essentials">📿 Essentials</button>
             </div>
         </div>
     </section>
@@ -444,12 +466,12 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 sm:mb-8 gap-4 reveal">
             <div>
                 <h2 class="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                    <i class="fab fa-tiktok text-tiktok text-xl sm:text-2xl"></i>
-                    <span id="category-title">All Men's Collection</span>
+                    <i class="fas fa-star-and-crescent text-royal text-xl sm:text-2xl"></i>
+                    <span id="category-title">All Islamic Collection</span>
                 </h2>
                 <p class="text-gray-400 mt-1 flex items-center gap-2 text-sm sm:text-base">
-                    <i class="fas fa-video text-tiktok"></i>
-                    <span id="category-count">Showing all items with TikTok videos</span>
+                    <i class="fas fa-check-circle text-royal"></i>
+                    <span id="category-count">Showing all halal-certified items</span>
                 </p>
             </div>
             <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
@@ -495,31 +517,30 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
             <h2 class="font-display text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center gap-3">
                 <i class="fas fa-ruler text-royal"></i>
-                Royal Size Guide
+                Clothing & Footwear Size Guide
             </h2>
-            <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">Find your perfect fit with our comprehensive sizing chart</p>
+            <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">Find your perfect fit for our formal wear and footwear collection</p>
             <div class="glass rounded-xl sm:rounded-2xl p-4 sm:p-8 gold-border overflow-x-auto">
                 <table class="w-full text-left text-xs sm:text-sm">
                     <thead>
                         <tr class="border-b border-royal/20">
                             <th class="pb-3 sm:pb-4 font-bold text-royal">Size</th>
                             <th class="pb-3 sm:pb-4 font-bold text-gray-300">Chest (in)</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300">Waist (in)</th>
                             <th class="pb-3 sm:pb-4 font-bold text-gray-300">Length (in)</th>
-                            <th class="pb-3 sm:pb-4 font-bold text-gray-300 hidden sm:table-cell">US Size</th>
+                            <th class="pb-3 sm:pb-4 font-bold text-gray-300">US Shoe</th>
+                            <th class="pb-3 sm:pb-4 font-bold text-gray-300 hidden sm:table-cell">Height</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-400">
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XS</td><td>34-36</td><td>28-30</td><td>26</td><td class="hidden sm:table-cell">34</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">S</td><td>36-38</td><td>30-32</td><td>27</td><td class="hidden sm:table-cell">36</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">M</td><td>38-40</td><td>32-34</td><td>28</td><td class="hidden sm:table-cell">38-40</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">L</td><td>40-42</td><td>34-36</td><td>29</td><td class="hidden sm:table-cell">40-42</td></tr>
-                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XL</td><td>42-44</td><td>36-38</td><td>30</td><td class="hidden sm:table-cell">42-44</td></tr>
-                        <tr class="hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XXL</td><td>44-46</td><td>38-40</td><td>31</td><td class="hidden sm:table-cell">44-46</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">S</td><td>36-38</td><td>52</td><td>7-8</td><td class="hidden sm:table-cell">5'4"-5'6"</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">M</td><td>38-40</td><td>54</td><td>8-9</td><td class="hidden sm:table-cell">5'6"-5'8"</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">L</td><td>40-42</td><td>56</td><td>9-10</td><td class="hidden sm:table-cell">5'8"-5'10"</td></tr>
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XL</td><td>42-44</td><td>58</td><td>10-11</td><td class="hidden sm:table-cell">5'10"-6'0"</td></tr>
+                        <tr class="hover:bg-white/5 transition-colors"><td class="py-3 sm:py-4 font-bold text-white">XXL</td><td>44-46</td><td>60</td><td>11-12</td><td class="hidden sm:table-cell">6'0"+</td></tr>
                     </tbody>
                 </table>
             </div>
-            <p class="text-xs text-gray-500 mt-4">* Measurements may vary slightly by brand. When in doubt, size up for a relaxed fit.</p>
+            <p class="text-xs text-gray-500 mt-4">* Thobes are designed for a relaxed, modest fit. For a tailored look, size down. Shoes run true to size.</p>
         </div>
     </section>
 
@@ -545,26 +566,26 @@
     <!-- Footer -->
     <footer class="bg-dark border-t border-royal/10 pt-12 sm:pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-12">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-12">
+                <div class="lg:col-span-2">
                     <span class="font-display text-2xl sm:text-3xl font-bold tracking-wider text-white mb-4 sm:mb-6 block flex items-center gap-2">
-                        <i class="fas fa-crown text-royal crown-icon"></i>
+                        <i class="fas fa-mosque text-royal crown-icon"></i>
                         ROYAL
-                        <span class="text-xs sm:text-sm font-normal text-gray-500 ml-2">MEN</span>
+                        <span class="text-xs sm:text-sm font-normal text-gray-500 ml-2">ISLAMIC</span>
                     </span>
                     <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-                        Premium men's fashion with immersive <span class="tiktok-gradient-text font-bold">TikTok video previews</span>. 
-                        Royal quality, instant WhatsApp checkout.
+                        Premium <span class="text-royal font-bold">Official Formal Wear</span>, Halal fragrances, and Islamic lifestyle products. 
+                        Dress with dignity, scent with purity, live with faith. <span class="font-arabic text-royal">بسم الله الرحمن الرحيم</span>
                     </p>
                     <div class="flex space-x-3">
-                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-tiktok hover:text-white transition-all border border-gray-700 hover:border-tiktok">
-                            <i class="fab fa-tiktok"></i>
-                        </a>
                         <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
                             <i class="fab fa-instagram"></i>
                         </a>
                         <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
                             <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-dark-lighter flex items-center justify-center text-gray-400 hover:bg-royal hover:text-black transition-all border border-gray-700 hover:border-royal">
+                            <i class="fas fa-envelope"></i>
                         </a>
                     </div>
                 </div>
@@ -572,21 +593,21 @@
                 <div>
                     <h4 class="font-display font-bold text-base sm:text-lg mb-4 sm:mb-6 text-royal">Shop</h4>
                     <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
-                        <li><a href="#" onclick="filterCategory('streetwear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-fire text-xs"></i> Streetwear</a></li>
                         <li><a href="#" onclick="filterCategory('formal')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-user-tie text-xs"></i> Formal Wear</a></li>
-                        <li><a href="#" onclick="filterCategory('casual')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-tshirt text-xs"></i> Casual</a></li>
-                        <li><a href="#" onclick="filterCategory('activewear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-running text-xs"></i> Activewear</a></li>
-                        <li><a href="#" onclick="filterCategory('outerwear')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-snowflake text-xs"></i> Outerwear</a></li>
+                        <li><a href="#" onclick="filterCategory('perfumes')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-spray-can text-xs"></i> Perfumes</a></li>
+                        <li><a href="#" onclick="filterCategory('shoes')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-shoe-prints text-xs"></i> Footwear</a></li>
+                        <li><a href="#" onclick="filterCategory('attars')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-oil-can text-xs"></i> Attars & Oils</a></li>
+                        <li><a href="#" onclick="filterCategory('essentials')" class="hover:text-royal transition-colors flex items-center gap-2"><i class="fas fa-pray text-xs"></i> Essentials</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="font-display font-bold text-base sm:text-lg mb-4 sm:mb-6 text-royal">Help</h4>
                     <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
-                        <li><a href="#" onclick="document.querySelector('.bg-dark-lighter').scrollIntoView({behavior: 'smooth'})" class="hover:text-royal transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-royal transition-colors">Halal Certification</a></li>
                         <li><a href="#" class="hover:text-royal transition-colors">Shipping Info</a></li>
                         <li><a href="#" class="hover:text-royal transition-colors">Returns & Exchanges</a></li>
-                        <li><a href="#" class="hover:text-royal transition-colors">Track Order</a></li>
                         <li><a href="#" class="hover:text-royal transition-colors">FAQ</a></li>
                     </ul>
                 </div>
@@ -600,11 +621,11 @@
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fas fa-envelope text-royal text-base sm:text-lg"></i>
-                            <span>king@royalfashion.com</span>
+                            <span>salam@royalislamic.com</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i class="fas fa-crown text-royal text-base sm:text-lg"></i>
-                            <span>24/7 Royal Support</span>
+                            <i class="fas fa-mosque text-royal text-base sm:text-lg"></i>
+                            <span>24/7 Islamic Support</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fas fa-map-marker-alt text-royal text-base sm:text-lg"></i>
@@ -615,132 +636,536 @@
             </div>
 
             <div class="border-t border-gray-800 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-xs sm:text-sm text-gray-500 text-center sm:text-left">© 2024 ROYAL Men. All rights reserved. Crafted with <i class="fas fa-heart text-red-500 mx-1"></i> in Kenya</p>
+                <p class="text-xs sm:text-sm text-gray-500 text-center sm:text-left">© 2024 ROYAL Islamic. All rights reserved. <span class="font-arabic text-royal">بارك الله فيك</span></p>
                 <div class="flex items-center gap-3 sm:gap-4 text-xl sm:text-2xl text-gray-600">
+                    <i class="fas fa-certificate text-royal hover:scale-110 transition-transform" title="Halal Certified"></i>
                     <i class="fab fa-cc-visa hover:text-royal transition-colors"></i>
                     <i class="fab fa-cc-mastercard hover:text-royal transition-colors"></i>
-                    <i class="fab fa-cc-amex hover:text-royal transition-colors"></i>
                     <i class="fab fa-cc-paypal hover:text-royal transition-colors"></i>
-                    <i class="fab fa-cc-apple-pay hover:text-royal transition-colors"></i>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Product Database
+        // Updated Product Database with Official Formal Wear Category
         const products = [
+            // FORMAL WEAR CATEGORY - OFFICIAL ISLAMIC CLOTHING
+            {
+                id: 101,
+                name: "Royal White Thobe - Premium",
+                brand: "ROYAL",
+                price: 180,
+                originalPrice: 220,
+                category: "formal",
+                subcategory: "Thobes",
+                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                tiktokVideoId: "7612046437991370001",
+                tiktokUsername: "royalislamic",
+                badge: "BESTSELLER",
+                description: "Luxurious white thobe crafted from premium cotton blend. Perfect for Jumu'ah, Eid, and formal occasions. Features subtle gold embroidery and comfortable modest fit.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Off-White", "Ivory"],
+                stock: 25,
+                popularity: 98,
+                videoDuration: "0:20",
+                halalCertified: true,
+                fabric: "Premium Cotton Blend"
+            },
+            {
+                id: 102,
+                name: "Official Black Bisht - Gold Trim",
+                brand: "ROYAL",
+                price: 350,
+                category: "formal",
+                subcategory: "Bishts",
+                image: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=800&q=80",
+                tiktokVideoId: "7612046437991370002",
+                tiktokUsername: "royalislamic",
+                badge: "LUXURY",
+                description: "Elegant black bisht with hand-stitched gold trim. Worn over thobe for official events, weddings, and special gatherings. Lightweight wool blend.",
+                sizes: ["M", "L", "XL", "XXL"],
+                colors: ["Black", "Dark Brown", "Navy"],
+                stock: 12,
+                popularity: 96,
+                videoDuration: "0:25",
+                halalCertified: true,
+                fabric: "Wool Blend"
+            },
+            {
+                id: 103,
+                name: "Cream Jubba - Executive",
+                brand: "ROYAL",
+                price: 220,
+                originalPrice: 280,
+                category: "formal",
+                subcategory: "Jubbas",
+                image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80",
+                tiktokVideoId: "7612046437991370003",
+                tiktokUsername: "royalislamic",
+                badge: "SALE",
+                description: "Sophisticated cream jubba with mandarin collar. Ideal for business meetings and semi-formal Islamic events. Wrinkle-resistant fabric.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Cream", "Beige", "Light Grey"],
+                stock: 18,
+                popularity: 94,
+                videoDuration: "0:18",
+                halalCertified: true,
+                fabric: "Polyester Blend"
+            },
+            {
+                id: 104,
+                name: "Royal Blue Thobe - Official",
+                brand: "ROYAL",
+                price: 195,
+                category: "formal",
+                subcategory: "Thobes",
+                image: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=800&q=80",
+                tiktokVideoId: "7612046437991370004",
+                tiktokUsername: "royalislamic",
+                badge: "NEW",
+                description: "Stunning royal blue thobe for distinguished occasions. Features concealed pockets and premium stitching. Modern cut with traditional elegance.",
+                sizes: ["M", "L", "XL", "XXL"],
+                colors: ["Royal Blue", "Navy", "Charcoal"],
+                stock: 15,
+                popularity: 92,
+                videoDuration: "0:22",
+                halalCertified: true,
+                fabric: "Premium Cotton"
+            },
+            {
+                id: 105,
+                name: "Gold Embroidered Thobe - Limited",
+                brand: "ROYAL",
+                price: 450,
+                category: "formal",
+                subcategory: "Luxury Thobes",
+                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                tiktokVideoId: "7612046437991370005",
+                tiktokUsername: "royalislamic",
+                badge: "LIMITED",
+                description: "Exclusive thobe with intricate gold hand-embroidery. Limited edition of 50 pieces. Perfect for weddings and Eid celebrations. Includes luxury box.",
+                sizes: ["M", "L", "XL"],
+                colors: ["White", "Black"],
+                stock: 5,
+                popularity: 99,
+                videoDuration: "0:30",
+                halalCertified: true,
+                fabric: "Egyptian Cotton"
+            },
+            {
+                id: 106,
+                name: "Charcoal Formal Kurta",
+                brand: "ROYAL",
+                price: 145,
+                category: "formal",
+                subcategory: "Kurtas",
+                image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80",
+                tiktokVideoId: "7612046437991370006",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "Modern charcoal kurta with clean lines. Versatile for both formal and smart-casual occasions. Breathable fabric with modest tailoring.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["Charcoal", "Black", "Navy"],
+                stock: 30,
+                popularity: 89,
+                videoDuration: "0:15",
+                halalCertified: true,
+                fabric: "Cotton Linen"
+            },
+            {
+                id: 107,
+                name: "White Shalwar Kameez - Premium",
+                brand: "ROYAL",
+                price: 165,
+                category: "formal",
+                subcategory: "Shalwar Kameez",
+                image: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=800&q=80",
+                tiktokVideoId: "7612046437991370007",
+                tiktokUsername: "royalislamic",
+                badge: "POPULAR",
+                description: "Classic white shalwar kameez set with detailed stitching. Traditional South Asian formal wear. Includes matching shalwar and kurta.",
+                sizes: ["S", "M", "L", "XL", "XXL"],
+                colors: ["White", "Off-White"],
+                stock: 22,
+                popularity: 93,
+                videoDuration: "0:20",
+                halalCertified: true,
+                fabric: "Pure Cotton"
+            },
+            {
+                id: 108,
+                name: "Burgundy Official Thobe",
+                brand: "ROYAL",
+                price: 210,
+                category: "formal",
+                subcategory: "Thobes",
+                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
+                tiktokVideoId: "7612046437991370008",
+                tiktokUsername: "royalislamic",
+                badge: "NEW",
+                description: "Rich burgundy thobe for those who seek distinction. Deep color with subtle sheen. Perfect for evening events and winter gatherings.",
+                sizes: ["M", "L", "XL", "XXL"],
+                colors: ["Burgundy", "Maroon"],
+                stock: 14,
+                popularity: 91,
+                videoDuration: "0:18",
+                halalCertified: true,
+                fabric: "Premium Blend"
+            },
+
+            // PERFUMES CATEGORY
             {
                 id: 1,
-                name: "Off-White Diagonal Hoodie",
-                brand: "Off-White",
-                price: 890,
-                originalPrice: 1100,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+                name: "Royal Oud Al-Misk",
+                brand: "ROYAL",
+                price: 120,
+                originalPrice: 150,
+                category: "perfumes",
+                subcategory: "Luxury Sprays",
+                image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80",
                 tiktokVideoId: "7612046437991370004",
-                tiktokUsername: "royalfashion_official",
+                tiktokUsername: "royalislamic",
                 badge: "BESTSELLER",
-                description: "Iconic diagonal stripe design with signature arrows motif. Heavyweight cotton fleece construction.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "White", "Grey"],
-                stock: 15,
+                description: "Premium alcohol-free EDP with rich oud and musk notes. Long-lasting fragrance perfect for prayers and special occasions.",
+                sizes: ["50ml", "100ml"],
+                concentrations: ["Eau de Parfum", "Intense"],
+                stock: 25,
                 popularity: 98,
-                videoDuration: "0:15"
+                videoDuration: "0:15",
+                halalCertified: true
             },
             {
                 id: 2,
-                name: "Supreme Box Logo Tee",
-                brand: "Supreme",
-                price: 355,
-                originalPrice: 500,
-                category: "streetwear",
-                subcategory: "T-Shirts",
-                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
+                name: "Amber Sultan Attar",
+                brand: "ROYAL",
+                price: 85,
+                category: "perfumes",
+                subcategory: "Attar Spray",
+                image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80",
                 tiktokVideoId: "6830059644233223429",
-                tiktokUsername: "royalfashion_official",
-                badge: "SALE",
-                description: "Classic box logo t-shirt in heavyweight cotton. Limited edition colorway.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Red", "Black", "White"],
-                stock: 8,
+                tiktokUsername: "royalislamic",
+                badge: "NEW",
+                description: "Warm amber blended with royal oud. Traditional Middle Eastern scent in modern spray format. 100% alcohol-free.",
+                sizes: ["30ml", "60ml"],
+                concentrations: ["Pure Attar", "Spray"],
+                stock: 18,
                 popularity: 95,
-                videoDuration: "0:12"
+                videoDuration: "0:12",
+                halalCertified: true
             },
             {
                 id: 3,
-                name: "BAPE Shark Full Zip Hoodie",
-                brand: "BAPE",
-                price: 750,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+                name: "Madinah Rose EDP",
+                brand: "ROYAL",
+                price: 95,
+                originalPrice: 120,
+                category: "perfumes",
+                subcategory: "Floral Collection",
+                image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=800&q=80",
                 tiktokVideoId: "6901234567890123456",
-                tiktokUsername: "royalfashion_official",
-                badge: "LIMITED",
-                description: "Iconic shark face design with WGM lettering. Camo pattern throughout.",
-                sizes: ["M", "L", "XL"],
-                colors: ["Green Camo", "Blue Camo", "Purple Camo"],
-                stock: 3,
+                tiktokUsername: "royalislamic",
+                badge: "SALE",
+                description: "Delicate Taif rose blended with saffron and sandalwood. Inspired by the gardens of Madinah. Perfect for daily wear.",
+                sizes: ["50ml"],
+                concentrations: ["Eau de Parfum"],
+                stock: 12,
                 popularity: 92,
-                videoDuration: "0:18"
+                videoDuration: "0:18",
+                halalCertified: true
             },
             {
                 id: 4,
-                name: "Nike Tech Fleece Joggers",
-                brand: "Nike",
-                price: 120,
-                originalPrice: 150,
-                category: "streetwear",
-                subcategory: "Pants",
-                image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?w=800&q=80",
+                name: "Black Oud Collection",
+                brand: "ROYAL",
+                price: 250,
+                category: "perfumes",
+                subcategory: "Ultra-Luxury",
+                image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&q=80",
                 tiktokVideoId: "6912345678901234567",
-                tiktokUsername: "royalfashion_official",
-                badge: null,
-                description: "Premium tech fleece material with tapered fit. Perfect for streetwear looks.",
-                sizes: ["S", "M", "L", "XL", "XXL"],
-                colors: ["Black", "Grey", "Olive"],
-                stock: 25,
-                popularity: 88,
-                videoDuration: "0:10"
+                tiktokUsername: "royalislamic",
+                badge: "LIMITED",
+                description: "Aged Cambodian oud oil in crystal bottle. Collector's edition with certificate of authenticity. Only 100 bottles produced.",
+                sizes: ["12ml", "30ml"],
+                concentrations: ["Pure Oud Oil", "Spray"],
+                stock: 3,
+                popularity: 99,
+                videoDuration: "0:25",
+                halalCertified: true
             },
+
+            // SHOES CATEGORY
             {
                 id: 5,
-                name: "Travis Scott x Jordan Hoodie",
-                brand: "Jordan",
-                price: 450,
-                category: "streetwear",
-                subcategory: "Hoodies",
-                image: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80",
+                name: "Royal Prayer Slippers",
+                brand: "ROYAL",
+                price: 45,
+                category: "shoes",
+                subcategory: "Prayer Shoes",
+                image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80",
                 tiktokVideoId: "6923456789012345678",
-                tiktokUsername: "royalfashion_official",
+                tiktokUsername: "royalislamic",
+                badge: "BESTSELLER",
+                description: "Soft leather slippers designed for mosque wear. Easy slip-on style with cushioned sole for extended prayers.",
+                sizes: ["7", "8", "9", "10", "11", "12"],
+                colors: ["Black", "Brown", "Tan"],
+                stock: 30,
+                popularity: 94,
+                videoDuration: "0:10",
+                halalCertified: true
+            },
+            {
+                id: 6,
+                name: "Formal Islamic Loafers",
+                brand: "ROYAL",
+                price: 120,
+                originalPrice: 160,
+                category: "shoes",
+                subcategory: "Formal Shoes",
+                image: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=800&q=80",
+                tiktokVideoId: "7101234567890123456",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "Premium leather formal shoes suitable for Jumu'ah and weddings. Modest design with no ostentatious branding.",
+                sizes: ["7", "8", "9", "10", "11"],
+                colors: ["Black", "Dark Brown"],
+                stock: 15,
+                popularity: 88,
+                videoDuration: "0:15",
+                halalCertified: true
+            },
+            {
+                id: 7,
+                name: "Arabian Sandals - Premium",
+                brand: "ROYAL",
+                price: 75,
+                category: "shoes",
+                subcategory: "Arabian Style",
+                image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=800&q=80",
+                tiktokVideoId: "7112345678901234567",
+                tiktokUsername: "royalislamic",
                 badge: "NEW",
-                description: "Collaboration piece with Cactus Jack branding. Oversized fit.",
-                sizes: ["M", "L", "XL"],
-                colors: ["Brown", "Black"],
-                stock: 12,
+                description: "Traditional Arabic sandals with modern comfort. Genuine leather straps with cushioned footbed. Perfect for hot climates.",
+                sizes: ["7", "8", "9", "10", "11", "12"],
+                colors: ["Brown", "Tan", "Black"],
+                stock: 20,
+                popularity: 91,
+                videoDuration: "0:12",
+                halalCertified: true
+            },
+            {
+                id: 8,
+                name: "Royal Collection Oxfords",
+                brand: "ROYAL",
+                price: 180,
+                category: "shoes",
+                subcategory: "Royal Collection",
+                image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=800&q=80",
+                tiktokVideoId: "7123456789012345678",
+                tiktokUsername: "royalislamic",
+                badge: "LIMITED",
+                description: "Handcrafted oxford shoes with gold accents. Luxury collection for special occasions. Each pair numbered and boxed.",
+                sizes: ["8", "9", "10", "11"],
+                colors: ["Black Gold", "Brown Gold"],
+                stock: 5,
                 popularity: 96,
-                videoDuration: "0:20"
+                videoDuration: "0:20",
+                halalCertified: true
+            },
+
+            // ATTARS & OILS CATEGORY
+            {
+                id: 9,
+                name: "Pure Oud Al-Hind",
+                brand: "ROYAL",
+                price: 200,
+                category: "attars",
+                subcategory: "Premium Oud Attars",
+                image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&q=80",
+                tiktokVideoId: "7134567890123456789",
+                tiktokUsername: "royalislamic",
+                badge: "BESTSELLER",
+                description: "Pure Indian oud oil, aged 10 years. Rich, woody scent with smoky undertones. Roll-on applicator for precise application.",
+                sizes: ["6ml", "12ml"],
+                concentrations: ["Pure Oil", "Roll-On"],
+                stock: 12,
+                popularity: 97,
+                videoDuration: "0:18",
+                halalCertified: true
+            },
+            {
+                id: 10,
+                name: "Musk Tahara Roll-On",
+                brand: "ROYAL",
+                price: 25,
+                originalPrice: 35,
+                category: "attars",
+                subcategory: "Perfume Oils",
+                image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=800&q=80",
+                tiktokVideoId: "7145678901234567890",
+                tiktokUsername: "royalislamic",
+                badge: "SALE",
+                description: "White musk attar - clean, pure scent perfect for daily use after wudu. Alcohol-free and long-lasting.",
+                sizes: ["10ml"],
+                concentrations: ["Roll-On"],
+                stock: 50,
+                popularity: 93,
+                videoDuration: "0:10",
+                halalCertified: true
+            },
+            {
+                id: 11,
+                name: "Sandalwood & Oud Blend",
+                brand: "ROYAL",
+                price: 65,
+                category: "attars",
+                subcategory: "Attars & Oils",
+                image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80",
+                tiktokVideoId: "7156789012345678901",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "Smooth sandalwood balanced with premium oud. Perfect for meditation and prayer times. Traditional oil format.",
+                sizes: ["12ml"],
+                concentrations: ["Oil"],
+                stock: 22,
+                popularity: 89,
+                videoDuration: "0:15",
+                halalCertified: true
+            },
+            {
+                id: 12,
+                name: "Collector's Oud Set",
+                brand: "ROYAL",
+                price: 450,
+                category: "attars",
+                subcategory: "Ultra-Luxury",
+                image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=800&q=80",
+                tiktokVideoId: "7167890123456789012",
+                tiktokUsername: "royalislamic",
+                badge: "LIMITED",
+                description: "Set of 3 rare oud oils: Cambodian, Indian, and Malaysian. Wooden presentation box with certificates.",
+                sizes: ["3x6ml"],
+                concentrations: ["Pure Oil"],
+                stock: 2,
+                popularity: 99,
+                videoDuration: "0:30",
+                halalCertified: true
+            },
+
+            // ESSENTIALS CATEGORY
+            {
+                id: 13,
+                name: "Premium Prayer Rug",
+                brand: "ROYAL",
+                price: 85,
+                category: "essentials",
+                subcategory: "Spiritual & Prayer",
+                image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=800&q=80",
+                tiktokVideoId: "7178901234567890123",
+                tiktokUsername: "royalislamic",
+                badge: "BESTSELLER",
+                description: "Luxury padded prayer rug with qibla compass. Soft velvet with Islamic geometric patterns. Includes carrying bag.",
+                sizes: ["Standard", "Large"],
+                colors: ["Green", "Blue", "Red"],
+                stock: 35,
+                popularity: 95,
+                videoDuration: "0:12",
+                halalCertified: true
+            },
+            {
+                id: 14,
+                name: "Tasbih - Crystal Beads",
+                brand: "ROYAL",
+                price: 35,
+                category: "essentials",
+                subcategory: "Spiritual & Prayer",
+                image: "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80",
+                tiktokVideoId: "7189012345678901234",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "99 crystal prayer beads with gold accents. Smooth glide for dhikr. Includes velvet pouch.",
+                sizes: ["8mm", "10mm"],
+                colors: ["Clear", "Amber", "Green"],
+                stock: 28,
+                popularity: 87,
+                videoDuration: "0:10",
+                halalCertified: true
+            },
+            {
+                id: 15,
+                name: "Ihram Set - Premium",
+                brand: "ROYAL",
+                price: 120,
+                category: "essentials",
+                subcategory: "Travel & Hajj",
+                image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&q=80",
+                tiktokVideoId: "7190123456789012345",
+                tiktokUsername: "royalislamic",
+                badge: "NEW",
+                description: "Complete ihram set for Umrah/Hajj. High-quality microfiber towels, belt, and travel bag. Lightweight and absorbent.",
+                sizes: ["One Size"],
+                colors: ["White"],
+                stock: 40,
+                popularity: 92,
+                videoDuration: "0:20",
+                halalCertified: true
             },
             {
                 id: 16,
-                name: "Hugo Boss Slim Fit Suit",
-                brand: "Hugo Boss",
-                price: 895,
-                originalPrice: 1200,
-                category: "formal",
-                subcategory: "Suits",
-                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
-                tiktokVideoId: "7101234567890123456",
-                tiktokUsername: "royalfashion_official",
-                badge: "BESTSELLER",
-                description: "Italian wool slim fit suit with peak lapels. Perfect for business or formal events.",
-                sizes: ["36R", "38R", "40R", "42R", "44R"],
-                colors: ["Navy", "Charcoal", "Black"],
-                stock: 8,
+                name: "Islamic Gift Box",
+                brand: "ROYAL",
+                price: 150,
+                category: "essentials",
+                subcategory: "Gift Sets",
+                image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?w=800&q=80",
+                tiktokVideoId: "7201234567890123456",
+                tiktokUsername: "royalislamic",
+                badge: "POPULAR",
+                description: "Curated gift set: attar, prayer rug, tasbih, and miswak. Beautifully packaged for Eid or special occasions.",
+                sizes: ["Standard"],
+                colors: ["Gold Box"],
+                stock: 15,
                 popularity: 94,
-                videoDuration: "0:25"
+                videoDuration: "0:25",
+                halalCertified: true
+            },
+            {
+                id: 17,
+                name: "Kufi Cap - Premium",
+                brand: "ROYAL",
+                price: 30,
+                category: "essentials",
+                subcategory: "Headwear",
+                image: "https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=800&q=80",
+                tiktokVideoId: "7212345678901234567",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "Hand-stitched kufi cap in breathable cotton. Traditional designs suitable for daily prayer and Jumu'ah.",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["White", "Black", "Navy"],
+                stock: 45,
+                popularity: 86,
+                videoDuration: "0:08",
+                halalCertified: true
+            },
+            {
+                id: 18,
+                name: "Miswak & Holder Set",
+                brand: "ROYAL",
+                price: 20,
+                category: "essentials",
+                subcategory: "Grooming",
+                image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80",
+                tiktokVideoId: "7223456789012345678",
+                tiktokUsername: "royalislamic",
+                badge: null,
+                description: "Natural miswak sticks with protective case. Sunnah dental care. Includes 3 fresh sticks and holder.",
+                sizes: ["One Size"],
+                colors: ["Natural"],
+                stock: 60,
+                popularity: 88,
+                videoDuration: "0:10",
+                halalCertified: true
             }
         ];
 
@@ -750,6 +1175,7 @@
         let currentSort = 'newest';
         let currentView = 'grid';
         let selectedColors = {};
+        let selectedConcentrations = {};
         let loadedVideos = new Set();
         let videoIntersectionObserver = null;
 
@@ -817,7 +1243,7 @@
                 }
             }
 
-            document.getElementById('category-count').textContent = `Showing ${filtered.length} items with TikTok videos`;
+            document.getElementById('category-count').textContent = `Showing ${filtered.length} halal-certified items`;
             setTimeout(() => {
                 document.querySelectorAll('#products-grid .reveal').forEach(el => el.classList.add('active'));
                 initLazyLoading();
@@ -828,12 +1254,14 @@
         function createProductCard(product) {
             const isWishlisted = wishlist.includes(product.id);
             const stockStatus = getStockStatus(product.stock);
+            const hasConcentrations = product.concentrations && product.concentrations.length > 0;
+            const isClothing = product.category === 'formal';
             
             return `
                 <div class="product-card reveal group" data-product-id="${product.id}">
                     <div class="product-media-container mb-3 sm:mb-4 gold-border relative" id="media-${product.id}" data-product-id="${product.id}">
                         ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} ${product.badge === 'NEW' ? 'new' : ''}">${product.badge}</div>` : ''}
-                        <div class="tiktok-badge"><i class="fab fa-tiktok"></i></div>
+                        ${product.halalCertified ? `<div class="absolute top-1 right-1 bg-islamic-green/90 text-white text-[10px] font-bold px-2 py-1 rounded-full z-10 border border-white/20"><i class="fas fa-check-circle mr-1"></i>HALAL</div>` : ''}
                         <button onclick="event.stopPropagation(); toggleWishlistItem(${product.id})" class="wishlist-btn ${isWishlisted ? 'active' : ''}" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
                             <i class="fas fa-heart ${isWishlisted ? '' : 'text-white'}"></i>
                         </button>
@@ -843,8 +1271,8 @@
                         <img src="${product.image}" alt="${product.name}" class="product-poster img-loading" id="poster-${product.id}" onload="this.classList.remove('img-loading'); this.classList.add('img-loaded')">
                         <div class="video-wrapper" id="video-wrapper-${product.id}"></div>
                         <div class="video-loading" id="loading-${product.id}"><div class="loading-spinner"></div></div>
-                        <button onclick="event.stopPropagation(); loadAndPlayVideo(${product.id})" class="video-facade-btn" id="play-btn-${product.id}" title="Click to play TikTok video">
-                            <i class="fab fa-tiktok"></i>
+                        <button onclick="event.stopPropagation(); loadAndPlayVideo(${product.id})" class="video-facade-btn" id="play-btn-${product.id}" title="Click to play video">
+                            <i class="fas fa-play"></i>
                         </button>
                         <div class="video-duration">
                             <i class="fas fa-clock text-xs"></i>
@@ -866,13 +1294,14 @@
                                 <p class="text-xs text-gray-500 hidden sm:block">${product.subcategory}</p>
                             </div>
                             <div class="flex items-center gap-1 bg-royal/10 px-2 py-1 rounded-full border border-royal/20">
-                                <i class="fas fa-crown text-royal text-xs"></i>
+                                <i class="fas fa-star text-royal text-xs"></i>
                                 <span class="text-xs font-bold text-royal">${product.popularity}%</span>
                             </div>
                         </div>
                         <h3 class="font-display text-sm sm:text-lg font-bold text-white leading-tight cursor-pointer hover:text-royal transition-colors line-clamp-2" onclick="openQuickView(${product.id})">
                             ${product.name}
                         </h3>
+                        ${isClothing && product.fabric ? `<p class="text-xs text-gray-400 italic">${product.fabric}</p>` : ''}
                         <div class="flex items-center gap-2">
                             <span class="text-lg sm:text-2xl font-bold text-royal price-tag">$${product.price}</span>
                             ${product.originalPrice ? `<span class="text-xs sm:text-sm text-gray-500 line-through">$${product.originalPrice}</span>` : ''}
@@ -889,6 +1318,10 @@
                                 `).join('')}
                                 ${product.colors.length > 3 ? `<span class="text-xs text-gray-500">+${product.colors.length - 3}</span>` : ''}
                             </div>
+                            ` : hasConcentrations ? `
+                            <div class="flex gap-1">
+                                <span class="text-xs text-gray-500 bg-dark px-2 py-1 rounded">${product.concentrations[0]}</span>
+                            </div>
                             ` : ''}
                         </div>
                     </div>
@@ -898,14 +1331,17 @@
 
         function createProductListItem(product) {
             const isWishlisted = wishlist.includes(product.id);
+            const hasConcentrations = product.concentrations && product.concentrations.length > 0;
+            const isClothing = product.category === 'formal';
             return `
                 <div class="product-card reveal flex gap-3 sm:gap-6 bg-dark-lighter p-3 sm:p-4 rounded-xl sm:rounded-2xl gold-border">
                     <div class="w-32 sm:w-48 h-32 sm:h-48 flex-shrink-0 relative rounded-lg sm:rounded-xl overflow-hidden" data-product-id="${product.id}">
                         ${product.badge ? `<div class="product-badge ${product.badge === 'SALE' ? 'sale' : ''} ${product.badge === 'LIMITED' ? 'limited' : ''} text-xs px-2 py-1">${product.badge}</div>` : ''}
+                        ${product.halalCertified ? `<div class="absolute top-1 right-1 bg-islamic-green/90 text-white text-[8px] font-bold px-1 py-0.5 rounded z-10"><i class="fas fa-check"></i></div>` : ''}
                         <img src="${product.image}" alt="${product.name}" class="product-poster w-full h-full object-cover">
                         <div class="video-wrapper" id="video-wrapper-list-${product.id}"></div>
                         <button onclick="loadAndPlayVideo(${product.id}, true)" class="video-facade-btn w-12 h-12 sm:w-16 sm:h-16 text-lg sm:text-2xl">
-                            <i class="fab fa-tiktok"></i>
+                            <i class="fas fa-play"></i>
                         </button>
                     </div>
                     <div class="flex-1 flex flex-col justify-between min-w-0">
@@ -914,6 +1350,7 @@
                                 <div class="min-w-0 pr-2">
                                     <p class="text-xs text-royal font-bold uppercase tracking-wider">${product.brand}</p>
                                     <h3 class="font-display text-base sm:text-xl font-bold text-white hover:text-royal transition-colors cursor-pointer line-clamp-2" onclick="openQuickView(${product.id})">${product.name}</h3>
+                                    ${isClothing && product.fabric ? `<p class="text-xs text-gray-400 italic mt-1">${product.fabric}</p>` : ''}
                                 </div>
                                 <button onclick="toggleWishlistItem(${product.id})" class="text-xl sm:text-2xl ${isWishlisted ? 'text-red-500' : 'text-gray-600'} hover:scale-110 transition-transform flex-shrink-0">
                                     <i class="fas fa-heart"></i>
@@ -925,7 +1362,8 @@
                                 ${product.originalPrice ? `<span class="text-gray-500 line-through text-sm">$${product.originalPrice}</span>` : ''}
                             </div>
                             <div class="flex flex-wrap gap-1 sm:gap-2">
-                                ${product.sizes.map(size => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${size}</span>`).join('')}
+                                ${product.sizes ? product.sizes.map(size => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${size}</span>`).join('') : 
+                                  hasConcentrations ? product.concentrations.map(c => `<span class="px-2 py-1 bg-dark rounded text-xs border border-gray-700">${c}</span>`).join('') : ''}
                             </div>
                         </div>
                         <div class="flex gap-2 sm:gap-3 mt-3 sm:mt-4">
@@ -966,7 +1404,7 @@
             iframe.className = 'tiktok-iframe';
             iframe.allow = 'fullscreen; autoplay; clipboard-write; encrypted-media; picture-in-picture';
             iframe.setAttribute('loading', 'lazy');
-            iframe.title = `${product.name} TikTok Video`;
+            iframe.title = `${product.name} Video`;
             iframe.src = getTikTokEmbedUrl(product.tiktokVideoId, product.tiktokUsername, true);
             
             iframe.onload = () => {
@@ -998,7 +1436,7 @@
         }
 
         function getColorCode(colorName) {
-            const colors = { 'Black': '#000000', 'White': '#FFFFFF', 'Grey': '#808080', 'Navy': '#000080', 'Red': '#FF0000', 'Blue': '#0000FF', 'Green': '#008000', 'Olive': '#808000', 'Brown': '#8B4513', 'Beige': '#F5F5DC', 'Khaki': '#C3B091', 'Pink': '#FFC0CB', 'Yellow': '#FFFF00', 'Orange': '#FFA500', 'Purple': '#800080', 'Camo': '#4B5320', 'Green Camo': '#4B5320', 'Blue Camo': '#1e3a5f', 'Purple Camo': '#4a1c6f' };
+            const colors = { 'Black': '#000000', 'White': '#FFFFFF', 'Grey': '#808080', 'Navy': '#000080', 'Red': '#FF0000', 'Blue': '#0000FF', 'Green': '#008000', 'Olive': '#808000', 'Brown': '#8B4513', 'Beige': '#F5F5DC', 'Khaki': '#C3B091', 'Pink': '#FFC0CB', 'Yellow': '#FFFF00', 'Orange': '#FFA500', 'Purple': '#800080', 'Tan': '#D2B48C', 'Dark Brown': '#654321', 'Black Gold': '#000000', 'Brown Gold': '#8B4513', 'Clear': '#E0F7FA', 'Amber': '#FFBF00', 'Off-White': '#FAF9F6', 'Ivory': '#FFFFF0', 'Cream': '#FFFDD0', 'Light Grey': '#D3D3D3', 'Charcoal': '#36454F', 'Royal Blue': '#4169E1', 'Burgundy': '#800020', 'Maroon': '#800000' };
             return colors[colorName] || '#888888';
         }
 
@@ -1029,7 +1467,14 @@
         }
 
         function updateCategoryTitle() {
-            const titles = { 'all': 'All Men\'s Collection', 'streetwear': 'Royal Streetwear', 'formal': 'Royal Formal Wear', 'casual': 'Royal Casual Wear', 'activewear': 'Royal Activewear', 'outerwear': 'Royal Outerwear' };
+            const titles = { 
+                'all': 'All Islamic Collection', 
+                'formal': 'Official Formal Wear',
+                'perfumes': 'Premium Perfumes', 
+                'shoes': 'Islamic Footwear', 
+                'attars': 'Attars & Oils', 
+                'essentials': 'Islamic Essentials' 
+            };
             document.getElementById('category-title').textContent = titles[currentCategory] || titles['all'];
         }
 
@@ -1134,11 +1579,18 @@
             const product = products.find(p => p.id === productId);
             const existing = cart.find(item => item.id === productId);
             const selectedColor = selectedColors[productId] || (product.colors ? product.colors[0] : null);
+            const selectedConcentration = selectedConcentrations[productId] || (product.concentrations ? product.concentrations[0] : null);
 
             if (existing) {
                 existing.quantity++;
             } else {
-                cart.push({ ...product, quantity: 1, selectedSize: product.sizes[0], selectedColor: selectedColor });
+                cart.push({ 
+                    ...product, 
+                    quantity: 1, 
+                    selectedSize: product.sizes ? product.sizes[0] : null, 
+                    selectedColor: selectedColor,
+                    selectedConcentration: selectedConcentration
+                });
             }
 
             saveToLocalStorage();
@@ -1191,7 +1643,7 @@
             if (cart.length === 0) {
                 items.innerHTML = `
                     <div class="text-center text-gray-500 py-12">
-                        <i class="fas fa-crown text-5xl sm:text-6xl mb-4 opacity-20"></i>
+                        <i class="fas fa-mosque text-5xl sm:text-6xl mb-4 opacity-20"></i>
                         <p class="text-base sm:text-lg mb-2">Your cart is empty</p>
                         <button onclick="toggleCart(); document.getElementById('products').scrollIntoView({behavior: 'smooth'})" class="text-royal hover:underline font-medium">Start Shopping</button>
                     </div>
@@ -1206,17 +1658,20 @@
                                     <p class="text-xs text-royal font-bold">${item.brand}</p>
                                     <h4 class="font-bold text-sm truncate pr-2">${item.name}</h4>
                                     ${item.selectedColor ? `<span class="text-xs text-gray-500">Color: ${item.selectedColor}</span>` : ''}
+                                    ${item.selectedConcentration ? `<span class="text-xs text-gray-500 block">Type: ${item.selectedConcentration}</span>` : ''}
                                 </div>
                                 <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors p-1">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
+                            ${item.sizes ? `
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-xs text-gray-400">Size:</span>
                                 <select onchange="updateSize(${item.id}, this.value)" class="bg-dark-lighter border border-gray-700 rounded text-xs px-2 py-1 focus:border-royal outline-none">
                                     ${item.sizes.map(size => `<option value="${size}" ${size === item.selectedSize ? 'selected' : ''}>${size}</option>`).join('')}
                                 </select>
                             </div>
+                            ` : ''}
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-1 bg-dark-lighter rounded-lg p-1">
                                     <button onclick="updateQuantity(${item.id}, -1)" class="qty-btn text-gray-400 hover:text-black text-xs sm:text-sm w-7 h-7 sm:w-9 sm:h-9">-</button>
@@ -1255,13 +1710,14 @@
             if (cart.length === 0) { showToast('Your cart is empty!', 'exclamation-circle'); return; }
 
             const phone = '+254704918499';
-            let message = `👑 *ROYAL MEN'S ORDER*%0A%0A`;
+            let message = `🕌 *ROYAL ISLAMIC ORDER*%0A%0A`;
             cart.forEach((item, i) => {
                 message += `*${i + 1}. ${item.name}*%0A`;
                 message += `   Brand: ${item.brand}%0A`;
                 message += `   Category: ${item.category}%0A`;
-                message += `   Size: ${item.selectedSize}%0A`;
+                if (item.selectedSize) message += `   Size: ${item.selectedSize}%0A`;
                 if (item.selectedColor) message += `   Color: ${item.selectedColor}%0A`;
+                if (item.selectedConcentration) message += `   Type: ${item.selectedConcentration}%0A`;
                 message += `   Qty: ${item.quantity}%0A`;
                 message += `   Price: $${(item.price * item.quantity).toLocaleString()}%0A%0A`;
             });
@@ -1271,13 +1727,13 @@
             message += `*Subtotal: $${total.toLocaleString()}*%0A`;
             message += `*Tax (8%): $${tax.toLocaleString()}*%0A`;
             message += `*TOTAL: $${(total + tax).toLocaleString()}*%0A%0A`;
-            message += `Please confirm availability. 👑`;
+            message += `Jazakallah Khair! 🕌`;
 
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         }
 
         function showWhatsAppChat() {
-            window.open(`https://wa.me/+254704918499?text=👑 Hi! I'm looking for royal fashion advice.`, '_blank');
+            window.open(`https://wa.me/+254704918499?text=🕌 As-salamu alaykum! I'm interested in your Islamic products.`, '_blank');
         }
 
         function openQuickView(productId) {
@@ -1285,17 +1741,20 @@
             const modal = document.getElementById('quick-view-modal');
             const content = document.getElementById('modal-content');
             const isWishlisted = wishlist.includes(productId);
+            const hasConcentrations = product.concentrations && product.concentrations.length > 0;
+            const isClothing = product.category === 'formal';
 
             content.innerHTML = `
                 <div class="h-[250px] sm:h-[300px] md:h-[600px] bg-dark-lighter relative">
                     <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" id="modal-poster">
                     <div class="video-wrapper" id="modal-video-wrapper"></div>
                     <button onclick="loadModalVideo(${product.id})" class="video-facade-btn" id="modal-play-btn" style="opacity: 1; transform: translate(-50%, -50%) scale(1);">
-                        <i class="fab fa-tiktok"></i>
+                        <i class="fas fa-play"></i>
                     </button>
-                    <div class="absolute bottom-4 right-4 bg-black/80 text-tiktok px-3 py-1 rounded-full text-xs sm:text-sm font-bold border border-tiktok/30">
-                        <i class="fab fa-tiktok mr-1"></i> TikTok Video
+                    <div class="absolute bottom-4 right-4 bg-black/80 text-royal px-3 py-1 rounded-full text-xs sm:text-sm font-bold border border-royal/30">
+                        <i class="fas fa-video mr-1"></i> Product Video
                     </div>
+                    ${product.halalCertified ? `<div class="absolute top-4 left-4 bg-islamic-green/90 text-white px-3 py-2 rounded-lg text-sm font-bold border border-white/20 flex items-center gap-2"><i class="fas fa-check-circle"></i> HALAL CERTIFIED</div>` : ''}
                     <button onclick="toggleWishlistItem(${product.id}); openQuickView(${product.id})" class="absolute top-4 right-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full ${isWishlisted ? 'bg-red-500' : 'bg-black/50'} flex items-center justify-center text-white hover:scale-110 transition-transform backdrop-blur-sm">
                         <i class="fas fa-heart"></i>
                     </button>
@@ -1317,7 +1776,19 @@
                             </div>
                         </div>
                         <p class="text-gray-400 leading-relaxed text-base sm:text-lg">${product.description}</p>
+                        ${isClothing && product.fabric ? `<p class="text-sm text-royal mt-2"><i class="fas fa-tshirt mr-2"></i>Fabric: ${product.fabric}</p>` : ''}
                     </div>
+
+                    ${hasConcentrations ? `
+                    <div>
+                        <p class="font-bold mb-2 sm:mb-3 text-xs sm:text-sm uppercase tracking-wider text-gray-400">Select Type</p>
+                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                            ${product.concentrations.map((conc, i) => `
+                                <button onclick="selectConcentration(${product.id}, '${conc}', this)" class="px-4 py-2 rounded-full border-2 ${i === 0 ? 'border-royal bg-royal text-black font-bold' : 'border-gray-700 text-gray-300 hover:border-royal'} transition-all text-sm">${conc}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
 
                     ${product.colors ? `
                     <div>
@@ -1331,6 +1802,7 @@
                     </div>
                     ` : ''}
 
+                    ${product.sizes ? `
                     <div>
                         <p class="font-bold mb-2 sm:mb-3 text-xs sm:text-sm uppercase tracking-wider text-gray-400">Select Size</p>
                         <div class="flex flex-wrap gap-2 sm:gap-3">
@@ -1339,6 +1811,7 @@
                             `).join('')}
                         </div>
                     </div>
+                    ` : ''}
 
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
                         <button onclick="addToCartFromModal(${product.id}); closeQuickView();" class="flex-1 bg-gradient-to-r from-royal to-royal-dark text-black font-bold py-3 sm:py-4 rounded-full hover:from-royal-light hover:to-royal transition-all flex items-center justify-center gap-2 text-base sm:text-lg shadow-lg shadow-royal/20 hover:shadow-royal/40 transform hover:scale-[1.02]">
@@ -1351,22 +1824,23 @@
 
                     <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-gray-800 text-center">
                         <div class="text-gray-400">
-                            <i class="fas fa-crown text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
-                            <p class="text-xs">Authentic</p>
+                            <i class="fas fa-certificate text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
+                            <p class="text-xs">Halal</p>
                         </div>
                         <div class="text-gray-400">
                             <i class="fas fa-truck text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
-                            <p class="text-xs">Free Shipping</p>
+                            <p class="text-xs">Free Ship</p>
                         </div>
                         <div class="text-gray-400">
                             <i class="fas fa-undo text-royal mb-1 sm:mb-2 text-lg sm:text-xl"></i>
-                            <p class="text-xs">30-Day Returns</p>
+                            <p class="text-xs">Returns</p>
                         </div>
                     </div>
                 </div>
             `;
 
             if (product.colors) selectedColors[productId] = product.colors[0];
+            if (product.concentrations) selectedConcentrations[productId] = product.concentrations[0];
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1405,6 +1879,16 @@
             if (text) text.textContent = `Selected: ${color}`;
         }
 
+        function selectConcentration(productId, concentration, btn) {
+            selectedConcentrations[productId] = concentration;
+            btn.parentElement.querySelectorAll('button').forEach(b => {
+                b.classList.remove('border-royal', 'bg-royal', 'text-black', 'font-bold');
+                b.classList.add('border-gray-700', 'text-gray-300');
+            });
+            btn.classList.remove('border-gray-700', 'text-gray-300');
+            btn.classList.add('border-royal', 'bg-royal', 'text-black', 'font-bold');
+        }
+
         function addToCartFromModal(productId) {
             const selectedSize = document.querySelector('.size-btn.selected')?.textContent;
             const product = products.find(p => p.id === productId);
@@ -1413,7 +1897,13 @@
             if (existing) {
                 existing.quantity++;
             } else {
-                cart.push({ ...product, quantity: 1, selectedSize: selectedSize || product.sizes[0], selectedColor: selectedColors[productId] || (product.colors ? product.colors[0] : null) });
+                cart.push({ 
+                    ...product, 
+                    quantity: 1, 
+                    selectedSize: selectedSize || (product.sizes ? product.sizes[0] : null), 
+                    selectedColor: selectedColors[productId] || (product.colors ? product.colors[0] : null),
+                    selectedConcentration: selectedConcentrations[productId] || (product.concentrations ? product.concentrations[0] : null)
+                });
             }
             
             saveToLocalStorage();
@@ -1433,13 +1923,16 @@
 
         function buyNow(productId) {
             const product = products.find(p => p.id === productId);
-            const selectedSize = document.querySelector('.size-btn.selected')?.textContent || product.sizes[0];
+            const selectedSize = document.querySelector('.size-btn.selected')?.textContent || (product.sizes ? product.sizes[0] : null);
             const selectedColor = selectedColors[productId] || (product.colors ? product.colors[0] : null);
+            const selectedConcentration = selectedConcentrations[productId] || (product.concentrations ? product.concentrations[0] : null);
             const phone = '+254704918499';
             
-            let message = `👑 *Quick Order - ROYAL Men*%0A%0A*${product.name}*%0ABrand: ${product.brand}%0ACategory: ${product.category}%0ASize: ${selectedSize}`;
+            let message = `🕌 *Quick Order - ROYAL Islamic*%0A%0A*${product.name}*%0ABrand: ${product.brand}%0ACategory: ${product.category}`;
+            if (selectedSize) message += `%0ASize: ${selectedSize}`;
             if (selectedColor) message += `%0AColor: ${selectedColor}`;
-            message += `%0APrice: $${product.price}%0A%0APlease confirm availability.`;
+            if (selectedConcentration) message += `%0AType: ${selectedConcentration}`;
+            message += `%0APrice: $${product.price}%0A%0APlease confirm availability. Jazakallah Khair!`;
             
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         }
@@ -1461,7 +1954,7 @@
             document.body.style.overflow = '';
         }
 
-        function showToast(message = 'Added to cart!', icon = 'crown') {
+        function showToast(message = 'Added to cart!', icon = 'mosque') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
             const toastIcon = toast.querySelector('i');
